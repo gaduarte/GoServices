@@ -23,4 +23,7 @@ Um site como o “GetNinjas” que planeja diversos serviços que atendem os cli
   - Para que tanto os usuários comuns quanto às pessoas e empresas que prestam serviços tenham acesso ao histórico de agendamentos.
 
 Integrantes:
- Francimara Matos, Lucas Coelho e Gabriela Duarte Albornoz.
+- :star: Francimara Matos
+- :star: Lucas Coelho
+- :star: Gabriela Duarte Albornoz
+
