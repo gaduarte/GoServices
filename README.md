@@ -1,5 +1,5 @@
 # GoServices
-# Funcionalidade Principal:
+# FUNCIONALIDADE PRINCIPAL:
 > Projeto para agendamento de serviços.
 
 Integrantes:
