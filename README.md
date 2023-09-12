@@ -1,6 +1,6 @@
 # GoServices
 
-### Descrição
+### Descrição:
 Um site como o “GetNinjas” que planeja diversos serviços que atendem os clientes de forma rápida, fácil e segura.
 
 ### Funcionalidades Principais:
