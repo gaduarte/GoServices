@@ -1,7 +1,7 @@
 # GoServices
 
 **Funcionalidade Principal:** 
-• Projeto para agendamento de serviços.
+> Projeto para agendamento de serviços.
 
 Integrantes:
  Francimara Matos, Lucas Coelho e Gabriela Duarte Albornoz.
