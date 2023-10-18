@@ -13,8 +13,7 @@ Um site como o “GetNinjas” que planeja diversos serviços que atendem os cli
   - Sprint_Backlog (antes): https://github.com/gaduarte/GoServices/blob/main/Documentos/artefatos/producaoArtefatos/Sprint%20Backlog%20GoServices.pdf
   - Sprints-Backlog (depois): https://trello.com/b/NTdklFMh/goservices
   - Diagrama Entidade-Relacionamento: https://github.com/gaduarte/GoServices/blob/main/Documentos/Diagrama/EntidadeRelacionamento/goservices.jpg
-  - Arquitetura (imagem): https://github.com/gaduarte/GoServices/blob/main/Documentos/artefatos/producaoArtefatos/goServices-Arquitetura.png
-  - Arquitetura (documento): https://github.com/gaduarte/GoServices/blob/main/Documentos/artefatos/producaoArtefatos/Documenta%C3%A7%C3%A3o%20de%20Arquitetura%20GoServices.pdf
+  - Arquitetura (imagem): https://github.com/gaduarte/GoServices/blob/main/Documentos/artefatos/producaoArtefatos/goServices-Arquitetura.png  (documento): https://github.com/gaduarte/GoServices/blob/main/Documentos/artefatos/producaoArtefatos/Documenta%C3%A7%C3%A3o%20de%20Arquitetura%20GoServices.pdf
 - 3 (Três) Sprints Principais:
    - Sprints: https://trello.com/b/NTdklFMh/goservices
 
