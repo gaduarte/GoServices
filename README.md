@@ -11,12 +11,12 @@ Um site como o “GetNinjas” que planeja diversos serviços que atendem os cli
 - RabiscoFrame (versão corrigida): [RabiscoFrame Atualizado](https://github.com/gaduarte/GoServices/blob/main/Documentos/artefatos/mapa%26rabiscoframe/RiscoFrame-atualizado.jpg)
 
 ## Produção de Artefatos e Prototipação
-- Protótipo: [Protótipo no Figma](https://www.figma.com/file/82tMLcTauMmQypfkOGhMus/Untitled?type=design&node-id=0-1&mode=design&t=k1Vh9r5p13oIsLYf-0)
-- Sprint Backlog (antes): [Sprint Backlog antes](https://github.com/gaduarte/GoServices/blob/main/Documentos/artefatos/producaoArtefatos/Sprint%20Backlog%20GoServices.pdf)
-- Sprint Backlog (depois): [Sprint Backlog depois](https://trello.com/invite/b/NTdklFMh/ATTIe021c6717e90b108b9554372349f7df5E2805CC4/goservices)
-- Diagrama de Entidade-Relacionamento: [Diagrama de Entidade-Relacionamento](https://github.com/gaduarte/GoServices/blob/main/Documentos/Diagrama/EntidadeRelacionamento/goservices.jpg)
-- Arquitetura (imagem): [Imagem da Arquitetura](https://github.com/gaduarte/GoServices/blob/main/Documentos/artefatos/producaoArtefatos/goServices-Arquitetura.png)
-- Documentação de Arquitetura: [Documentação de Arquitetura](https://github.com/gaduarte/GoServices/blob/main/Documentos/artefatos/producaoArtefatos/Documenta%C3%A7%C3%A3o%20de%20Arquitetura%20GoServices.pdf)
+- [Protótipo no Figma](https://www.figma.com/file/82tMLcTauMmQypfkOGhMus/Untitled?type=design&node-id=0-1&mode=design&t=k1Vh9r5p13oIsLYf-0)
+- [Sprint Backlog antes](https://github.com/gaduarte/GoServices/blob/main/Documentos/artefatos/producaoArtefatos/Sprint%20Backlog%20GoServices.pdf)
+- [Sprint Backlog depois](https://trello.com/invite/b/NTdklFMh/ATTIe021c6717e90b108b9554372349f7df5E2805CC4/goservices)
+- [Diagrama de Entidade-Relacionamento](https://github.com/gaduarte/GoServices/blob/main/Documentos/Diagrama/EntidadeRelacionamento/goservices.jpg)
+- [Imagem da Arquitetura](https://github.com/gaduarte/GoServices/blob/main/Documentos/artefatos/producaoArtefatos/goServices-Arquitetura.png)
+- [Documentação de Arquitetura](https://github.com/gaduarte/GoServices/blob/main/Documentos/artefatos/producaoArtefatos/Documenta%C3%A7%C3%A3o%20de%20Arquitetura%20GoServices.pdf)
 
 ## 3 Sprints Principais
 - [Sprints no Trello](https://trello.com/invite/b/NTdklFMh/ATTIe021c6717e90b108b9554372349f7df5E2805CC4/goservices)
