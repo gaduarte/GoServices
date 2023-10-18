@@ -10,7 +10,8 @@ Um site como o “GetNinjas” que planeja diversos serviços que atendem os cli
    - RabiscoFrame (versão corrigida): https://github.com/gaduarte/GoServices/blob/main/Documentos/artefatos/mapa%26rabiscoframe/RiscoFrame-atualizado.jpg
 - Produzir Artefatos e Prototipação:
   - Protótipo: https://www.figma.com/file/82tMLcTauMmQypfkOGhMus/Untitled?type=design&node-id=0-1&mode=design&t=k1Vh9r5p13oIsLYf-0
-  - Sprints-Backlog: https://trello.com/b/NTdklFMh/goservices
+  - Sprint_Backlog (antes): 
+  - Sprints-Backlog (depois): https://trello.com/b/NTdklFMh/goservices
   - Diagrama Entidade-Relacionamento: https://github.com/gaduarte/GoServices/blob/main/Documentos/Diagrama/EntidadeRelacionamento/goservices.jpg
   - Arquitetura (imagem): https://github.com/gaduarte/GoServices/blob/main/Documentos/artefatos/producaoArtefatos/goServices-Arquitetura.png
   - Arquitetura (documento): https://github.com/gaduarte/GoServices/blob/main/Documentos/artefatos/producaoArtefatos/Documenta%C3%A7%C3%A3o%20de%20Arquitetura%20GoServices.pdf
