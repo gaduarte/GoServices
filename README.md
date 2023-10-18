@@ -6,6 +6,9 @@ Um site como o “GetNinjas” que planeja diversos serviços que atendem os cli
 - Documento Inception:
   - https://github.com/gaduarte/GoServices/blob/main/Documento-Inception/1693326448315_Inception%20ToServices.pdf
 
+- Documento Artefatos:
+   - Mapa e Rabisco Frame (versão inicial): 
+
 - Integrantes:
   -  Francimara Matos
   - Lucas Coelho
