@@ -1,0 +1,50 @@
+/* Estilos para o componente CadastroCliente */
+.centeredForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100vw;
+    background-color: #101e5c; 
+    margin: 0;
+  }
+  
+  form {
+    background-color: #ffc0cb; 
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .inputContainer {
+    margin: 10px 0;
+  }
+  
+  input {
+    width: 300px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #fff; 
+    outline: none;
+    color: black;
+  }
+  
+  button {
+    width: 150px;
+    height: 40px;
+    background-color: #b14f28; 
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  button:hover {
+    background-color: #214b86; 
+  }
+  
