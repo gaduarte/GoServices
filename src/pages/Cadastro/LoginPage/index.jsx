@@ -1,78 +1,66 @@
 import React, { useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { appF } from "../../../backend/Firebase/firebase";
-import { getDatabase, ref, update } from "firebase/database";
-import { useNavigate } from "react-router-dom";
+import LoginCliente from "./LoginCliente";
+import LoginEmpresa from "./LoginEmpresa";
+import LoginProfissional from "./LoginProfissional";
+import { getAuth } from "firebase/auth";
+import { getDatabase, ref, get } from "firebase/database";
 
 const LoginUsuario = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState("cliente"); 
-  const history = useNavigate();
+  const [opcao, setOpcao] = useState("cliente");
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleChangeOpcao = (event) => {
+    setOpcao(event.target.value);
+  };
 
-    if (!email || !password) {
-      alert("Preencha o email e senha.");
-      return;
+  const checkUserType= async (userEmail) =>{
+    try{
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if(user){
+        const databaseRef = getDatabase();
+        const userTypeRef = ref(databaseRef, `cliente/${user.uid}`);
+
+        const snapshot = await get(userTypeRef);
+
+        if(snapshot.exists()){
+          return true;
+        }else{
+          return false;
+        }
+      }else{
+        return false;
+      }
+    } catch(error){
+      console.error("Erro ao verificar tipo de usuário", error);
+      return false;
     }
+  }
 
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        const user = userCredential.user;
-        const databaseRef = getDatabase(appF);
+  const handleLogin = async (userType, email) => {
+    const userTypeByEmail = await checkUserType(email);
 
-        const user_data = {
-          last_login: Date.now(),
-        };
+    if(userTypeByEmail === "cliente" && userType === "cliente"){
 
-        update(ref(databaseRef, `${userType}/${user.uid}`), user_data);
+    }else if(userTypeByEmail === "empresa" && userType === "empresa"){
 
-        alert("Usuário logado!");
-        history("/");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        alert(`Erro de login: ${errorCode} - ${errorMessage}`);
-      });
+    }else if(userTypeByEmail === "profissional" && userType === "profissional"){
+
+    };
+
   };
 
   return (
-    <div>
-      <div>
-        <select
-          value={userType}
-          onChange={(e) => setUserType(e.target.value)}
-        >
-          <option value="cliente">Cliente</option>
-          <option value="empresa">Empresa</option>
-          <option value="profissional">Profissional</option>
-        </select>
-      </div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="text"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <input
-            type="password"
-            placeholder="Senha"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit" onClick={handleSubmit}>
-          Entrar
-        </button>
-      </form>
+    <div style={{margin: "10px 0"}}>
+      <select value={opcao} onChange={handleChangeOpcao}>
+        <option value="cliente">Cliente</option>
+        <option value="empresa">Empresa</option>
+        <option value="profissional">Profissional</option>
+      </select>
+
+      {opcao === "cliente" && <LoginCliente onLogin={()=> handleLogin("cliente")}/>}
+      {opcao === "empresa" && <LoginEmpresa onLogin={()=> handleLogin("empresa")} />}
+      {opcao === "profissional" && <LoginProfissional onLogin={()=> handleLogin("profissional")} />}
     </div>
   );
 };

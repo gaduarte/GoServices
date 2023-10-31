@@ -4,7 +4,7 @@ const cadastroEmpresaContext = createContext(null);
 const cadastroEmpresaDispatch = createContext(null);
 
 export function CadastroEmpresaProvider({children}){
-    const [cadastros, dispatch] = useReducer(cadastroReducer);
+    const [cadastros, dispatch] = useReducer(cadastroReducer, []);
 
     return(
         <cadastroEmpresaContext.Provider value={cadastros}>

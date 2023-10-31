@@ -1,3 +1,4 @@
+
 const admin = require('firebase-admin');
 
 const serviceAccount = require('../Firebase/key.json');
@@ -6,7 +7,7 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 });
 
-db = admin.firestore();
+const db = admin.firestore();
 
 let Goservice = class {
     constructor(){

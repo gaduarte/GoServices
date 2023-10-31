@@ -106,7 +106,7 @@ const CadastroProfissional = () => {
     dispatch({
       type: 'added',
       id: nextId++, 
-      text: `Nome: ${nome}, Email: ${email}, CPF: ${cpf}, Endereço: ${endereco}, Empresa: ${empresa}, Tipo de Serviço: : ${tipoServico}, Telefone: ${telefone}, Senha: ${senha}, Senha ${password}`,
+      text: `Nome: ${nome}, Email: ${email}, CPF: ${cpf}, Endereço: ${endereco}, Empresa: ${empresa}, Tipo de Serviço: : ${tipoServico}, Telefone: ${telefone}, Senha: ${password}`,
     });
 
     nomeRef.current.value = "";

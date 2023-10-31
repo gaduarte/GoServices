@@ -48,7 +48,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/cadastro" element={<CadastrarUsuario />} />
             <Route path="/login" element={<LoginUsuario />}/>
-            
+
           </Routes>
         </BrowserRouter>
       </div>

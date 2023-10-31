@@ -4,7 +4,7 @@ const cadastroProfissionalContext = createContext(null);
 const cadastroProfissionalDispatch = createContext(null);
 
 export function CadastroProfissionalProvider({children}){
-    const [cadastros, dispatch] = useReducer(cadastroReducer);
+    const [cadastros, dispatch] = useReducer(cadastroReducer, []);
 
     return(
         <cadastroProfissionalContext.Provider value={cadastros}>
