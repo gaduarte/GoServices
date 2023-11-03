@@ -3,10 +3,13 @@ import { collection, getDocs } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { appF } from "../../backend/Firebase/firebase";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
   authDomain: "goservices-a0bf9.firebaseapp.com",
+  databaseURL: "https://goservices-a0bf9-default-rtdb.firebaseio.com",
   projectId: "goservices-a0bf9",
   storageBucket: "goservices-a0bf9.appspot.com",
   messagingSenderId: "966186778726",
@@ -20,6 +23,7 @@ const db = getFirestore(app);
 export function HomePage() {
   const [servicos, setServicos] = useState([]);
   const [usuario, setUsuario] = useState(null);
+  const history = useNavigate(); 
 
   useEffect(() => {
     async function fetchServicos() {
@@ -35,16 +39,7 @@ export function HomePage() {
       }
     }
 
-    const auth = getAuth(app);
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUsuario(user);
-        fetchServicos();
-      } else {
-        setUsuario(null);
-      }
-    });
+    fetchServicos();
 
   }, []);
 
@@ -65,9 +60,12 @@ export function HomePage() {
   }
 
   // Função para agendar serviço
-  const agendarServico = (empresaId, servicoId, dataAgendamento) => {
-    if (usuario) {
-      const uid = usuario.uid;
+const agendarServico = (empresaId, servicoId, dataAgendamento) => {
+  const auth = getAuth(appF);
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const uid = user.uid;
 
       const dadosAgendamento = {
         empresaId: empresaId,
@@ -94,8 +92,13 @@ export function HomePage() {
         .catch((error) => {
           console.error("Erro ao enviar solicitação", error);
         });
+    } else {
+      alert("Você precisa estar logado para realizar esta ação.");
+      history('/login');
     }
-  }
+  });
+};
+
 
   return (
     <main>
@@ -131,7 +134,7 @@ export function HomePage() {
               {servico.data.nome}
             </h5>
 
-            <p className="card-description" style={{ fontSize: "16px", color: "#0F1111", whiteSpace:"pre-line", textAlign: "left", textJustify: "inter-word",  textAlignLast: "left", letterSpacing: "-0.5px"}}>
+            <p className="card-description" style={{ fontSize: "16px", color: "#0F1111"}}>
               {servico.data.descricao}
             </p>
             </div>

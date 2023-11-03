@@ -1,6 +1,9 @@
 const express = require('express');
+const { request: req } = require('express');
+const res = require('express/lib/response');
 const cors = require('cors');
 const Goservice = require('./classe');
+const path = require('path');
 
 const app = express();
 
@@ -11,16 +14,30 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
 const port = 3000;
 const gs = new Goservice()
+
 
 app.listen(port, () => {
     console.log(`Rodando na porta: ${port}`);
 });
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../', 'pages', 'HomePage', 'index.jsx'));
+});
+
+// Função para gerar IDs únicos
+function generateUniqueId() {
+    const timestamp = new Date().getTime(); 
+    const randomPart = Math.floor(Math.random() * 10000); 
+    return `${timestamp}-${randomPart}`;
+}
+
+// Cliente
 app.get('/cliente/:email', async (req, res) => {
-    email = req.params.email;
-    mensagem = await gs.retrieveUsuario(email);
+    const email = req.params.email;
+    const mensagem = await gs.retrieveUsuario(email);
   
     if (mensagem == -1) {
       res.status(404).send('Não encontrado');
@@ -29,83 +46,132 @@ app.get('/cliente/:email', async (req, res) => {
   });
   
 app.get('/cliente/1/:id', async(req,res)=>{
-    id = req.params.id;
-    mensagem = await gs.retrieveUsuarioId(id);
+    const id = req.params.id;
+    const mensagem = await gs.retrieveUsuarioId(id);
 
     if(mensagem == -1){res.status(404).send('Não encontrado')}
     res.json(mensagem)
     
 })
 
-app.post('/cadastro', async (req, res) => {
-    const userType = req.query.type;
+// Cadastro Serviço
+app.post('/cadastro/cliente', async (req, res) => {
+    const generatedId = generateUniqueId();
 
-    if (userType === "cliente") {
-        const user = {
-            "email": req.body.email,
-            "username": req.body.username,
-            "cpf": req.body.cpf,
-            "telefone": req.body.telefone,
-            "endereco": req.body.endereco,
-            "id": req.body.id
-        }
-
-        // Registra os dados de cadastro de cliente no console
-        console.log('Dados de cadastro de cliente:', user);
-
-        gs.add_usuario(user['email'], user['username'], user['cpf'], user['telefone'], user['endereco'], user['id']);
-        res.status(201).send('Cliente Cadstrado.');
-
-        console.log('Cadastro de cliente realizado com sucesso.');
-    } else if (userType === "empresa") {
-        const userDataEmpresa = {
-            "email": req.body.email,
-            "username": req.body.username,
-            "cnpj": req.body.cnpj,
-            "descricao": req.body.descricao,
-            "telefone": req.body.telefone,
-            "endereco": req.body.endereco,
-            "id": req.body.id
-        }
-
-        // Registra os dados de cadastro de empresa no console
-        console.log('Dados de cadastro de empresa:', userDataEmpresa);
-
-        gs.add_usuario_empresa(userDataEmpresa['email'], userDataEmpresa['username'], ['cnpj'], userDataEmpresa['descricao'], userDataEmpresa['telefone'], userDataEmpresa['enedereco']);
-        res.status(201).send('Empresa Cadastrada.');
-
-        console.log('Cadastro de empresa realizado com sucesso.');
-    } else if (userType === "profissional") {
-        try {
-            const userDataProfissional = req.body;
-
-            // Registra os dados de cadastro de profissional no console
-            console.log('Dados de cadastro de profissional:', userDataProfissional);
-
-            if (!userDataProfissional || !userDataProfissional.name || !userDataProfissional.specialty) {
-                res.status(400).send('Dados de profissional incompletos ou inválidos.');
-                return;
-            }
-
-            const gs = new Goservice();
-            const result = await gs.add_profissional(userDataProfissional.name, userDataProfissional.specialty);
-
-            if (result) {
-                res.status(201).send('Profissional Cadastrado.');
-            } else {
-                res.status(500).send('Erro ao cadastrar o profissional.');
-            }
-        } catch (error) {
-            console.error(error);
-
-            // Registra o erro no console
-            console.error('Erro no tratamento de cadastro de profissional:', error);
-
-            res.status(500).send('Erro no servidor.');
-        }
-    } else {
-        res.status(400).send('Tipo de usuário desconhecido.');
+    const user = {
+        username: req.body.username,
+        email: req.body.email,
+        endereco: req.body.endereco,
+        cpf: req.body.cpf,
+        telefone: req.body.telefone,
+        id: generatedId,
     }
+
+    console.log('Dados de cadastro de cliente:', user);
+
+    user.email,
+    user.username,
+    user.cpf,
+    user.telefone,
+    user.endereco,
+    user.id
+
+    console.log('Cadastro de cliente realizado com sucesso.');
 });
+
+// Empresa 
+app.get('/empresa/:email', async (req, res) => {
+    const email = req.params.email;
+    const mensagem = await gs.retrieveUsuarioEmpresa(email);
+  
+    if (mensagem == -1) {
+      res.status(404).send('Não encontrado');
+    }
+    res.json(mensagem);
+  });
+  
+app.get('/empresa/1/:id', async(req,res)=>{
+    const id = req.params.id;
+    const mensagem = await gs.retrieveUsuarioEmpresaId(id);
+
+    if(mensagem == -1){res.status(404).send('Não encontrado')}
+    res.json(mensagem)
+    
+})
+
+// Cadastro Empresa
+app.post('/cadastro/empresa', async (req, res) => {
+    const generatedId = generateUniqueId();
+    
+    const userDataEmpresa = {
+        email: req.body.email,
+        username: req.body.username,
+        cnpj: req.body.cnpj,
+        descricao: req.body.descricao,
+        telefone: req.body.telefone,
+        endereco: req.body.endereco,
+        id: generatedId,
+    }
+
+    console.log('Dados de cadastro de empresa:', userDataEmpresa);
+
+    userDataEmpresa.email,
+    userDataEmpresa.username,
+    userDataEmpresa.cnpj,
+    userDataEmpresa.descricao,
+    userDataEmpresa.endereco,
+    userDataEmpresa.telefone,
+    userDataEmpresa.id
+
+    console.log('Cadastro de empresa realizado com sucesso.');
+});
+
+// Pessoa Portadora de Serviço
+app.get('/profissional/:email', async (req, res)=>{
+    const email = req.params.email;
+    const mensagem = await gs.retrieveProfissional(email);
+
+    if(mensagem == -1){
+        res.status(404).send('Não encontrado');
+    }
+    res.json(mensagem);
+})
+
+app.get('/profissional/1/:id', async(req,res)=>{
+    const id = req.params.id;
+    const mensagem = await gs.retrieveProfissionalId(id);
+
+    if(mensagem == -1){res.status(404).send('Não encontrado')}
+    res.json(mensagem);
+})
+
+// Cadastro Pessoa Prestadora de Serviço
+app.post('/cadastro/profissional', async (req, res) => {
+    const generatedId = generateUniqueId();
+
+    const userDataProfissional = {
+        email: req.body.email,
+        username: req.body.username,
+        cpf: req.body.cpf,
+        empresa: req.body.empresa,
+        tipoServico: req.body.tipoServico,
+        telefone: req.body.telefone,
+        endereco: req.body.endereco,
+        id: generatedId
+    }
+
+    console.log('Dados de cadastro de profissional:', userDataProfissional);
+
+    userDataProfissional.email,
+    userDataProfissional.username,
+    userDataProfissional.cpf,
+    userDataProfissional.empresa,
+    userDataProfissional.tipoServico,
+    userDataProfissional.endereco,
+    userDataProfissional.id
+
+    console.log('Cadastro de profissional realizado com sucesso.');
+});
+
 
 

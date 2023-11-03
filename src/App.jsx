@@ -4,6 +4,7 @@ import { HomePage } from "./pages/HomePage";
 import './App.css'
 import CadastrarUsuario from "./pages/Cadastro";
 import LoginUsuario from "./pages/Cadastro/LoginPage";
+import { ClienteDados } from "./pages/ClientePage";
 
 
 function App() {
@@ -35,6 +36,9 @@ function App() {
                   <NavLink to="/">Home</NavLink>
                 </li>
                 <li>
+                  <NavLink to="/cliente">Minha Conta</NavLink>
+                </li>
+                <li>
                   <NavLink to="/cadastro">Cadastrar-se</NavLink>
                 </li>
                 <li>
@@ -48,7 +52,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/cadastro" element={<CadastrarUsuario />} />
             <Route path="/login" element={<LoginUsuario />}/>
-
+            <Route path="/cliente" element={<ClienteDados />} />
           </Routes>
         </BrowserRouter>
       </div>

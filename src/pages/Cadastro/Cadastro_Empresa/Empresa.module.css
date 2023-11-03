@@ -8,6 +8,32 @@
     background-color: #101e5c; 
     margin: 0;
   }
+
+  .successMessage {
+    position: absolute;
+    top: 10px; 
+    left: 50%; /* Centralize horizontalmente */
+    transform: translateX(-50%); /* Centralize horizontalmente */
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    z-index: 2; 
+  }
+  
+  /* Estilo para mensagem de erro */
+  .errorMessage {
+    position: absolute; 
+    top: 10px; 
+    left: 50%; /* Centralize horizontalmente */
+    transform: translateX(-50%); 
+    background-color: #f44336;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+  }  
   
   form {
     background-color: #ffc0cb; 

@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useCadastroEmpresaDispatch } from "./CadastroEmpresaContext";
 import styles from "./Empresa.module.css";
 import { appF } from "../../../backend/Firebase/firebase";
-import { getAuth, createUserWithEmailAndPassword } from "@firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 
 const CadastroEmpresa = () => {
   const nomeRef = useRef(null);
@@ -14,6 +14,9 @@ const CadastroEmpresa = () => {
   const telefoneRef = useRef(null);
   const passwordRef = useRef(null);
   const dispatch = useCadastroEmpresaDispatch();
+
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   let nextId = 1;
 
@@ -28,35 +31,36 @@ const CadastroEmpresa = () => {
     const telefone = telefoneRef.current.value;
     const password = passwordRef.current.value;
 
-    if(validate_email(email) == false || validate_pass(password) == false){
-        alert('Email ou senha inválidos!');
-        return;
-    }
-
-    if(validate_cnpj(cnpj) == false){
-      alert('CNPJ inválido.');
+    if (validateEmail(email) === false || validatePassword(password) === false) {
+      setErrorMessage('Email ou senha inválidos!');
       return;
     }
 
-    if(
-      validateField(nome) == false ||
-      validateField(email) ==  false || 
-      validateField(endereco) == false ||
-      validateField(descricao == false ||
-      validateField(cnpj) == false ||
-      validateField(telefone) == false ||
-      validateField(password) == false)
-     ) {
-      alert('Campos obrigatórios não foram preenchidos!');
+    if (!validateCnpj(cnpj)) {
+      setErrorMessage('CNPJ inválido.');
       return;
     }
 
-    try{
-      const auth = getAuth(); 
+    if (
+      !validateField(nome) ||
+      !validateField(cnpj) ||
+      !validateField(descricao) ||
+      !validateField(endereco) ||
+      !validateField(telefone) ||
+      !validateField(email) ||
+      !validateField(password)
+    ) {
+      setErrorMessage('Campos obrigatórios não foram preenchidos!');
+      return;
+    }
+
+    try {
+      const auth = getAuth();
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      const uid = user.uid;
 
-      const databaseRef = getDatabase(appF);
+      const db = getFirestore();
 
       const userDataForEmpresa = {
         email: email,
@@ -69,99 +73,113 @@ const CadastroEmpresa = () => {
         last_login: Date.now(),
       };
 
-      set(ref(databaseRef, 'empresa/' + user.uid), userDataForEmpresa);
+      const empresaRef = doc(db, "empresa", uid);
 
-      const newUsuarioEmpresa = {
-        email: email,
-        username: nome,
-        cnpj: cnpj,
-        endereco: endereco,
-        descricao: descricao,
-        telefone: telefone,
-        id: user.uid,
-      };
+      try {
+        await setDoc(empresaRef, userDataForEmpresa);
 
-      fetch("http://localhost:3000/cadastro?type=empresa", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          userType: "empresa",
-          user: newUsuarioEmpresa,
-        }),
-      })
-      .then((response)=> response.json())
-      .then((data)=>{
-        alert('Empresa Cadastrada com Sucesso!');
-      })
-      .catch((error)=>{
-        console.error("Erro ao enviar solicitação", error)
-      })
+        const newUsuarioEmpresa = {
+          type: "empresa",
+          email: email,
+          username: nome,
+          cnpj: cnpj,
+          endereco: endereco,
+          descricao: descricao,
+          telefone: telefone,
+          id: uid,
+        };
 
-    dispatch({
-      type: 'added',
-      id: nextId++, 
-      text: `Nome: ${nome}, Email: ${email}, Endereço: ${endereco}, Descrição: ${descricao}, CNPJ: ${cnpj}, Telefone: ${telefone}, Senha: ${password}`,
-    });
+        const configUsuarioEmpresa = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newUsuarioEmpresa),
+        };
 
-    nomeRef.current.value = "";
-    emailRef.current.value = "";
-    enderecoRef.current.value = "";
-    descricaoRef.current.value = "";
-    cnpjRef.current.value = "";
-    telefoneRef.current.value = "";
-    passwordRef.current.value = "";
-  }catch(error){
-    console.log(error);
-    alert('Erro ao cadastrar Empresa');
-  }
+        await fetch("http://localhost:3000/cadastro/empresa", configUsuarioEmpresa)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Erro na solicitação da API");
+            }
+            return response.json();
+          })
+          .then((response) => response.json())
+          .then((data) => {
+            setSuccessMessage('Usuário cadastrado com sucesso!');
+            setErrorMessage('');
+          })
+          .catch((error) => {
+            console.error("Erro ao enviar solicitação", error);
+          });
+
+        dispatch({
+          type: 'added',
+          id: nextId++,
+          text: `Nome: ${nome}, Email: ${email}, Endereço: ${endereco}, Descrição: ${descricao}, CNPJ: ${cnpj}, Telefone: ${telefone}, Senha: ${password}`,
+        });
+
+        nomeRef.current.value = "";
+        emailRef.current.value = "";
+        enderecoRef.current.value = "";
+        descricaoRef.current.value = "";
+        cnpjRef.current.value = "";
+        telefoneRef.current.value = "";
+        passwordRef.current.value = "";
+      } catch (error) {
+        console.error(error);
+        setErrorMessage('Erro ao cadastrar usuário');
+        setSuccessMessage('');
+      }
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('Erro ao criar empresa no Firebase Authentication');
+    }
   };
 
-  //Funções de Validação
-  function validate_email(email){
+  // Funções de validação
+  function validateEmail(email) {
     const expression = /^[^@]+@\w+(\.\w+)+\w$/;
     return expression.test(email);
   }
 
-  function validate_pass(password){
+  function validatePassword(password) {
     return password.length >= 6;
   }
 
-  function validate_cnpj(cnpj){
-    return cnpj.length == 18;
+  function validateCnpj(cnpj) {
+    return cnpj.length <= 18;
   }
 
   function validateField(field) {
-    if (typeof field === "string") {
-      return field.trim() !== "";
-    }
-    return false;
-  }  
+    return field !== null && field.trim() !== "";
+  }
 
   return (
     <div className={styles.centeredForm}>
+      {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
+      {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
         <div className={styles.inputContainer}>
-          <input type="text" ref={nomeRef} className={styles.inputField} placeholder="Nome" />
+          <input type="text" ref={nomeRef} className={styles.inputField} name="nome" placeholder="Nome" />
         </div>
         <div className={styles.inputContainer}>
-          <input type="text" ref={emailRef} className={styles.inputField} placeholder="Email" />
+          <input type="text" ref={emailRef} className={styles.inputField} name="email" placeholder="Email" />
         </div>
         <div className={styles.inputContainer}>
-          <input type="text" ref={enderecoRef} className={styles.inputField} placeholder="Endereço" />
+          <input type="text" ref={enderecoRef} className={styles.inputField} name="endereco" placeholder="Endereço" />
         </div>
         <div className={styles.inputContainer}>
-          <input type="text" ref={descricaoRef} className={styles.inputField} placeholder="Descrição" />
+          <input type="text" ref={descricaoRef} className={styles.inputField} name="descricao" placeholder="Descrição" />
         </div>
         <div className={styles.inputContainer}>
-          <input type="text" ref={cnpjRef} className={styles.inputField} placeholder="CNPJ" />
+          <input type="text" ref={cnpjRef} className={styles.inputField} name="cnpj" placeholder="CNPJ" />
         </div>
         <div className={styles.inputContainer}>
-          <input type="text" ref={telefoneRef} className={styles.inputField} placeholder="Telefone" />
+          <input type="text" ref={telefoneRef} className={styles.inputField} name="telefone" placeholder="Telefone" />
         </div>
         <div className={styles.inputContainer}>
-          <input type="password" ref={passwordRef} className={styles.inputField} placeholder="Senha" />
+          <input type="password" ref={passwordRef} className={styles.inputField} name="password" placeholder="Senha" />
         </div>
         <button type="submit" className={styles.button}>
           Cadastrar

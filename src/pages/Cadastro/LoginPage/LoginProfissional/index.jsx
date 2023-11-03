@@ -31,7 +31,7 @@ const LoginProfissional = ({onLogin}) => {
           update(ref(databaseRef, `profissional/${user.uid}`), user_data);
   
           alert("Usuário profissional logado!");
-          history("/");
+          history("/profissional");
           onLogin("profissional");
         })
         .catch((error) => {

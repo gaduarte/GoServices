@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
+import React, { useRef , useState} from "react";
 import { useCadastroProfissionalDispatch } from "./CadastroProfissionalContext";
 import styles from "./Profissional.module.css";
 import { appF } from "../../../backend/Firebase/firebase";
 import { getAuth, createUserWithEmailAndPassword } from "@firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 
 const CadastroProfissional = () => {
   const nomeRef = useRef(null);
@@ -15,6 +15,9 @@ const CadastroProfissional = () => {
   const telefoneRef = useRef(null);
   const passwordRef = useRef(null);
   const dispatch = useCadastroProfissionalDispatch();
+
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   let nextId = 1;
 
@@ -41,15 +44,15 @@ const CadastroProfissional = () => {
     }
 
     if(
-      validate_field(nome) == null ||
-      validate_field(email) ==  null ||
-      validate_field(cpf) == null ||
-      validate_field(endereco) == null ||
-      validate_field(tipoServico) == null ||
-      validate_field(telefone) == null ||
-      validate_field(password) ==  null
+      !validate_field(nome) ||
+      !validate_field(email) ||
+      !validate_field(cpf) ||
+      !validate_field(endereco) ||
+      !validate_field(tipoServico)  ||
+      !validate_field(telefone)  ||
+      !validate_field(password) 
     ){
-      alert('Campos obrigatórios não preenchidos');
+      setErrorMessage('Campos obrigatórios não preenchidos');
       return;
     }
 
@@ -57,8 +60,9 @@ const CadastroProfissional = () => {
       const auth = getAuth(); 
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      const uid = user.uid;
 
-      const databaseRef = getDatabase(appF);
+      const db = getFirestore();
 
       const userDataProfissional = {
         email: email,
@@ -72,9 +76,13 @@ const CadastroProfissional = () => {
         lat_login: Date.now(),
       };
 
-      set(ref(databaseRef, 'profissional/' + user.uid), userDataProfissional);
+      const profissionalRef = doc(db, "profissional", uid);
+
+      try{
+        await setDoc(profissionalRef, userDataProfissional);
 
       const newUsuarioProfissional = {
+        type: "profissional",
         email: email,
         username: nome,
         cpf: cpf,
@@ -82,26 +90,31 @@ const CadastroProfissional = () => {
         tipoServico: tipoServico,
         empresa: empresa,
         telefone: telefone,
-        id: user.uid,
+        id: uid,
       };
 
-      fetch("http://localhost:3000/cadastro?type=profissional", {
+      const configUsuarioProfissional = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          userType: "profissional",
-          user: newUsuarioProfissional,
-        }),
-      })
-      .then((response)=> response.json())
+        body: JSON.stringify(newUsuarioProfissional),
+      }
+
+      await fetch("http://localhost:3000/cadastro/profissional", configUsuarioProfissional)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Erro na solicitação da API");
+        }
+        return response.json();
+      }).then((response)=> response.json())
       .then((data)=>{
-        alert('Usuário Cadastrado com Sucesso!');
+        setSuccessMessage('Usuário cadastrado com sucesso!');
+        setErrorMessage('');
       })
-      .catch((error)=>{
-        console.error("Erro ao enviar solicitação", error)
-      })
+      .catch((error) => {
+        console.error("Erro ao enviar solicitação", error);
+      });
 
     dispatch({
       type: 'added',
@@ -120,8 +133,13 @@ const CadastroProfissional = () => {
 
   }catch(error){
     console.error(error);
-    alert('Erro ao cadastrar Profissional');
+    setErrorMessage('Erro ao cadastrar usuário');
+    setSuccessMessage('');
   }
+}catch(error){
+  console.error(error);
+  setErrorMessage('Erro ao criar usuário no Firebase Authentication');
+}
   };
 
   //Funções de Validção
@@ -139,14 +157,13 @@ const CadastroProfissional = () => {
   }
 
   function validate_field(field){
-    if (typeof field === "string") {
-      return field.trim() !== "";
-    }
-    return false;
+    return field !== null && field.trim() !== "";
   }
 
   return (
     <div className={styles.centeredForm}>
+      {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
+      {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <div className={styles.inputContainer}>

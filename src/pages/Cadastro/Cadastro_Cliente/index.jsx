@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useCadastroDispatch } from "./CadastroClienteContext";
 import styles from "./Cliente.module.css";
-import { appF } from "../../../backend/Firebase/firebase";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const CadastroCliente = () => {
   const nomeRef = useRef(null);
@@ -13,6 +13,11 @@ const CadastroCliente = () => {
   const telefoneRef = useRef(null);
   const passwordRef = useRef(null);
   const dispatch = useCadastroDispatch();
+
+  const history = useNavigate();
+
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   let nextId = 1;
 
@@ -27,19 +32,19 @@ const CadastroCliente = () => {
     const password = passwordRef.current.value;
 
     if (validateEmail(email) === false || validatePassword(password) === false) {
-      alert('Email ou senha inválidos!');
+      setErrorMessage('Email ou senha inválidos!');
       return;
     }
 
     if (
-      validateField(nome) === false ||
-      validateField(cpf) === false ||
-      validateField(endereco) === false ||
-      validateField(telefone) === false ||
-      validateField(email) === false ||
-      validateField(password) === false
+      !validateField(nome) ||
+      !validateField(cpf) ||
+      !validateField(endereco) ||
+      !validateField(telefone)  ||
+      !validateField(email)  ||
+      !validateField(password) 
     ) {
-      alert('Campos obrigatórios não foram preenchidos!');
+      setErrorMessage('Campos obrigatórios não foram preenchidos!');
       return;
     }
 
@@ -47,8 +52,9 @@ const CadastroCliente = () => {
       const auth = getAuth(); 
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      const uid = user.uid;
 
-      const databaseRef = getDatabase(appF);
+      const db = getFirestore();
 
       const userData = {
         email: email,
@@ -60,58 +66,65 @@ const CadastroCliente = () => {
         last_login: Date.now(),
       };
 
-      set(ref(databaseRef, 'cliente/' + user.uid), userData);
+      const userDocRef = doc(db, "cliente", uid);
 
-      const newUsuario = {
-        email: email,
-        username: nome,
-        cpf: cpf,
-        endereco: endereco,
-        telefone: telefone,
-        id: user.uid,
-      };
+      try {
+        await setDoc(userDocRef, userData);
 
-      const configUsuario = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userType: "cliente",
-          user: newUsuario,
-        }),
-      }
+        const newUsuario = {
+          type: "cliente",
+          username: nome,
+          email: email,
+          endereco: endereco,
+          cpf: cpf,
+          telefone: telefone,
+          id: uid,
+        };
 
-      fetch("http://localhost:3000/cadastro?type=cliente", configUsuario)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Erro na solicitação da API");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          alert('Usuário Cadastrado com Sucesso!');
-        })
-        .catch((error) => {
-          console.error("Erro ao enviar solicitação", error);
+        const configUsuario = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newUsuario),
+        };
+
+        await fetch("http://localhost:3000/cadastro/cliente", configUsuario)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Erro na solicitação da API");
+            }
+            return response.json();
+          }).then((response)=> response.json())
+          .then((data)=>{
+            setSuccessMessage('Usuário cadastrado com sucesso!');
+            setErrorMessage('');
+          })
+          .catch((error) => {
+            console.error("Erro ao enviar solicitação", error);
+          });
+
+        dispatch({
+          type: "added",
+          id: nextId++, 
+          text: `Nome: ${nome}, Email: ${email}, Endereço: ${endereco}, CPF: ${cpf}, Telefone: ${telefone}, Senha: ${password}`,
         });
 
+        nomeRef.current.value = "";
+        emailRef.current.value = "";
+        enderecoRef.current.value = "";
+        cpfRef.current.value = "";
+        telefoneRef.current.value = "";
 
-      dispatch({
-        type: "added",
-        id: nextId++, 
-        text: `Nome: ${nome}, Email: ${email}, Endereço: ${endereco}, CPF: ${cpf}, Telefone: ${telefone}, Senha: ${password}`,
-      });
-
-
-      nomeRef.current.value = "";
-      emailRef.current.value = "";
-      enderecoRef.current.value = "";
-      cpfRef.current.value = "";
-      telefoneRef.current.value = "";
+        history("/login");
+      } catch (error) {
+        console.error(error);
+        setErrorMessage('Erro ao cadastrar usuário');
+        setSuccessMessage('');
+      }
     } catch (error) {
       console.error(error);
-      alert('Erro no cadastro.');
+      setErrorMessage('Erro ao criar usuário no Firebase Authentication');
     }
   };
 
@@ -131,18 +144,20 @@ const CadastroCliente = () => {
 
   return (
     <div className={styles.centeredForm}>
+      {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
+      {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
         <div className={styles.inputContainer}>
-          <input type="text" ref={nomeRef} className={styles.inputField} placeholder="Nome" />
+          <input type="text" ref={nomeRef} className={styles.inputField} name="nome" placeholder="Nome" />
         </div>
         <div className={styles.inputContainer}>
-          <input type="text" ref={emailRef} className={styles.inputField} placeholder="Email" />
+          <input type="text" ref={emailRef} className={styles.inputField} name="email" placeholder="Email" />
         </div>
         <div className={styles.inputContainer}>
-          <input type="text" ref={enderecoRef} className={styles.inputField} placeholder="Endereço" />
+          <input type="text" ref={enderecoRef} className={styles.inputField} name="endereco" placeholder="Endereço" />
         </div>
         <div className={styles.inputContainer}>
-          <input type="text" ref={cpfRef} className={styles.inputField} placeholder="Cpf" />
+          <input type="text" ref={cpfRef} className={styles.inputField} name="cpf" placeholder="Cpf" />
         </div>
         <div className={styles.inputContainer}>
           <input type="text" ref={telefoneRef} className={styles.inputField} placeholder="Telefone" />
@@ -150,7 +165,7 @@ const CadastroCliente = () => {
         <div className={styles.inputContainer}>
           <input type="password" ref={passwordRef} className={styles.inputField} placeholder="Senha" />
         </div>
-
+        
         <button type="submit" className={styles.button}>
           Cadastrar
         </button>
@@ -160,3 +175,4 @@ const CadastroCliente = () => {
 };
 
 export default CadastroCliente;
+

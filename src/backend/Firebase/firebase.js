@@ -6,6 +6,7 @@ import { getAnalytics } from "firebase/analytics";
 const firebaseConfig = {
     apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
     authDomain: "goservices-a0bf9.firebaseapp.com",
+    databaseURL: "https://goservices-a0bf9-default-rtdb.firebaseio.com",
     projectId: "goservices-a0bf9",
     storageBucket: "goservices-a0bf9.appspot.com",
     messagingSenderId: "966186778726",

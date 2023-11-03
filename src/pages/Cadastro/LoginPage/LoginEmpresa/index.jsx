@@ -31,7 +31,7 @@ const LoginEmpresa = ({onLogin}) => {
           update(ref(databaseRef, `empresa/${user.uid}`), user_data);
   
           alert("Usuário empresa logado!");
-          history("/");
+          history("/empresa");
           onLogin("empresa");
         })
         .catch((error) => {

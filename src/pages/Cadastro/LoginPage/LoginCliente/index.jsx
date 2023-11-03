@@ -31,7 +31,7 @@ const LoginCliente = ({onLogin}) => {
           update(ref(databaseRef, `cliente/${user.uid}`), user_data);
   
           alert("Usuário cliente logado!");
-          history("/");
+          history("/cliente");
           onLogin("cliente");
         })
         .catch((error) => {

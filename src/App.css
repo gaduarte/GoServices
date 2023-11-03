@@ -43,33 +43,37 @@
 
 .my-header{
   display: flex;
-  flex-direction: column;
+  flex-flow: column nowrap;
+  font-size: 12px;
+  line-height: 1em;
   width: 100vw;
 }
 
 .my-list{
   display: flex;
+  position: relative;
+  float: none;
+  top: 0;
+  left: 0;
+  font-size: 14px;
   gap: 1rem;
-}
-
-.my-list{
   background-color: #101e5c;
   border-radius: 5px;
   padding: 2px 5px;
-  min-width: 10rem;
   list-style: none;
 }
 
-.minha-lista li a {
+.my-list li a {
   display: block;
   color: white;
+  height: 60px;
+  position: relative;
+  width: 100%;
+  font-size: 14px;
+  z-index: 5;
 }
 
-.minha-lista li a.active {
-  border-bottom: 3px solid black;
+.my-list li a.active {
+  border-bottom: 3px solid #3C8DDE;
 }
-
-
-
-
-      
+   
