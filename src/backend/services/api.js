@@ -54,7 +54,7 @@ app.get('/cliente/1/:id', async(req,res)=>{
     
 })
 
-// Cadastro Serviço
+// Cadastro Cliente
 app.post('/cadastro/cliente', async (req, res) => {
     const generatedId = generateUniqueId();
 

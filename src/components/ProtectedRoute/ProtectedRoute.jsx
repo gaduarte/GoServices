@@ -1,23 +1,12 @@
-import { Route, NavLink } from "react-router-dom";
+import { Route, Navigate } from "react-router-dom";
 
-export function PrivateRoute({ children, userType, allowedUserType, ...rest }) {
-  return (
-    <Route
-      {...rest}
-      render={({ location }) => {
-        if (userType === allowedUserType) {
-          return children;
-        } else {
-          return (
-            <NavLink
-              to={{
-                pathname: "/login",
-                state: { from: location }
-              }}
-            />
-          );
-        }
-      }}
-    />
-  );
+export function PrivateRoute({ element, allowRoles }) {
+  const userRole = sessionStorage.getItem("role");
+
+  if (allowRoles.includes(userRole)) {
+    return <Route element={element} />;
+  } else {
+    return <Navigate to="/login" />;
+  }
 }
+

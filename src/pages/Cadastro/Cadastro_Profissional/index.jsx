@@ -1,7 +1,6 @@
 import React, { useRef , useState} from "react";
 import { useCadastroProfissionalDispatch } from "./CadastroProfissionalContext";
 import styles from "./Profissional.module.css";
-import { appF } from "../../../backend/Firebase/firebase";
 import { getAuth, createUserWithEmailAndPassword } from "@firebase/auth";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 
@@ -34,12 +33,12 @@ const CadastroProfissional = () => {
     const password = passwordRef.current.value;
 
     if(validateEmail(email) == false || validatePassword(password) == false){
-      alert('Email ou senha Inválidos!');
+      setErrorMessage('Email ou senha Inválidos!');
       return;
     }
 
     if (validate_cpf(cpf) == false){
-      alert('CPF inválido!');
+      setErrorMessage('CPF inválido!');
       return;
     }
 

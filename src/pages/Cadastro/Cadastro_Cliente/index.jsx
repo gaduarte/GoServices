@@ -116,6 +116,7 @@ const CadastroCliente = () => {
         cpfRef.current.value = "";
         telefoneRef.current.value = "";
 
+        console.log("Tentando redirecionar para /login");
         history("/login");
       } catch (error) {
         console.error(error);

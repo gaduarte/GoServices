@@ -1,11 +1,11 @@
 import { getAuth, signOut } from "firebase/auth";
-import { getDatabase, ref } from "firebase/database";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ClienteDashboard from "./ClienteDashboard";
 
 export function ClienteDados() {
   const history = useNavigate();
-  const [id, setId] = useState(null); 
+  const [id, setId] = useState(null);
 
   useEffect(() => {
     const auth = getAuth();
@@ -34,12 +34,12 @@ export function ClienteDados() {
 
   return (
     <div>
-      {id && (
+      {id && 
         <>
-          <p>Hello, user with ID: {id}</p>
+          <ClienteDashboard /> 
           <button onClick={logOut}>Sign Out</button>
         </>
-      )}
+    }
     </div>
   );
 }

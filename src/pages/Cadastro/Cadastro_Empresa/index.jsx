@@ -4,6 +4,7 @@ import styles from "./Empresa.module.css";
 import { appF } from "../../../backend/Firebase/firebase";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const CadastroEmpresa = () => {
   const nomeRef = useRef(null);
@@ -14,6 +15,8 @@ const CadastroEmpresa = () => {
   const telefoneRef = useRef(null);
   const passwordRef = useRef(null);
   const dispatch = useCadastroEmpresaDispatch();
+
+  const history = useNavigate();
 
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -126,6 +129,9 @@ const CadastroEmpresa = () => {
         cnpjRef.current.value = "";
         telefoneRef.current.value = "";
         passwordRef.current.value = "";
+
+        console.log("Tentando redirecionar para /login");
+        history("/");
       } catch (error) {
         console.error(error);
         setErrorMessage('Erro ao cadastrar usuário');

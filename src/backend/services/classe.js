@@ -13,6 +13,7 @@ let Goservice = class {
         this.servicos = []
     }
 
+    // Cliente
     async add_usuario(email, username, cpf, telefone, endereco, uid) {
         const userRef = db.collection("cliente").doc(uid);
 
@@ -63,6 +64,7 @@ let Goservice = class {
         return doc.data();
     }
 
+    // Empresa
     async add_usuario_empresa(email, username, cnpj, telefone, endereco, descricao, uid) {
     
         const empresaDocRef = db.collection("empresa").doc(uid);
@@ -113,7 +115,7 @@ let Goservice = class {
         return doc.data();
     }
     
-
+    // Pessoa Prestadora de Serviço
     async add_usuario_profissional(email, username, cpf, empresa, tipoServico, telefone, endereco, uid) {
     
         const profissionalDocRef = db.collection("profissional").doc(uid);
