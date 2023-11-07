@@ -148,10 +148,10 @@ const ClienteDashboard = () => {
           <Row style={{margin: "10px 0", textAlign: "left"}}>
             <Col md={3}>
               <Form.Group>
-                <Form.Label  style={{color: "black"}}>Nome de usuário:</Form.Label>
+                <Form.Label style={{color: "black"}}>Nome de usuário:</Form.Label>
               </Form.Group>
             </Col>
-            <Col md={9} className="text-secondary">
+            <Col md={9} className="text-secondary" >
               <Form.Group>
                 <Form.Control
                   type="text"

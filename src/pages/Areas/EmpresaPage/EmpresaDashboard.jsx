@@ -142,11 +142,11 @@ const EmpresaDashboard = () => {
             {isLoading ? (
                 <p>Carregando Informações...</p>
             ) : editMode ? (
-                <Form style={{ width: "400px", margin: "0 auto", padding: "0px", marginTop: "40px"}}>
-                    <Row style={{margin: "10px 0", textAlign: "left"}}>
+                <Form style={{width: "400px", margin: "0 auto", padding: "0px", marginTop: "40px"}}>
+                    <Row style={{margin: "5px 0", textAlign: "left"}}>
                         <Col md={3}>
                             <Form.Group>
-                                <Form.Label  style={{color: "black"}} >Nome da Empresa: </Form.Label>
+                                <Form.Label style={{color: "black"}}>Nome da Empresa: </Form.Label>
                             </Form.Group>
                         </Col>
                         <Col md={9} className="text-secundary">
@@ -161,10 +161,10 @@ const EmpresaDashboard = () => {
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row style={{margin: "10px 0", textAlign: "left"}}>
+                    <Row style={{margin: "5px 0", textAlign: "left"}}>
                         <Col md={3}>
                             <Form.Group>
-                                <Form.Label  style={{color: "black"}}>Email: </Form.Label>
+                                <Form.Label style={{color: "black"}}>Email: </Form.Label>
                             </Form.Group>
                         </Col>
                         <Col md={9} className="text-secundary">
@@ -177,10 +177,10 @@ const EmpresaDashboard = () => {
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row style={{margin: "10px 0", textAlign: "left"}}>
+                    <Row style={{margin: "5px 0", textAlign: "left"}}>
                         <Col md={3}>
                             <Form.Group>
-                                <Form.Label  style={{color: "black"}}>CNPJ:</Form.Label>
+                                <Form.Label style={{color: "black"}}>CNPJ:</Form.Label>
                             </Form.Group>
                         </Col>
                         <Col md={9} className="text-secundary">
@@ -193,10 +193,10 @@ const EmpresaDashboard = () => {
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row style={{margin: "10px 0", textAlign: "left"}}>
+                    <Row style={{margin: "5px 0", textAlign: "left"}}>
                         <Col md={3}>
                             <Form.Group>
-                                <Form.Label  style={{color: "black"}}>Descrição:
+                                <Form.Label style={{color: "black"}}>Descrição:
                                 </Form.Label>
                             </Form.Group>
                         </Col>
@@ -210,10 +210,10 @@ const EmpresaDashboard = () => {
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row> style={{margin: "10px 0", textAlign: "left"}}
+                    <Row style={{margin: "5px 0", textAlign: "left"}}>
                         <Col md={3}>
                             <Form.Group>
-                                <Form.Label  style={{color: "black"}}>Telefone:</Form.Label>
+                                <Form.Label style={{color: "black"}}>Telefone:</Form.Label>
                             </Form.Group>
                         </Col>
                         <Col md={9} className="text-secundary">
@@ -226,10 +226,10 @@ const EmpresaDashboard = () => {
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row style={{margin: "10px 0", textAlign: "left"}}>
+                    <Row style={{margin: "5px 0", textAlign: "left"}}>
                         <Col md={3}>
                             <Form.Group>
-                                <Form.Label  style={{color: "black"}}>Endereço:</Form.Label>
+                                <Form.Label style={{color: "black"}}>Endereço:</Form.Label>
                             </Form.Group>
                         </Col>
                         <Col md={9}>
@@ -243,8 +243,8 @@ const EmpresaDashboard = () => {
                         </Col>
                     </Row>
                     <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px"}}>
-                        <Button onClick={handleSaveClick} style={{padding: "2px", margin: "10px"}}>Salvar</Button>
-                        <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px"}}>Cancelar</Button>
+                    <Button onClick={handleSaveClick} style={{padding: "2px", margin: "10px"}}>Salvar</Button>
+                    <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px"}}>Cancelar</Button>
                     </div>
                 </Form>
             ) : (
