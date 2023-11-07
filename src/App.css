@@ -56,21 +56,19 @@
   border-radius: 5px;
   padding: 2px 5px;
   list-style: none;
-  margin: 0; /* Remova a margem superior */
+  margin: 0; 
 }
 
 .my-list li a {
   display: flex;
-  align-items: center; /* Alinhe verticalmente os ícones e texto */
+  align-items: center; 
   color: white;
   font-size: 14px;
-  text-decoration: none; /* Remova a sublinhado padrão dos links */
-  padding: 10px; /* Adicione um espaçamento uniforme */
+  text-decoration: none; 
+  padding: 10px; 
   border-bottom: 3px solid transparent;
 }
 
 .my-list li a.active {
   border-bottom: 3px solid #3C8DDE;
 }
-
-   

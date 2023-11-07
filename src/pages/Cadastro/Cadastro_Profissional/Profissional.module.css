@@ -67,7 +67,7 @@ form {
   color: black;
 }
 
-.button {
+button {
   width: 150px;
   height: 40px;
   background-color: #b14f28;
@@ -78,7 +78,7 @@ form {
   font-weight: bold;
 }
 
-.button:hover {
+button:hover {
   background-color: #214b86;
 }
 
