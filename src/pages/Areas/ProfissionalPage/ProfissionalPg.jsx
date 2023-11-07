@@ -144,11 +144,11 @@ return(
             {isLoading ? (
                 <p>Carregando Informações...</p>
             ) : editMode ? (
-                <Form>
-                    <Row>
+                <Form style={{ width: "400px", margin: "0 auto", padding: "0px", marginTop: "40px"}}>
+                    <Row style={{margin: "10px 0", textAlign: "left"}}>
                         <Col md={3}>
                             <Form.Group>
-                                <Form.Label>Nome da Pessoa Prestadora de Serviço:</Form.Label>
+                                <Form.Label style={{color: "black" }}>Nome da Pessoa Prestadora de Serviço:</Form.Label>
                             </Form.Group>
                         </Col>
                         <Col md={9} className="text-secundary">
@@ -161,10 +161,10 @@ return(
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col md={3}>
+                    <Row style={{margin: "5px 0", textAlign: "left"}}>
+                        <Col md={3} >
                             <Form.Group>
-                                <Form.Label>Email: </Form.Label>
+                                <Form.Label style={{ color: "black"}}>Email: </Form.Label>
                             </Form.Group>
                         </Col>
                         <Col md={9} className="text-secundary">
@@ -177,10 +177,10 @@ return(
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row style={{margin: "5px 0", textAlign: "left"}}>
                         <Col md={3}>
                             <Form.Group>
-                                <Form.Label>CPF:</Form.Label>
+                                <Form.Label style={{color: "black"}}>CPF:</Form.Label>
                             </Form.Group>
                         </Col>
                         <Col md={9} className="text-secundary">
@@ -193,10 +193,10 @@ return(
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row style={{margin: "5px 0", textAlign: "left"}}>
                         <Col md={3}>
                             <Form.Group>
-                                <Form.Label>Tipo de Serviço:</Form.Label>
+                                <Form.Label style={{color: "black"}}>Tipo de Serviço:</Form.Label>
                             </Form.Group>
                         </Col>
                         <Col md={9} className="text-secundary">
@@ -209,10 +209,10 @@ return(
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row style={{margin: "5px 0", textAlign: "left"}}>
                         <Col md={3}>
                             <Form.Group>
-                                <Form.Label>Telefone:</Form.Label>
+                                <Form.Label  style={{color: "black"}}>Telefone:</Form.Label>
                             </Form.Group>
                         </Col>
                         <Col md={9} className="text-secundary">
@@ -225,10 +225,10 @@ return(
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row style={{margin: "5px 0", textAlign: "left"}}>
                         <Col md={3}>
                             <Form.Group>
-                                <Form.Label>Endereço:</Form.Label>
+                                <Form.Label  style={{color: "black"}}>Endereço:</Form.Label>
                             </Form.Group>
                         </Col>
                         <Col md={9}>
@@ -241,8 +241,10 @@ return(
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Button onClick={handleSaveClick}>Salvar</Button>
-                    <Button onClick={handleCancelClick} >Cancelar</Button>
+                    <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px"}}>
+                    <Button onClick={handleSaveClick} style={{padding: "2px", margin: "10px"}}>Salvar</Button>
+                    <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px"}}>Cancelar</Button>
+                    </div>
                 </Form>
             ) : (
                 <Card>

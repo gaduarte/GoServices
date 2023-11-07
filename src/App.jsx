@@ -7,16 +7,44 @@ import LoginUsuario from "./pages/Cadastro/LoginPage";
 import { ClienteDados } from "./pages/Areas/ClientePage";
 import { EmpresaDados } from "./pages/Areas/EmpresaPage";
 import { ProfissionalDados } from "./pages/Areas/ProfissionalPage";
-import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Importe as funções do Firebase Auth
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { collection, doc, getDocs, getFirestore, setDoc, query, where } from "firebase/firestore";
+import { SearchT } from "./pages/Search/Search";
+
 
 function App() {
   const [firebaseReady, setFirebaseReady] = useState(false);
   const [user, setUser] = useState(null);
+  const [userRole, setUserRole] = useState(null);
+
+  const checkUserInProfissionalCollection = async (email) => {
+    const db = getFirestore();
+    const userRef = collection(db, "profissional");
+    const q = query(userRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+  };
+
+  const checkUserInEmpresaCollection = async (email) => {
+    const db = getFirestore();
+    const userRef = collection(db, "empresa");
+    const q = query(userRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+  };
+
+  const checkUserInClienteCollection = async (email) => {
+    const db = getFirestore();
+    const usersRef = collection(db, "cliente");
+    const q = query(usersRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+  };
 
   useEffect(() => {
     const checkFirebase = async () => {
       try {
-        //await initializeApp(appF);
+        // Inicialize seu Firebase aqui
         setFirebaseReady(true);
       } catch (error) {
         console.error(error);
@@ -28,13 +56,27 @@ function App() {
   useEffect(() => {
     const auth = getAuth();
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
+    onAuthStateChanged(auth, async (authUser) => {
+      if (authUser) {
         // O usuário está autenticado
-        setUser(user);
+        setUser(authUser);
+        const isProfissional = await checkUserInProfissionalCollection(authUser.email);
+        const isCliente = await checkUserInClienteCollection(authUser.email);
+        const isEmpresa = await checkUserInEmpresaCollection(authUser.email);
+
+        if (isProfissional) {
+          setUserRole("profissional");
+        } else if (isCliente) {
+          setUserRole("cliente");
+        } else if (isEmpresa) {
+          setUserRole("empresa");
+        } else {
+          setUserRole(null);
+        }
       } else {
         // O usuário não está autenticado
         setUser(null);
+        setUserRole(null);
       }
     });
   }, []);
@@ -43,14 +85,9 @@ function App() {
     return <div>Carregando Firebase....</div>
   }
 
-  const checkUserRole = (allowRoles) => {
-    const userRole = sessionStorage.getItem("role");
-    return allowRoles.includes(userRole);
-  }
-
   return (
-    <div>
-      <BrowserRouter>
+    <BrowserRouter>
+      <div>
         <header className="my-header">
           <nav>
             <ul className="my-list">
@@ -58,16 +95,26 @@ function App() {
                 <NavLink to="/">Home</NavLink>
               </li>
               <li>
-                {user ? <NavLink to="/cliente">Meu Perfil</NavLink> : null}
+                {userRole === "cliente" ? (
+                  <NavLink to="/cliente">Meu Perfil</NavLink>
+                ) : null}
               </li>
               <li>
-                {user ? <NavLink to="/empresa">Minha Área</NavLink> : null}
+                {userRole === "profissional" ? (
+                  <NavLink to="/profissional">Perfil do Profissional</NavLink>
+                ) : null}
               </li>
               <li>
+                {userRole === "empresa" ? (
+                  <NavLink to="/empresa">Minha Área</NavLink>
+                ) : null}
                 {user ? null : <NavLink to="/cadastro">Cadastrar-se</NavLink>}
               </li>
               <li>
                 {user ? null : <NavLink to="/login">Login</NavLink>}
+              </li>
+              <li>
+                  <SearchT />
               </li>
             </ul>
           </nav>
@@ -77,37 +124,13 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/cadastro/*" element={<CadastrarUsuario />} />
           <Route path="/login" element={<LoginUsuario />} />
-          <Route path="cliente/*" element={<ClienteRoutes />} />
-          <Route path="empresa/*" element={<EmpresaRoutes />} />
-          <Route path="profissional/*" element={<ProfissionalRoutes />} />
+          {userRole === "cliente" && <Route path="/cliente/*" element={<ClienteDados />} />}
+          {userRole === "profissional" && <Route path="/profissional/*" element={<ProfissionalDados />} />}
+          {userRole === "empresa" && <Route path="/empresa/*" element={<EmpresaDados />} />}
         </Routes>
-      </BrowserRouter>
-    </div>
+      </div>
+    </BrowserRouter>
   );
-}
-
-function ClienteRoutes() {
-  return (
-    <Routes>
-      <Route path="/" element={<ClienteDados />} />
-    </Routes>
-  )
-}
-
-function EmpresaRoutes() {
-  return (
-    <Routes>
-      <Route path="/" element={<EmpresaDados />} />
-    </Routes>
-  )
-}
-
-function ProfissionalRoutes(){
-  return(
-    <Routes>
-      <Route path="/" element={<ProfissionalDados />} />
-    </Routes>
-  )
 }
 
 export default App;
