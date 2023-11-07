@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { collection, doc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col, Card, Button } from  "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -115,18 +115,22 @@ const ClienteDashboard = () => {
         async function fetchCliente(){
             try{
                 setIsLoading(true);
-                const querySnapshot = await getDocs(collection(db, "cliente"));
-                const clienteData = [];
 
-                querySnapshot.forEach((doc)=>{
-                    clienteData.push({id: doc.id, data: doc.data()});
-                });
+                const auth = getAuth();
+                const user = auth.currentUser;
+                const uid = user ? user.uid : null;
 
-                if(clienteData.length > 0){
-                    setClientInfo(clienteData[0].data);
+                if(uid){
+                    const clienteDocRef = doc(db, "cliente", uid);
+
+                    const docSnapshot = await getDoc(clienteDocRef);
+
+                    if(docSnapshot.exists()){
+                        const data = docSnapshot.data();
+                        setClientInfo(data);
+                    }
+                    setIsLoading(false);
                 }
-
-                setIsLoading(false);
                 }catch(error) {
                     console.error("Erro ao buscar informações: ", error);
                     setIsLoading(false);

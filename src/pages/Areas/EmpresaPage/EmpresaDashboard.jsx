@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { collection, doc, getDocs, getFirestore, setDoc, query , where} from "firebase/firestore";
+import { collection, doc, getDocs, getFirestore, setDoc, query , where, getDoc} from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col, Card, Button } from  "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -113,18 +113,22 @@ const EmpresaDashboard = () => {
         async function fetchEmpresa(){
             try{
                 setIsLoading(true);
-                const querySnapshot = await getDocs(collection(db, "empresa"));
-                const empresaData = [];
 
-                querySnapshot.forEach((doc)=>{
-                    empresaData.push({id: doc.id, data: doc.data()});
-                });
+                const auth = getAuth();
+                const user = auth.currentUser;
+                const uid = user ? user.uid : null;
 
-                if(empresaData.length > 0){
-                    setEmpresaInfo(empresaData[0].data);
+                if(uid){
+                    const empresaDocRef = doc(db, "empresa", uid);
+
+                    const docSnapshot = await getDoc(empresaDocRef);
+
+                    if(docSnapshot.exists()){
+                        const data = docSnapshot.data();
+                        setEmpresaInfo(data);
+                    }
+                    setIsLoading(false);
                 }
-
-                setIsLoading(false);
             }catch(error){
                 console.error("Erro ao buscar informações: ", error);
                 setIsLoading(false);

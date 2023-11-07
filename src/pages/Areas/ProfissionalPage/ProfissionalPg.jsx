@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { collection, doc, getDocs, getFirestore, setDoc, query , where} from "firebase/firestore";
+import { collection, doc, getDocs, getFirestore, setDoc, query , where, getDoc} from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col, Card, Button } from  "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -113,18 +113,23 @@ const ProfissionalDashboard = () => {
         async function fetchProfissional(){
             try{
                 setIsLoading(true);
-                const querySnapshot = await getDocs(collection(db, "profissional"));
-                const profissionalData = [];
 
-                querySnapshot.forEach((doc)=>{
-                    profissionalData.push({id:doc.id, data: doc.data()});
-                });
+                const auth = getAuth();
+                const user = auth.currentUser;
+                const uid = user ? user.uid : null;
 
-                if(profissionalData.length > 0){
-                    setProfissionalInfo(profissionalData[0].data);
+                if(uid){
+                    const profissionalDocRef = doc(db, "profissional", uid);
+
+                    const docSnapshot = await getDoc(profissionalDocRef);
+
+                    if(docSnapshot.exists()){
+                        const data = docSnapshot.data();
+                        setProfissionalInfo(data);
+                    }
+                    setIsLoading(false);
                 }
 
-                setIsLoading(false);
             }catch(error){
                 console.error("Erro ao buscar informações: ", error);
                 setIsLoading(false);
@@ -133,18 +138,175 @@ const ProfissionalDashboard = () => {
        fetchProfissional();
     }, []);
 
-/*
+
 return(
         <Container>
             {isLoading ? (
                 <p>Carregando Informações...</p>
             ) : editMode ? (
                 <Form>
-                    <Row></Row>
+                    <Row>
+                        <Col md={3}>
+                            <Form.Group>
+                                <Form.Label>Nome da Pessoa Prestadora de Serviço:</Form.Label>
+                            </Form.Group>
+                        </Col>
+                        <Col md={9} className="text-secundary">
+                            <Form.Group>
+                                <Form.Control
+                                type="text"
+                                value={profissionalInfo.username}
+                                onChange={(e)=> setProfissionalInfo({...profissionalInfo, username: e.target.value})}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={3}>
+                            <Form.Group>
+                                <Form.Label>Email: </Form.Label>
+                            </Form.Group>
+                        </Col>
+                        <Col md={9} className="text-secundary">
+                            <Form.Group>
+                                <Form.Control
+                                type="text"
+                                value={profissionalInfo.email}
+                                onChange={(e)=> setProfissionalInfo({...profissionalInfo, email: e.target.value})}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={3}>
+                            <Form.Group>
+                                <Form.Label>CPF:</Form.Label>
+                            </Form.Group>
+                        </Col>
+                        <Col md={9} className="text-secundary">
+                            <Form.Group>
+                                <Form.Control
+                                type="text"
+                                value={profissionalInfo.cpf}
+                                onChange={(e)=> setProfissionalInfo({...profissionalInfo, cpf: e.target.value})}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={3}>
+                            <Form.Group>
+                                <Form.Label>Tipo de Serviço:</Form.Label>
+                            </Form.Group>
+                        </Col>
+                        <Col md={9} className="text-secundary">
+                            <Form.Group>
+                                <Form.Control
+                                type="text"
+                                value={profissionalInfo.tipoServico}
+                                onChange={(e)=> setProfissionalInfo({...profissionalInfo, tipoServico: e.target.value})}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={3}>
+                            <Form.Group>
+                                <Form.Label>Telefone:</Form.Label>
+                            </Form.Group>
+                        </Col>
+                        <Col md={9} className="text-secundary">
+                            <Form.Group>
+                                <Form.Control
+                                type="text"
+                                value={profissionalInfo.telefone}
+                                onChange={(e)=> setProfissionalInfo({...profissionalInfo, telefone: e.target.value})}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={3}>
+                            <Form.Group>
+                                <Form.Label>Endereço:</Form.Label>
+                            </Form.Group>
+                        </Col>
+                        <Col md={9}>
+                            <Form.Group>
+                                <Form.Control
+                                type="text"
+                                value={profissionalInfo.endereco}
+                                onChange={(e)=> setProfissionalInfo({...profissionalInfo, endereco: e.target.value})}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Button onClick={handleSaveClick}>Salvar</Button>
+                    <Button onClick={handleCancelClick} >Cancelar</Button>
                 </Form>
-            )
+            ) : (
+                <Card>
+                    <Card.Body>
+                        <Row>
+                            <Col md={12}>
+                                <Card>
+                                    <Card.Body>
+                                        <Row>
+                                            <Col md={3}>
+                                                <strong>Nome do Profissional:</strong>
+                                            </Col>
+                                            <Col md={9} className="text-secundary">{profissionalInfo.username}</Col>
+                                        </Row>
+                                        <hr />
+                                        <Row>
+                                            <Col md={3}>
+                                                <strong>Email:</strong>
+                                            </Col>
+                                            <Col md={9} className="text-secundary">{profissionalInfo.email}</Col>
+                                        </Row>
+                                        <hr />
+                                        <Row>
+                                            <Col md={3}>
+                                            <strong>CPF:</strong>
+                                            </Col>
+                                            <Col md={9} className="text-secondary">
+                                            {profissionalInfo.cpf}
+                                            </Col>
+                                        </Row>
+                                        <hr />
+                                        <Row>
+                                            <Col md={3}>
+                                            <strong>Tipo de Serviço</strong>
+                                            </Col>
+                                            <Col md={9} className="text-secondary">
+                                            {profissionalInfo.tipoServico}
+                                            </Col>
+                                        </Row>
+                                        <hr />
+                                        <Row>
+                                            <Col md={3}>
+                                                <strong>Telefone:</strong>
+                                            </Col>
+                                            <Col md={9} className="text-secundary">{profissionalInfo.telefone}</Col>
+                                        </Row>
+                                        <hr />
+                                        <Row>
+                                            <Col md={3}>
+                                                <strong>Endreço:</strong>
+                                            </Col>
+                                            <Col md={9} className="text-secundary">{profissionalInfo.endereco}</Col>
+                                        </Row>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        </Row>
+                        <Button onClick={handleEditClick}>Editar</Button>
+                    </Card.Body>
+                </Card>
             )}
         </Container>
-    )
-    */
+    );
+    
 }
+
+export default ProfissionalDashboard;
