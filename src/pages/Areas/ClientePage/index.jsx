@@ -7,6 +7,8 @@ export function ClienteDados() {
   const history = useNavigate();
   const [id, setId] = useState(null);
 
+  const [alertMessage, setAlertMessage] = useState("");
+
   useEffect(() => {
     const auth = getAuth();
 
@@ -24,7 +26,7 @@ export function ClienteDados() {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-        alert("Signed Out");
+        setAlertMessage("Signed Out");
         history("/login");
       })
       .catch((error) => {
@@ -37,6 +39,7 @@ export function ClienteDados() {
       {id && 
         <>
           <ClienteDashboard /> 
+          {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
           <button onClick={logOut}>Sign Out</button>
         </>
     }

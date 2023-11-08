@@ -121,10 +121,10 @@ const agendarServico = (empresaId, servicoId, dataAgendamento) => {
           }}
         >
           
-          <img src={'https://firebasestorage.googleapis.com/v0/b/goservices-a0bf9.appspot.com/o/limpeza.jpeg?alt=media&token=0dd0c5a2-c5f9-49f1-893b-0c26fab3d177&_gl=1*4xis0j*_ga*MTEyMjc3MDQ4Ny4xNjk3NTQyNzY3*_ga_CW55HF8NVT*MTY5ODY3NDg1MC4xOC4xLjE2OTg2NzU4NTAuNTQuMC4w} alt={servico.data.nome'} alt={servico.data.nome}
+          <img src={servico.data.img} alt={servico.data.nome}
           style={{
             width: "100%",
-            height: "auto",
+            height: "100px",
             marginBottom: "-20px"
           }}/>
 
@@ -134,9 +134,13 @@ const agendarServico = (empresaId, servicoId, dataAgendamento) => {
               {servico.data.nome}
             </h5>
 
-            <p className="card-description" style={{ fontSize: "16px", color: "#0F1111"}}>
+            <p style={{fontSize: "16px", display: "flex", color: "#0F1111"}}>
+              {servico.data.empresa}
+            </p>
+            <p className="card-description" style={{ fontSize: "16px", display: "flex", color: "#0F1111"}}>
               {servico.data.descricao}
             </p>
+    
             </div>
             <div className="card-price" style={{ fontSize: "13px", top:"-.75em", color: "black", marginBottom: "-40px" }}>
             R$:{' '} 

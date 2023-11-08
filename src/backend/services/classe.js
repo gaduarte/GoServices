@@ -166,6 +166,34 @@ let Goservice = class {
         return doc.data();
     }
 
+    criar_servico(uid){
+        db.collection("servico").doc(uid).set({
+            lista_servico: ['default']
+        })
+    }
+
+    async retrieveServico(id_procurando){
+        id_procurando = id_procurando.replace(/\s/g, '');
+        const servicoRef = db.collection("servico").doc(id_procurando);
+        const doc = await servicoRef.get();
+
+        if(!doc.exists()){
+            console.log("Serviço não existe.");
+        }else{
+            return doc.data();
+        }
+    }
+
+    async retrieveAllServicos(uid){
+        const servicoRef = db.collection("servico").doc(uid);
+        const snapshot = await servicoRef.get();
+        const servicos = [];
+        snapshot.forEach(doc=>{
+            servicos.push(doc.data());
+        });
+        return servicos;
+    }
+
 }
 
 module.exports = Goservice

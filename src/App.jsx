@@ -11,6 +11,8 @@ import { ProfissionalDados } from "./pages/Areas/ProfissionalPage";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, doc, getDocs, getFirestore, setDoc, query, where } from "firebase/firestore";
 import { SearchT } from "./pages/Search/Search";
+import { EmpresaAdicionaServ } from "./pages/Areas/EmpresaPage/AddServiço";
+import { EmpresaAtualiza } from "./pages/Areas/EmpresaPage/AtualizarServiço";
 
 
 function App() {
@@ -106,6 +108,16 @@ function App() {
                 ) : null}
               </li>
               <li>
+              {userRole === "empresa" ? (
+                  <NavLink to="/addServiço">Adicionar Serviço</NavLink>
+                ) : null}
+              </li>
+              <li>
+              {userRole === "empresa" ? (
+                  <NavLink to="/atualizaServiço">Atualizar Serviço</NavLink>
+                ) : null}
+              </li>
+              <li>
                 {userRole === "empresa" ? (
                   <NavLink to="/empresa">Minha Área</NavLink>
                 ) : null}
@@ -128,6 +140,8 @@ function App() {
           {userRole === "cliente" && <Route path="/cliente/*" element={<ClienteDados />} />}
           {userRole === "profissional" && <Route path="/profissional/*" element={<ProfissionalDados />} />}
           {userRole === "empresa" && <Route path="/empresa/*" element={<EmpresaDados />} />}
+          {userRole === "empresa" && <Route path="/addServiço/*" element={<EmpresaAdicionaServ />} />}
+          {userRole === "empresa" && <Route path="/atualizaServiço/*" element={<EmpresaAtualiza/>} />}
         </Routes>
       </div>
     </BrowserRouter>

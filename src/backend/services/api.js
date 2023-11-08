@@ -34,6 +34,12 @@ function generateUniqueId() {
     return `${timestamp}-${randomPart}`;
 }
 
+app.get('/servicos/:uid', async(req, res)=>{
+    const uid = generateUniqueId();
+    const msg = await gs.retrieveAllServicos(uid);
+    res.json(msg);
+})
+
 // Cliente
 app.get('/cliente/:email', async (req, res) => {
     const email = req.params.email;
