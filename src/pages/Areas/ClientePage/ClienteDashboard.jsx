@@ -236,8 +236,8 @@ const ClienteDashboard = () => {
             </Col>
           </Row>
           <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px"}}>
-            <Button onClick={handleSaveClick} style={{padding: "2px", margin: "10px"}}>Salvar</Button>
-            <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px"}}>Cancelar</Button>
+            <Button onClick={handleSaveClick} style={{padding: "2px", margin: "10px", color: "#f44336", borderRadius: "5px"}}>Salvar</Button>
+            <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px", color: "#f44336", borderRadius: "5px"}}>Cancelar</Button>
           </div>
         </Form>
       ) : (

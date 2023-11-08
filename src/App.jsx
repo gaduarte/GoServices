@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route, BrowserRouter, NavLink } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
 import './App.css'
+import './index.css'
 import CadastrarUsuario from "./pages/Cadastro";
 import LoginUsuario from "./pages/Cadastro/LoginPage";
 import { ClienteDados } from "./pages/Areas/ClientePage";

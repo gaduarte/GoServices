@@ -3,6 +3,7 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background-color: #101e5c;
 }
 
 .logo {
@@ -43,7 +44,7 @@
 
 .my-header {
   display: flex;
-  align-items: center; /* Alinhe verticalmente os elementos no cabeçalho */
+  align-items: center;
   font-size: 12px;
   line-height: 1em;
   width: 100vw;
