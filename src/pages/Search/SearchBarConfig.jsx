@@ -20,7 +20,7 @@ const SearchBar = ({ onSearch }) => {
         />
         <button
           onClick={handleSearch}
-          style={{ padding: "5px 10px", cursor: "pointer", width: "50px" }}
+          style={{ padding: "5px 10px", cursor: "pointer", width: "40px", color: "white" }}
         >
           <FaSearch size={20} /> 
         </button>

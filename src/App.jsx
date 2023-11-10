@@ -13,6 +13,9 @@ import { collection, doc, getDocs, getFirestore, setDoc, query, where } from "fi
 import { SearchT } from "./pages/Search/Search";
 import { EmpresaAdicionaServ } from "./pages/Areas/EmpresaPage/AddServiço";
 import { EmpresaAtualiza } from "./pages/Areas/EmpresaPage/AtualizarServiço";
+import { AgendarDados } from "./pages/HomePage/Agendamento";
+import ClienteAddServico from "./pages/Areas/ClientePage/AddCartao/AddCartao";
+import { ClienteAdicionaCartao } from "./pages/Areas/ClientePage/AddCartao";
 
 
 function App() {
@@ -103,13 +106,18 @@ function App() {
                 ) : null}
               </li>
               <li>
+              {userRole === "cliente" ? (
+                  <NavLink to="/addCartao">Adicionar Cartão</NavLink>
+                ) : null}
+              </li>
+              <li>
                 {userRole === "profissional" ? (
                   <NavLink to="/profissional">Perfil do Profissional</NavLink>
                 ) : null}
               </li>
               <li>
               {userRole === "empresa" ? (
-                  <NavLink to="/addServiço">Adicionar Serviço</NavLink>
+                  <NavLink to="/addServico">Adicionar Serviço</NavLink>
                 ) : null}
               </li>
               <li>
@@ -138,9 +146,11 @@ function App() {
           <Route path="/cadastro/*" element={<CadastrarUsuario />} />
           <Route path="/login" element={<LoginUsuario />} />
           {userRole === "cliente" && <Route path="/cliente/*" element={<ClienteDados />} />}
+          {userRole === "cliente" && <Route path="/addCartao/*" element={<ClienteAdicionaCartao />} />}
+          {userRole === "cliente" && <Route path="/agendamento/:servicoId" element={<AgendarDados />} />}
           {userRole === "profissional" && <Route path="/profissional/*" element={<ProfissionalDados />} />}
           {userRole === "empresa" && <Route path="/empresa/*" element={<EmpresaDados />} />}
-          {userRole === "empresa" && <Route path="/addServiço/*" element={<EmpresaAdicionaServ />} />}
+          {userRole === "empresa" && <Route path="/addServico/*" element={<EmpresaAdicionaServ />} />}
           {userRole === "empresa" && <Route path="/atualizaServiço/*" element={<EmpresaAtualiza/>} />}
         </Routes>
       </div>

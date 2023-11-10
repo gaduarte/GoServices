@@ -34,11 +34,6 @@ function generateUniqueId() {
     return `${timestamp}-${randomPart}`;
 }
 
-app.get('/servicos/:uid', async(req, res)=>{
-    const uid = generateUniqueId();
-    const msg = await gs.retrieveAllServicos(uid);
-    res.json(msg);
-})
 
 // Cliente
 app.get('/cliente/:email', async (req, res) => {
@@ -84,6 +79,34 @@ app.post('/cadastro/cliente', async (req, res) => {
 
     console.log('Cadastro de cliente realizado com sucesso.');
 });
+
+app.post('/addCartao', async(req,res)=>{
+    try{
+        const generatedId = generateUniqueId();
+
+        const cartaoData = {
+            numero: req.body.numero,
+            codigo: req.body.codigo,
+            nome: req.body.nome,
+            endereco: req.body.endereco,
+            dataValidade: req.body.dataValidade,
+            id: generatedId
+        };
+        console.log("Cartão adicionando", cartaoData);
+
+        cartaoData.numero,
+        cartaoData.nome,
+        cartaoData.endereco,
+        cartaoData.dataValidade,
+        cartaoData.id
+
+        console.log('Simulação: Cadastro de cartão realizado com sucesso.');
+        res.status(200).json({ message: 'Cartão cadastrado com sucesso!' });
+    }catch (error) {
+        console.error("Erro ao cadastrar serviço", error);
+        res.status(500).json({ error: 'Erro interno ao cadastrar serviço' });
+      }
+})
 
 // Empresa 
 app.get('/empresa/:email', async (req, res) => {
@@ -132,6 +155,39 @@ app.post('/cadastro/empresa', async (req, res) => {
     console.log('Cadastro de empresa realizado com sucesso.');
 });
 
+
+app.post('/addServico', async (req, res) => {
+    try {
+      const generatedId = generateUniqueId();
+  
+      const servicoData = {
+        descricao: req.body.descricao,
+        nome: req.body.nome,
+        valor: req.body.valor,
+        empresa: req.body.empresa,
+        empresaId: req.body.empresaId,
+        id: generatedId,
+      };
+  
+      console.log('Dados de serviço de empresa:', servicoData);
+  
+      servicoData.descricao,
+      servicoData.nome,
+      servicoData.valor,
+      servicoData.empresa,
+      servicoData.empresaId,
+      servicoData.id
+
+      console.log('Simulação: Cadastro de serviço realizado com sucesso.');
+  
+      res.status(200).json({ message: 'Serviço cadastrado com sucesso!' });
+    } catch (error) {
+      console.error("Erro ao cadastrar serviço", error);
+      res.status(500).json({ error: 'Erro interno ao cadastrar serviço' });
+    }
+  });
+  
+
 // Pessoa Portadora de Serviço
 app.get('/profissional/:email', async (req, res)=>{
     const email = req.params.email;
@@ -178,6 +234,9 @@ app.post('/cadastro/profissional', async (req, res) => {
 
     console.log('Cadastro de profissional realizado com sucesso.');
 });
+
+//Agendamento
+
 
 
 

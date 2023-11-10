@@ -145,7 +145,7 @@ const EmpresaDashboard = () => {
                 <p>Carregando Informações...</p>
             ) : editMode ? (
                 <Form style={{width: "400px", margin: "0 auto", padding: "0px", marginTop: "40px"}}>
-                    <Row style={{margin: "5px 0", textAlign: "left"}}>
+                    <Row style={{margin: "5px 0", textAlign: "left", color: "white"}}>
                         <Col md={3}>
                             <Form.Group>
                                 <Form.Label style={{color: "black"}}>Nome da Empresa: </Form.Label>

@@ -1,10 +1,9 @@
 import { getAuth, signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ClienteDashboard from "./ClienteDashboard";
-import { ClienteAdicionaCartao } from "./AddCartao";
+import Agendamento from "./Agendamento";
 
-export function ClienteDados() {
+export function AgendarDados() {
   const history = useNavigate();
   const [id, setId] = useState(null);
 
@@ -39,9 +38,7 @@ export function ClienteDados() {
     <div>
       {id && 
         <>
-          <ClienteDashboard /> 
-          {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-          <button onClick={logOut}>Sign Out</button>
+          <Agendamento /> 
         </>
     }
     </div>

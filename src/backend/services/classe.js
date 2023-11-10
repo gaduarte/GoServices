@@ -166,12 +166,6 @@ let Goservice = class {
         return doc.data();
     }
 
-    criar_servico(uid){
-        db.collection("servico").doc(uid).set({
-            lista_servico: ['default']
-        })
-    }
-
     async retrieveServico(id_procurando){
         id_procurando = id_procurando.replace(/\s/g, '');
         const servicoRef = db.collection("servico").doc(id_procurando);

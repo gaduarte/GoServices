@@ -59,50 +59,25 @@ export function HomePage() {
   };
   }
 
-  // Função para agendar serviço
-const agendarServico = (empresaId, servicoId, dataAgendamento) => {
-  const auth = getAuth(appF);
+  const navigateToAgendamento = (servico) => {
+    const auth = getAuth(appF);
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const uid = user.uid;
+    onAuthStateChanged(auth, (user)=>{
+      if(user){
+        const uid = user.uid;
 
-      const dadosAgendamento = {
-        empresaId: empresaId,
-        servicoId: servicoId,
-        data: dataAgendamento,
-      };
-
-      const config = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dadosAgendamento),
-      };
-
-      fetch(`http://localhost:3000/agendamento/${uid}`, config)
-        .then((response) => {
-          if (response.ok) {
-            alert('Agendamento realizado com sucesso');
-          } else {
-            alert('Erro ao agendar o serviço');
-          }
-        })
-        .catch((error) => {
-          console.error("Erro ao enviar solicitação", error);
-        });
-    } else {
-      alert("Você precisa estar logado para realizar esta ação.");
+        history(`/agendamento/${servico.id}`); 
+      }else{
+        alert("Você precisa estar logado para realizar esta ação.");
       history('/login');
-    }
-  });
-};
+      }
+    }) 
+  };
 
 
   return (
     <main>
-      <h1>Lista de Serviços:</h1>
+      <h1 style={{color: "whitesmoke"}}>Lista de Serviços:</h1>
       <div className="container" style={{display: "flex", flexWrap: "wrap", position: "relative", margin: 0}}>
       {servicos.map((servico) => (
         <div
@@ -167,8 +142,8 @@ const agendarServico = (empresaId, servicoId, dataAgendamento) => {
             ❤️
           </button>
 
-            <button
-              onClick={() => agendarServico('empresaId',servico.id, 'dataAgendamento')}
+          <button
+              onClick={() => navigateToAgendamento(servico)}
               style={{
                 backgroundColor: "#b14f28",
                 border: "none",
@@ -178,7 +153,8 @@ const agendarServico = (empresaId, servicoId, dataAgendamento) => {
               }}
             >
               Agendar
-            </button>
+        </button>
+
           </div>
         </div>
       ))}

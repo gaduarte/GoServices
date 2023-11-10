@@ -1,10 +1,9 @@
 import { getAuth, signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import EmpresaAddServico from "./EmpresaAddServiço";
+import ClienteAddServico from "./AddCartao";
 
-
-export function EmpresaAdicionaServ() {
+export function ClienteAdicionaCartao() {
     const history = useNavigate();
     const[id, setId] = useState(null);
 
@@ -39,10 +38,11 @@ export function EmpresaAdicionaServ() {
         <div>
             {id && 
             <>
-            <EmpresaAddServico />
+            <ClienteAddServico />
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
             <button onClick={logOut}>Sign Out</button>
             </>}
         </div>
     )
+
 }
