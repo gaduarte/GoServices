@@ -3,6 +3,7 @@ import { Form, Button,  Container, Table, Col, Row } from "react-bootstrap";
 import { getDoc, collection, doc, addDoc, getFirestore, query, where, getDocs } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { NavLink } from "react-router-dom";
 
 
 const firebaseConfig = {
@@ -19,7 +20,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const ClienteAddServico = () => {
+const ClienteAddCartao = () => {
     const [cartoes, setCartao] = useState([]);
     const [id, setId] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -138,6 +139,15 @@ const ClienteAddServico = () => {
         const user = auth.currentUser;
         const uid = user ? user.uid : null;
 
+        if (uid) {
+            const empresaDocRef = doc(db, "cliente", uid);
+            const docSnapshot = await getDoc(empresaDocRef);
+      
+            if (docSnapshot.exists()) {
+              const data = docSnapshot.data();
+              setClienteInfo(data);
+            }
+
         const numero = numeroRef.current.value;
         const nome = nomRef.current.value;
         const codigo = codSegRef.current.value;
@@ -189,13 +199,14 @@ const ClienteAddServico = () => {
             setErrorMessage("Erro ao adicionar cartão: " + error.message);
         }
     }
+    }
 
     return(
         <Container>
            {successMessage && <div className="successMessage">{successMessage}</div>}
           {errorMessage && <div className="errorMessage">{errorMessage}</div>}
 
-          <Form style={{width: "400px", margin: "0 auto", padding: "0px", marginTop: "40px"}}> 
+          <Form style={{width: "700px", margin: "0 auto", padding: "0px", marginTop: "40px"}}> 
             <Row style={{margin: "5px 0", textAlign: "left"}}>
                 <Col md={3}>
                     <Form.Group>
@@ -208,6 +219,7 @@ const ClienteAddServico = () => {
                         type="number"
                         ref={codSegRef}
                         required
+                        style={{width: "400px"}}
                         />
                     </Form.Group>
                 </Col>
@@ -224,6 +236,7 @@ const ClienteAddServico = () => {
                         type="text"
                         ref={nomRef}
                         required
+                        style={{width: "400px"}}
                         />
                     </Form.Group>
                 </Col>
@@ -243,6 +256,7 @@ const ClienteAddServico = () => {
                         onChange={(e) => setDataValidade(e.target.value)}
                         value={dataValidade}
                         required
+                        style={{width: "400px"}}
                         />
                     </Form.Group>
                 </Col>
@@ -259,6 +273,7 @@ const ClienteAddServico = () => {
                         type="number"
                         ref={numeroRef}
                         required
+                        style={{width: "400px"}}
                         />
                     </Form.Group>
                 </Col>
@@ -277,19 +292,20 @@ const ClienteAddServico = () => {
                         value={clienteInfo.endereco || ""}
                         required
                         readOnly
+                        style={{width: "400px"}}
                         />
                     </Form.Group>
                 </Col>
             </Row>
             <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px"}} >
-                <Button variant="primary" onClick={handleCarataoSubmit} style={{margin: "10px", color: "green"}}>
+                <Button variant="primary" onClick={handleCarataoSubmit} style={{margin: "10px"}}>
                 Adicionar
                 </Button>
-                <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px", color: "#CC0000", borderRadius: "5px"}}>Cancelar</Button>
+                <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px", borderRadius: "5px", width: "100px"}}><NavLink to="/cliente">Cancelar</NavLink></Button>
             </div>
           </Form>
         </Container>
     )
 }
 
-export default ClienteAddServico;
+export default ClienteAddCartao;

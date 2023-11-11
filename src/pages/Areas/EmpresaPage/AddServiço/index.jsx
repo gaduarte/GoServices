@@ -2,6 +2,7 @@ import { getAuth, signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EmpresaAddServico from "./EmpresaAddServiço";
+import { NavLink } from "react-router-dom";
 
 
 export function EmpresaAdicionaServ() {
@@ -40,8 +41,14 @@ export function EmpresaAdicionaServ() {
             {id && 
             <>
             <EmpresaAddServico />
+            <button style={{margin: "10px", fontSize: "15px"}}>
+                <NavLink to="/atualizaServico" style={{color: "white"}}>Atualizar Serviço</NavLink>
+            </button>
+            <button style={{margin: "10px", fontSize: "15px"}}>
+                <NavLink to="/horarios" style={{color: "white"}}>Adicionar Horário</NavLink>
+            </button>
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-            <button onClick={logOut}>Sign Out</button>
+            <button onClick={logOut} style={{margin: "10px", fontSize: "15px"}}>Sign Out</button>
             </>}
         </div>
     )

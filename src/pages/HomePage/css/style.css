@@ -1,0 +1,41 @@
+/* Estilos padrão para todos os tamanhos de tela */
+.card-container {
+    background-color: #ffc0cb;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    width: 100%;
+    min-width: 12.9%;
+    max-height: 380px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-footer{
+    position: absolute;
+    margin-bottom: 20px;
+    justify-content: space-around;
+  }
+  
+  /* Estilos específicos para telas com largura maior que 768px */
+  @media (min-width: 769px) {
+    .card-container {
+      width: 12.6%; /* Largura diferente para telas maiores */
+    }
+  }
+  
+  /* Estilos específicos para telas com largura entre 320px e 768px */
+  @media (min-width: 320px) and (max-width: 768px) {
+    .card-container {
+      width: 30%; /* Largura diferente para telas menores */
+    }
+  }
+  
+  /* Estilos específicos para telas com largura menor que 320px */
+  @media (max-width: 319px) {
+    .card-container {
+      width: 50%; /* Largura diferente para telas muito pequenas */
+    }
+  }
+  

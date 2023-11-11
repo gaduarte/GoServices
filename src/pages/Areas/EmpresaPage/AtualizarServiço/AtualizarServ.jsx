@@ -6,14 +6,14 @@ import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
-    authDomain: "goservices-a0bf9.firebaseapp.com",
-    databaseURL: "https://goservices-a0bf9-default-rtdb.firebaseio.com",
-    projectId: "goservices-a0bf9",
-    storageBucket: "goservices-a0bf9.appspot.com",
-    messagingSenderId: "966186778726",
-    appId: "1:966186778726:web:31e6300c46c447d03cada7",
-    measurementId: "G-H7L211LBSZ"
+  apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
+  authDomain: "goservices-a0bf9.firebaseapp.com",
+  databaseURL: "https://goservices-a0bf9-default-rtdb.firebaseio.com",
+  projectId: "goservices-a0bf9",
+  storageBucket: "goservices-a0bf9.appspot.com",
+  messagingSenderId: "966186778726",
+  appId: "1:966186778726:web:31e6300c46c447d03cada7",
+  measurementId: "G-H7L211LBSZ"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -73,8 +73,8 @@ const EmpresaAtualizaServico = () => {
           sessionStorage.setItem("role", "empresa");
           setIsLoading(false);
         }
-      }
-    } catch (error) {
+      } 
+    }catch (error) {
       console.error("Erro ao verificar a função do usuário: ", error);
       setIsLoading(false);
     }
@@ -105,25 +105,21 @@ const EmpresaAtualizaServico = () => {
     async function fetchEmpresa() {
       try {
         setIsLoading(true);
-
+  
         const auth = getAuth();
         const user = auth.currentUser;
         const uid = user ? user.uid : null;
-
+  
         if (uid) {
           const empresaDocRef = doc(db, "empresa", uid);
           const docSnapshot = await getDoc(empresaDocRef);
-
+  
           if (docSnapshot.exists()) {
             const data = docSnapshot.data();
             setEmpresaInfo(data);
-            setServicoInfo({ ...servicoInfo, id: data.id });
+            setServicoInfo({ ...servicoInfo, id: data.id }); 
           }
-
-          if (servicoInfo.id) {
-            fetchServicosEmpresa(servicoInfo.id);
-          }
-
+  
           setIsLoading(false);
         }
       } catch (error) {
@@ -131,9 +127,16 @@ const EmpresaAtualizaServico = () => {
         setIsLoading(false);
       }
     }
-
+  
     fetchEmpresa();
   }, [servicoInfo, setServicoInfo]);
+  
+  useEffect(() => {
+    if (empresaInfo && servicoInfo.id) {
+      fetchServicosEmpresa(servicoInfo.id);
+    }
+  }, [servicoInfo, setServicoInfo]);
+  
 
   const handleEditClick = () => {
     setEditMode(true);
@@ -284,22 +287,6 @@ const EmpresaAtualizaServico = () => {
                     </Col>
                   </Row>
                   <hr />
-                  <Row>
-                    <Col md={3}>
-                      <strong>Imagem:</strong>
-                    </Col>
-                    <Col md={9}>
-                      <img
-                        src={servico.img}
-                        alt={servico.nome}
-                        style={{
-                          width: "100%",
-                          height: "auto",
-                          marginBottom: "-20px",
-                        }}
-                      />
-                    </Col>
-                  </Row>
                   <Button onClick={() => handleServicoSelect(index)}>Editar</Button>
                 </Card.Body>
               </Card>
@@ -312,3 +299,4 @@ const EmpresaAtualizaServico = () => {
 };
 
 export default EmpresaAtualizaServico;
+

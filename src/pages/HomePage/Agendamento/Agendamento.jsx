@@ -25,6 +25,7 @@ const Agendamento = () => {
   const [servicoData, setServicoData] = useState(null);
   const [clienteData, setClienteData] = useState(null);
   const [cartao, setCartaoCliente] = useState(null);
+  const [horarios, setHorarios] = useState(null);
   const [empresaData, setEmpresaData] = useState(null);
   const [profissionalData, setProfissionalData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -62,6 +63,16 @@ const Agendamento = () => {
           // Define o cliente logado
           const cliente = querySnapshot.docs[0].data();
           setClienteData(cliente);
+
+          // Fetch the "cartao" subcollection within the specific "cliente" document
+          const clienteId = querySnapshot.docs[0].id;
+          const cartaoQuery = query(collection(clienteRef, clienteId, "cartao"));
+          const cartaoSnapshot = await getDocs(cartaoQuery);
+          const cartaoData = cartaoSnapshot.docs.map((cartaoDoc) => ({
+            id: cartaoDoc.id,
+            ...cartaoDoc.data(),
+          }));
+          setCartaoCliente(cartaoData);
         } else {
           history("/login");
         }
@@ -101,38 +112,37 @@ const Agendamento = () => {
     async function fetchClientes() {
       try {
         setIsLoading(true);
-  
+
         const auth = getAuth();
         const user = auth.currentUser;
         const uid = user ? user.uid : null;
-  
+
         if (uid) {
           const clienteRef = doc(db, "cliente", uid);
-  
+
           const docSnapshot = await getDoc(clienteRef);
           if (docSnapshot.exists()) {
             const data = docSnapshot.data();
             setClienteData(data);
           }
-  
+
           const cartaoQuerySnapshot = await getDocs(collection(clienteRef, "cartao"));
           const cartaoData = cartaoQuerySnapshot.docs.map((cartaoDoc) => ({
             id: cartaoDoc.id,
             ...cartaoDoc.data(),
           }));
-  
-          // Adicionando o estado de cartões
+
           setCartaoCliente(cartaoData);
         }
       } catch (error) {
         console.error("Erro ao buscar os clientes:", error);
       } finally {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
     }
-  
     fetchClientes();
-  }, []);
+  }, [setCartaoCliente]);
+  
   
 
   useEffect(() => {
@@ -167,6 +177,32 @@ const Agendamento = () => {
     
   }, []);
 
+  useEffect(() => {
+    async function fetchCartaoCliente() {
+      try {
+        setIsLoading(true);
+  
+        // Consulta a subcoleção "cartao" dentro do documento do cliente
+        const cartaoQuery = query(collection(clienteRef, "cartao"));
+        const cartaoSnapshot = await getDocs(cartaoQuery);
+  
+        if (!cartaoSnapshot.empty) {
+          // Se existirem documentos na subcoleção, você pode percorrê-los
+          const cartoes = [];
+          cartaoSnapshot.forEach((doc) => {
+            cartoes.push(doc.data());
+          });
+          setCartaoCliente(cartoes);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar os cartões do cliente:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchCartaoCliente();
+  }, []);
+
   const handleAgendamento = async () => {
     try {
       
@@ -175,7 +211,8 @@ const Agendamento = () => {
         empresaId: servicoData.empresaId,
         profissionalId: servicoData.profissionalId,
         servicoId: servicoId,
-        dataAgendamento: Timestamp.fromDate(new Date()), 
+        cartao: cartao[0].id,
+        dataAgendamento: horarios.id
       };
 
       const agendamentoRef = collection(db, "agendamento");
@@ -198,30 +235,43 @@ const Agendamento = () => {
           margin: "0 auto",
           border: "1px solid #ddd",
           borderRadius: "10px",
-          width: "50vw",
-          height: "auto",
           display: "flex",
           flexDirection: "column",
-          marginTop: "100px"
+          width: "50vw",
+          height: "100vh",
+          marginTop: "100px",
         }}>
           {servicoData && servicoData.img && (
             <img src={servicoData.img} alt={servicoData.nome} style={{ width: "200px", height: "100px", marginBottom: "-20px" }} />
           )}
           <div className="card-body" style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div style={{ marginBottom: "-10px" }}>
-              <h5 className="card-title" style={{ fontSize: "24px", lineHeight: "32px", color: "#0F1111", fontWeight: "400", textRendering: "optimizeLegibility", marginBottom: "-10px" }}>
-                {servicoData.nome}
-              </h5>
-              <p style={{ fontSize: "16px", display: "flex", color: "#0F1111" }}>{servicoData.empresa}</p>
+              {servicoData && (
+                <h5 className="card-title" style={{ fontSize: "24px", lineHeight: "32px", color: "#0F1111", fontWeight: "400", textRendering: "optimizeLegibility", marginBottom: "-10px" }}>
+                  {servicoData.nome}
+                </h5>
+              )}
+              {servicoData && (
+                <p style={{ fontSize: "16px", display: "flex", color: "#0F1111" }}>{servicoData.empresa}</p>
+              )}
+
               <p style={{ fontSize: "16px", display: "flex", color: "#0F1111" }}>{clienteData && clienteData.username}</p>
-              {clienteData && clienteData.cartao && (
-              <div>
-                <p>Número do Cartão: {clienteData.cartao.numero}</p>
-                <p>Nome no Cartão: {clienteData.cartao.nome}</p>
-                <p>Data de Validade: {clienteData.cartao.dataValidade}</p>
-               
+              {cartao && cartao.length > 0 && (
+              <div style={{ flex: "1", padding: "10px" }}>
+                {cartao.map((cartao, index) => (
+                  <div key={index}>
+                    <p>Número do Cartão: {cartao.numero}</p>
+                    <p>Nome no Cartão: {cartao.nome}</p>
+                    <p>Data de Validade: {cartao.dataValidade}</p>
+                  </div>
+                ))}
               </div>
             )}
+
+              {servicoData && (
+                <p style={{ fontSize: "16px", display: "flex", color: "#0F1111" }}>Valor: {servicoData.valor}</p>
+              )}
+
               <button onClick={handleAgendamento}>Agendar</button>
             </div>
           </div>
@@ -229,8 +279,6 @@ const Agendamento = () => {
       )}
     </div>
   );
-  
-
 }
 
 export default Agendamento;

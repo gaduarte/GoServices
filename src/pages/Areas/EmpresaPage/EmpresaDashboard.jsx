@@ -144,7 +144,8 @@ const EmpresaDashboard = () => {
             {isLoading ? (
                 <p>Carregando Informações...</p>
             ) : editMode ? (
-                <Form style={{width: "400px", margin: "0 auto", padding: "0px", marginTop: "40px"}}>
+                <Form style={{width: "700px", margin: "0 auto", padding: "0px", marginTop: "40px"}}>
+                    <h2>Minhas Informações</h2>
                     <Row style={{margin: "5px 0", textAlign: "left", color: "white"}}>
                         <Col md={3}>
                             <Form.Group>
@@ -159,6 +160,7 @@ const EmpresaDashboard = () => {
                                 onChange={(e) =>
                                     setEmpresaInfo({ ...empresaInfo, username: e.target.value })
                                 }
+                                style={{width: "400px"}}
                                 />
                             </Form.Group>
                         </Col>
@@ -175,6 +177,7 @@ const EmpresaDashboard = () => {
                                 type="text"
                                 value={empresaInfo.email}
                                 onChange={(e)=> setEmpresaInfo({...empresaInfo, email: e.target.value})}
+                                style={{width: "400px"}}
                                 />
                             </Form.Group>
                         </Col>
@@ -191,6 +194,7 @@ const EmpresaDashboard = () => {
                                 type="text"
                                 value={empresaInfo.cnpj}
                                 onChange={(e)=> setEmpresaInfo({...empresaInfo, cnpj: e.target.value})}
+                                style={{width: "400px"}}
                                 />
                             </Form.Group>
                         </Col>
@@ -208,6 +212,7 @@ const EmpresaDashboard = () => {
                                 type="text"
                                 value={empresaInfo.descricao}
                                 onChange={(e)=> setEmpresaInfo({...empresaInfo, descricao: e.target.value})}
+                                style={{width: "400px"}}
                                 />
                             </Form.Group>
                         </Col>
@@ -224,6 +229,7 @@ const EmpresaDashboard = () => {
                                 type="text"
                                 value={empresaInfo.telefone}
                                 onChange={(e)=> setEmpresaInfo({...empresaInfo, telefone: e.target.value})}
+                                style={{width: "400px"}}
                                 />
                             </Form.Group>
                         </Col>
@@ -240,23 +246,24 @@ const EmpresaDashboard = () => {
                                 type="text"
                                 value={empresaInfo.endereco}
                                 onChange={(e)=> setEmpresaInfo({...empresaInfo, endereco: e.target.value})}
+                                style={{width: "400px"}}
                                 />
                             </Form.Group>
                         </Col>
                     </Row>
                     <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px"}}>
-                    <Button onClick={handleSaveClick} style={{padding: "2px", margin: "10px"}}>Salvar</Button>
-                    <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px"}}>Cancelar</Button>
+                    <Button onClick={handleSaveClick} style={{padding: "2px", margin: "10px", width: "100px",height:"40px"}}>Salvar</Button>
+                    <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px",width: "100px", height:"40px"}}>Cancelar</Button>
                     </div>
                 </Form>
             ) : (
                 <Card>
-                    <Card.Body>
+                    <Card.Body style={{backgroundColor: "rgba(255, 192, 203, 0.5"}}>
                         <Row>
                             <Col md={12}>
                                 <Card>
                                     <Card.Body>
-                                        <Row>
+                                        <Row >
                                             <Col md={3}>
                                                 <strong>Nome da Empresa:</strong>
                                             </Col>

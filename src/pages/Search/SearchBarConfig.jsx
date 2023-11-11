@@ -16,13 +16,13 @@ const SearchBar = ({ onSearch }) => {
           placeholder="Pesquisar..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          style={{ height: "30px", padding: "3px", margin: "3px" }}
+          style={{ height: "20px", width: "100%", padding: "3px", margin: "1px", marginTop: "14px" }}
         />
         <button
           onClick={handleSearch}
-          style={{ padding: "5px 10px", cursor: "pointer", width: "40px", color: "white" }}
+          style={{ padding: "5px 10px", height: "24px",cursor: "pointer", width: "30px", color: "white",  marginTop: "13px" }}
         >
-          <FaSearch size={20} /> 
+          <FaSearch size={12} /> 
         </button>
       </div>
     </div>

@@ -144,7 +144,7 @@ const ClienteDashboard = () => {
       {isLoading ? (
         <p>Carregando informações...</p>
       ) : editMode ? (
-        <Form style={{ width: "400px", margin: "0 auto", padding: "0px", marginTop: "40px"}}>
+        <Form style={{ width: "600px", margin: "0 auto", padding: "0px", marginTop: "40px"}}>
           <Row style={{margin: "10px 0", textAlign: "left"}}>
             <Col md={3}>
               <Form.Group>
@@ -159,6 +159,7 @@ const ClienteDashboard = () => {
                   onChange={(e) =>
                     setClientInfo({ ...clientInfo, username: e.target.value })
                   }
+                  style={{width: "300px"}}
                 />
               </Form.Group>
             </Col>
@@ -177,6 +178,7 @@ const ClienteDashboard = () => {
                   onChange={(e) =>
                     setClientInfo({ ...clientInfo, email: e.target.value })
                   }
+                  style={{width: "300px"}}
                 />
               </Form.Group>
             </Col>
@@ -195,6 +197,7 @@ const ClienteDashboard = () => {
                   onChange={(e) =>
                     setClientInfo({ ...clientInfo, telefone: e.target.value })
                   }
+                  style={{width: "300px"}}
                 />
               </Form.Group>
             </Col>
@@ -213,6 +216,7 @@ const ClienteDashboard = () => {
                   onChange={(e) =>
                     setClientInfo({ ...clientInfo, cpf: e.target.value })
                   }
+                  style={{width: "300px"}}
                 />
               </Form.Group>
             </Col>
@@ -231,13 +235,14 @@ const ClienteDashboard = () => {
                   onChange={(e) =>
                     setClientInfo({ ...clientInfo, endereco: e.target.value })
                   }
+                  style={{width: "300px"}}
                 />
               </Form.Group>
             </Col>
           </Row>
           <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px"}}>
-            <Button onClick={handleSaveClick} style={{padding: "2px", margin: "10px", color: "#f44336", borderRadius: "5px"}}>Salvar</Button>
-            <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px", color: "#f44336", borderRadius: "5px"}}>Cancelar</Button>
+            <Button onClick={handleSaveClick} style={{padding: "2px", margin: "10px", borderRadius: "5px", width: "100px"}}>Salvar</Button>
+            <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px", borderRadius: "5px", width: "100px"}}>Cancelar</Button>
           </div>
         </Form>
       ) : (
@@ -299,6 +304,7 @@ const ClienteDashboard = () => {
             <Button onClick={handleEditClick}>
               Editar
             </Button>
+
           </Card.Body>
         </Card>
       )}

@@ -5,6 +5,7 @@ import { appF } from "../../../backend/Firebase/firebase";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 const CadastroEmpresa = () => {
   const nomeRef = useRef(null);
@@ -190,10 +191,12 @@ const CadastroEmpresa = () => {
         <button type="submit" className={styles.button}>
           Cadastrar
         </button>
+        <Button href="/" style={{backgroundColor: "#b14f28", margin: "5px", borderRadius: "5px", width: "60%", height:"30px"}}>Cancelar</Button>
       </form>
     </div>
   );
 };
 
 export default CadastroEmpresa;
+
 

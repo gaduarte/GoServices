@@ -16,6 +16,7 @@ import { EmpresaAtualiza } from "./pages/Areas/EmpresaPage/AtualizarServiço";
 import { AgendarDados } from "./pages/HomePage/Agendamento";
 import ClienteAddServico from "./pages/Areas/ClientePage/AddCartao/AddCartao";
 import { ClienteAdicionaCartao } from "./pages/Areas/ClientePage/AddCartao";
+import { EmpresaAdicionaHorario } from "./pages/Areas/EmpresaPage/AddServiço/Horarios";
 
 
 function App() {
@@ -106,9 +107,6 @@ function App() {
                 ) : null}
               </li>
               <li>
-              {userRole === "cliente" ? (
-                  <NavLink to="/addCartao">Adicionar Cartão</NavLink>
-                ) : null}
               </li>
               <li>
                 {userRole === "profissional" ? (
@@ -118,11 +116,6 @@ function App() {
               <li>
               {userRole === "empresa" ? (
                   <NavLink to="/addServico">Adicionar Serviço</NavLink>
-                ) : null}
-              </li>
-              <li>
-              {userRole === "empresa" ? (
-                  <NavLink to="/atualizaServiço">Atualizar Serviço</NavLink>
                 ) : null}
               </li>
               <li>
@@ -151,9 +144,15 @@ function App() {
           {userRole === "profissional" && <Route path="/profissional/*" element={<ProfissionalDados />} />}
           {userRole === "empresa" && <Route path="/empresa/*" element={<EmpresaDados />} />}
           {userRole === "empresa" && <Route path="/addServico/*" element={<EmpresaAdicionaServ />} />}
-          {userRole === "empresa" && <Route path="/atualizaServiço/*" element={<EmpresaAtualiza/>} />}
+          {userRole === "empresa" && <Route path="/atualizaServico/*" element={<EmpresaAtualiza/>} />}
+          {userRole === "empresa" && <Route  path="/horarios/*" element={<EmpresaAdicionaHorario />}/>}
         </Routes>
       </div>
+
+      <footer className="footer">
+        <p>@Goservices; 2023 
+        </p>
+      </footer>
     </BrowserRouter>
   );
 }

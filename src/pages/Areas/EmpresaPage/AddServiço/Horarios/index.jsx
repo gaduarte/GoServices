@@ -1,9 +1,11 @@
 import { getAuth, signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ClienteAddCartao from "./AddCartao";
+import { NavLink } from "react-router-dom";
+import { AdicionarHorarioDisponivel } from "./addHorarios";
 
-export function ClienteAdicionaCartao() {
+
+export function EmpresaAdicionaHorario() {
     const history = useNavigate();
     const[id, setId] = useState(null);
 
@@ -38,11 +40,10 @@ export function ClienteAdicionaCartao() {
         <div>
             {id && 
             <>
-            <ClienteAddCartao />
+            < AdicionarHorarioDisponivel/>
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-            <button onClick={logOut}>Sign Out</button>
+            <button onClick={logOut} style={{margin: "10px", fontSize: "15px"}}>Sign Out</button>
             </>}
         </div>
     )
-
 }

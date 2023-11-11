@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ClienteDashboard from "./ClienteDashboard";
 import { ClienteAdicionaCartao } from "./AddCartao";
+import { NavLink } from "react-router-dom";
 
 export function ClienteDados() {
   const history = useNavigate();
@@ -40,6 +41,9 @@ export function ClienteDados() {
       {id && 
         <>
           <ClienteDashboard /> 
+          <button style={{margin: "10px", fontSize: "15px"}}>
+                <NavLink to="/addCartao" style={{color: "white"}}>Adicionar Cartão</NavLink>
+            </button>
           {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
           <button onClick={logOut}>Sign Out</button>
         </>

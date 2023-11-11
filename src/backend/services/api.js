@@ -34,6 +34,14 @@ function generateUniqueId() {
     return `${timestamp}-${randomPart}`;
 }
 
+//Serviço
+app.get('/servico/1/:id', async(req, res)=>{
+    const id = req.params.id;
+    const mensagem = await gs.retrieveServicoId(id);
+
+    if(mensagem == -1){res.status(400).send("Não encontrado")}
+    res.json(mensagem);
+})
 
 // Cliente
 app.get('/cliente/:email', async (req, res) => {
@@ -80,6 +88,7 @@ app.post('/cadastro/cliente', async (req, res) => {
     console.log('Cadastro de cliente realizado com sucesso.');
 });
 
+// Cartão
 app.post('/addCartao', async(req,res)=>{
     try{
         const generatedId = generateUniqueId();
@@ -106,6 +115,14 @@ app.post('/addCartao', async(req,res)=>{
         console.error("Erro ao cadastrar serviço", error);
         res.status(500).json({ error: 'Erro interno ao cadastrar serviço' });
       }
+})
+
+app.get('/cartao/1/:id', async(req,res)=>{
+    const id = req.params.id;
+    const mensagem = await gs.retrieveCartao(id);
+
+    if(mensagem == -1){res.status(404).send('Não encontrado.')}
+    res.json(mensagem);
 })
 
 // Empresa 
@@ -155,7 +172,7 @@ app.post('/cadastro/empresa', async (req, res) => {
     console.log('Cadastro de empresa realizado com sucesso.');
 });
 
-
+// Empresa Cadastra Serviço
 app.post('/addServico', async (req, res) => {
     try {
       const generatedId = generateUniqueId();
@@ -186,7 +203,34 @@ app.post('/addServico', async (req, res) => {
       res.status(500).json({ error: 'Erro interno ao cadastrar serviço' });
     }
   });
+
+//Adicionar Horário
+app.post('/addHorario', async(req,res)=>{
+    try{
+        const generatedId = generateUniqueId();
+
+        const horarioData = {
+            diasSelecionados: req.body.diasSelecionados,
+            empresaID: req.body.empresaID,
+            servicoId: req.body.servicoId,
+            id: generatedId
+        };
+
+        console.log('Dados de serviço de empresa:', horarioData);
+
+        horarioData.diasSelecionados,
+        horarioData.empresaID,
+        horarioData.servicoId,
+        horarioData.id
+
+      console.log('Simulação: Cadastro de serviço realizado com sucesso.');
   
+      res.status(200).json({ message: 'Serviço cadastrado com sucesso!' });
+    } catch (error) {
+      console.error("Erro ao cadastrar serviço", error);
+      res.status(500).json({ error: 'Erro interno ao cadastrar serviço' });
+    }
+})
 
 // Pessoa Portadora de Serviço
 app.get('/profissional/:email', async (req, res)=>{

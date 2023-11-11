@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {collection, getDocs, getFirestore, query} from "firebase/firestore";
 import SearchBar from "./SearchBarConfig";

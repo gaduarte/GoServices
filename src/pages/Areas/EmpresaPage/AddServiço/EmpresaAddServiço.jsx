@@ -6,6 +6,7 @@ import { getAuth } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
   authDomain: "goservices-a0bf9.firebaseapp.com",
@@ -30,6 +31,7 @@ const EmpresaAddServico = () => {
   const [addingService, setAddingService] = useState(false);
   const [serviceAdded, setServiceAdded] = useState(false);
   const history = useNavigate();
+  const [mostrarAdicionarHorario, setMostrarAdicionarHorario] = useState(false);
 
   const descricaoRef = useRef(null);
   const nomeRef = useRef(null);
@@ -165,6 +167,7 @@ const EmpresaAddServico = () => {
           empresaId: uid,
           img: imgUrl,
         };
+        
 
         const configServico = {
           method: "POST",
@@ -234,12 +237,21 @@ const EmpresaAddServico = () => {
     }
   };
 
+  const handleAdicionarHorarioClick = () => {
+    setMostrarAdicionarHorario(true);
+  };
+
+  const handleFecharAdicionarHorario = () => {
+    setMostrarAdicionarHorario(false);
+  };
+
+
   return (
     <Container>
       {successMessage && <div className="successMessage">{successMessage}</div>}
       {errorMessage && <div className="errorMessage">{errorMessage}</div>}
-
-      <Form style={{ width: "400px", margin: "0 auto", padding: "0px", marginTop: "40px" }}>
+      <Form style={{ width: "850px", margin: "0 auto", padding: "0px", marginTop: "80px", marginBottom: "10px", borderRadius: "20px" }}>
+      <h2 style={{color: "#333333"}}>Adicionar Serviço:</h2>
         <Row style={{ margin: "5px 0", textAlign: "left" }}>
           <Col md={3}>
             <Form.Group>
@@ -248,7 +260,7 @@ const EmpresaAddServico = () => {
           </Col>
           <Col md={9} className="text-secundary">
             <Form.Group>
-              <Form.Control type="text" ref={empresaRef} value={empresaInfo.username || ""} readOnly />
+              <Form.Control type="text" ref={empresaRef} value={empresaInfo.username || ""} readOnly style={{width: "400px"}} />
             </Form.Group>
           </Col>
         </Row>
@@ -259,7 +271,7 @@ const EmpresaAddServico = () => {
             </Form.Group>
           </Col>
           <Col md={9} className="text-secundary">
-            <Form.Control type="text" ref={nomeRef} />
+            <Form.Control type="text" ref={nomeRef} style={{width: "400px"}} />
           </Col>
         </Row>
         <Row style={{ margin: "5px 0", textAlign: "left" }}>
@@ -269,7 +281,7 @@ const EmpresaAddServico = () => {
             </Form.Group>
           </Col>
           <Col md={9} className="text-secundary">
-            <Form.Control type="textarea" rows={3} ref={descricaoRef} style={{ backgroundColor: "white", width: "20vw" }} />
+            <Form.Control type="textarea" rows={3} ref={descricaoRef} style={{ backgroundColor: "white", width: "400px" }} />
           </Col>
         </Row>
         <Row style={{ margin: "5px 0", textAlign: "left" }}>
@@ -279,24 +291,25 @@ const EmpresaAddServico = () => {
             </Form.Group>
           </Col>
           <Col md={9} className="text-secundary">
-            <Form.Control type="text" ref={valorRef} />
+            <Form.Control type="text" ref={valorRef} style={{width: "400px"}} />
           </Col>
         </Row>
-        <Row>
+        <Row style={{ margin: "5px 0", textAlign: "left" }}>
           <Col md={3}>
             <Form.Group>
               <Form.Label style={{ color: "black" }}>Escolha uma imagem:</Form.Label>
             </Form.Group>
           </Col>
           <Col md={9}>
-            <Form.Control type="file" accept="image/*" onChange={handleImageSelect} />
+            <Form.Control type="file" accept="image/*" onChange={handleImageSelect} style={{width: "400px"}} />
           </Col>
         </Row>
+      
         <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px" }} >
           <Button variant="primary" onClick={handleServiceSubmit} style={{ margin: "10px" }}>
             Adicionar
           </Button>
-          <Button onClick={handleCancelClick} style={{ padding: "2px", margin: "10px", color: "#f44336", borderRadius: "5px" }}>Cancelar</Button>
+          <Button onClick={handleCancelClick} style={{ padding: "2px", margin: "10px",  borderRadius: "5px"}}>Cancelar</Button>
         </div>
       </Form>
     </Container>

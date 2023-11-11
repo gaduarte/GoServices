@@ -5,6 +5,7 @@ import { getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { appF } from "../../backend/Firebase/firebase";
+import './css/style.css';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
@@ -83,17 +84,6 @@ export function HomePage() {
         <div
           className="card-container"
           key={servico.id}
-          style={{
-            backgroundColor: "#ffc0cb",
-            padding: "10px",
-            margin: "10px",
-            border: "1px solid #ddd",
-            borderRadius: "10px",
-            width: "15%",
-            height: "auto",
-            display: "flex",
-            flexDirection: "column"
-          }}
         >
           
           <img src={servico.data.img} alt={servico.data.nome}
@@ -125,8 +115,7 @@ export function HomePage() {
           </div>
           
           </div>
-          <div className="card-footer" style={{ textAlign: "center", marginTop: "10px", fontSize: "14px",  }}>
-
+          <div className="card-footer" style={{ textAlign: "center", marginTop: "10px", fontSize: "14px", position: "relative" }}>
           <button
             onClick={() => favoritaServico('empresaId', servico.id)}
             style={{
@@ -134,7 +123,8 @@ export function HomePage() {
               backgroundColor: "transparent",
               position: "relative",
               right: "10px",
-              left: "70px",
+              left: "40px",
+              top: "13px",
               fontSize: "20px",
               color: "red",
             }}
@@ -162,5 +152,4 @@ export function HomePage() {
     </main>
   );
 }
-
 

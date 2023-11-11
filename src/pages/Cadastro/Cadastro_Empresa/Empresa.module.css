@@ -1,76 +1,72 @@
-
+/* Estilos gerais do formulário */
 .centeredForm {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    width: 100vw;
-    background-color: #101e5c; 
-    margin: 0;
-  }
+  background-color: #ffc0cb;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 5px;
+  width: 800px; /* Define a largura do formulário como 60% */
+  max-width: 400px; /* Define a largura máxima como 50% */
+  margin: 0 auto;
+  height: 600px;
+}
 
-  .successMessage {
-    position: absolute;
-    top: 10px; 
-    left: 50%; /* Centralize horizontalmente */
-    transform: translateX(-50%); /* Centralize horizontalmente */
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    text-align: center;
-    z-index: 2; 
-  }
-  
-  /* Estilo para mensagem de erro */
-  .errorMessage {
-    position: absolute; 
-    top: 10px; 
-    left: 50%; /* Centralize horizontalmente */
-    transform: translateX(-50%); 
-    background-color: #f44336;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    text-align: center;
-  }  
-  
+
+/* Estilo para o seletor (select) */
+select {
+  width: 100%;
+  height: 30px;
+  margin-top: 70px; /* Reduz a margem superior para encaixar melhor */
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #b14f28;
+  outline: none;
+  color: black;
+}
+
+
+.inputContainer {
+  width: 100vw; /* Ocupa 80% da largura do contêiner */
+  max-width: 300px; 
+  height: 26px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  outline: none;
+  color: black;
+}
+
+.inputField {
+  width: 300px;
+  height: 38px;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #fff; 
+  outline: none;
+  color: black;
+}
+
+.button {
+  width: 60%; /* Define a largura do botão como 60% */
+  height: 30px;
+  background-color: #b14f28;
+  color: #fff;
+  border: none;
+  margin-top: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+@media (min-width: 701px) {
   form {
-    background-color: #ffc0cb; 
-    padding: 20px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    width: 700px;
+    max-width: 71%;
+    margin: 0 auto; 
   }
-  
-  .inputContainer {
-    margin: 10px 0;
-  }
-  
-  input {
-    width: 300px;
-    height: 40px;
-    border: none;
-    border-radius: 5px;
-    padding: 5px;
-    background-color: #fff; 
-    outline: none;
-    color: black;
-  }
-  
-  .button {
-    width: 150px;
-    height: 40px;
-    background-color: #b14f28; 
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .button:hover {
-    background-color: #214b86; 
-  }
-  
+}

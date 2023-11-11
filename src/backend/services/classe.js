@@ -188,6 +188,28 @@ let Goservice = class {
         return servicos;
     }
 
+    async retrieveServicoId(id){
+        const userRef = db.collection("servico").doc(id);
+        const doc = await userRef.get();
+
+        if(!doc.exists()){
+            return null;
+        }
+        return doc.data();
+    }
+
+    async retrieveCartao(id){
+        const userRef = db.collection("cliente").doc(id);
+        const cartaoRef = userRef.collection("cartao");
+
+        const cartaoDoc = await cartaoRef.get();
+
+        if(!cartaoDoc.exists()){
+            return null;
+        }
+        return cartaoDoc.data();
+    }
+
 }
 
 module.exports = Goservice
