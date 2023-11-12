@@ -1,0 +1,80 @@
+/* Estilos para a classe do container principal */
+.card-container {
+    background-color: #ffc0cb;
+    padding: 10px;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 47vw;
+    height: 100vh;
+    margin-top: 100px;
+  }
+  
+  .imagem {
+    width: 170px;
+    height: 120px;
+    border-radius: 5px;
+  }
+  /* Estilos para a seção de detalhes do serviço */
+  .service-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Estilos para a seção de seleção do profissional */
+  .professional-section {
+    margin: -100px 200px;
+    margin-bottom: 1px;
+    text-align: right;
+    color: black;
+    font-size: 10px;
+}
+  select {
+    text-align: center;
+    margin: 1px;
+    margin-left: 50px;
+  }
+  /* Estilos para a seção de seleção de horário */
+  .schedule-section {
+     margin: 0 200px;
+     text-align: right;
+     color: black;
+     font-size: 10px;
+  }
+  
+  /* Estilos para a seção de seleção de cartão */
+  .card-section {
+    margin: 0 200px; 
+    text-align: right;
+    color: black;
+    font-size: 10px;
+  }
+  
+  /* Estilos para a seção inferior com informações do serviço e botão de agendamento */
+  .service-details-bottom {
+    display: flex;
+    justify-content: space-between;
+    margin: -170px 0;
+    padding: 0;
+    color: black;
+  }
+  
+  /* Estilos para informações do serviço */
+  .service-info {
+    flex: 1;
+    text-align: left;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+  }
+  
+  button{
+    width: 150px;
+    height: 40px;
+    margin-top: 200px;
+    margin-right: 300px;
+  }
+  
+  

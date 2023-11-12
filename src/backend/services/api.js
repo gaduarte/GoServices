@@ -183,6 +183,7 @@ app.post('/addServico', async (req, res) => {
         valor: req.body.valor,
         empresa: req.body.empresa,
         empresaId: req.body.empresaId,
+        profissional: req.body.profissional,
         id: generatedId,
       };
   
@@ -193,6 +194,7 @@ app.post('/addServico', async (req, res) => {
       servicoData.valor,
       servicoData.empresa,
       servicoData.empresaId,
+      servicoData.profissional,
       servicoData.id
 
       console.log('Simulação: Cadastro de serviço realizado com sucesso.');
@@ -280,7 +282,38 @@ app.post('/cadastro/profissional', async (req, res) => {
 });
 
 //Agendamento
+app.post('/addAgendamento', async (req, res)=>{
+    try{
+        const generatedId = generateUniqueId();
 
+        const agendamentoData = {
+            clienteId: req.body.clienteId,
+            empresaId: req.body.empresaId,
+            profissionalId: req.body.profissional,
+            servicoId: req.body.servicoId,
+            cartao: req.body.cartao,
+            dataAgendamento: req.body.dataAgendamento,
+            id: generatedId,
+        };
+
+        console.log("Dados de agendamento do cliente", agendamentoData);
+
+        agendamentoData.clienteId,
+        agendamentoData.empresaId,
+        agendamentoData.profissionalId,
+        agendamentoData.servicoId,
+        agendamentoData.cartao,
+        agendamentoData.dataAgendamento,
+        agendamentoData.id
+
+        console.log("Cadastro de agendamento realizado com sucesso! ");
+
+        res.status(200).json({message: "Agendamento cadastrado com sucesso!"});
+    }catch(error){
+        console.error("Erro ao cadastrar agendamento", error );
+        res.status(500).json({error: "Erro interno ao cadastrar agendamento"});
+    }
+})
 
 
 

@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { EmailAuthProvider, getAuth } from "firebase/auth";
 import { collection, doc, getDocs, getFirestore, setDoc, query , where, getDoc} from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col, Card, Button } from  "react-bootstrap";
@@ -24,6 +24,7 @@ const EmpresaDashboard = () => {
     const [empresaInfo, setEmpresaInfo] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [ id, setId] = useState(null);
+    const [newEmail, setNewEmail] = useState('');
     const history = useNavigate();
 
     const [successMessage, setSuccessMessage] = useState('');
@@ -81,6 +82,36 @@ const EmpresaDashboard = () => {
     const handleEditClick = () => {
         setEditMode(true);
     }
+
+    const handleChangeEmail = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        const uid = user ? user.uid : null;
+    
+        if (user) {
+         
+          const credential = EmailAuthProvider.credential(user.email);
+    
+          try {
+            await reauthenticateWithCredential(user, credential);
+    
+            // Reautenticação bem-sucedida, agora você pode atualizar o email
+            await updateEmail(user, newEmail);
+    
+            // Atualize a coleção "users" com o novo email
+            const userRef = doc(db, 'profissional', user.uid);
+            await setDoc(userRef, { email: newEmail }, { merge: true });
+    
+            // Limpe o campo de email
+            setNewEmail('');
+    
+            // O email foi atualizado com sucesso
+            console.log('Email atualizado com sucesso.');
+          } catch (error) {
+            console.error('Erro ao atualizar o email:', error);
+          }
+        }
+      };
 
     const handleSaveClick = async () => {
         try{
@@ -176,7 +207,7 @@ const EmpresaDashboard = () => {
                                 <Form.Control
                                 type="text"
                                 value={empresaInfo.email}
-                                onChange={(e)=> setEmpresaInfo({...empresaInfo, email: e.target.value})}
+                                onChange={(e) => setNewEmail(e.target.value)}
                                 style={{width: "400px"}}
                                 />
                             </Form.Group>

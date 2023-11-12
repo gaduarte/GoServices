@@ -1,15 +1,34 @@
-import React, { useRef , useState} from "react";
+import React, { useRef , useState, useEffect} from "react";
 import { useCadastroProfissionalDispatch } from "./CadastroProfissionalContext";
 import styles from "./Profissional.module.css";
 import { getAuth, createUserWithEmailAndPassword } from "@firebase/auth";
-import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, getFirestore, setDoc } from "firebase/firestore";
+import { initializeApp } from 'firebase/app';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
+  authDomain: "goservices-a0bf9.firebaseapp.com",
+  databaseURL: "https://goservices-a0bf9-default-rtdb.firebaseio.com",
+  projectId: "goservices-a0bf9",
+  storageBucket: "goservices-a0bf9.appspot.com",
+  messagingSenderId: "966186778726",
+  appId: "1:966186778726:web:31e6300c46c447d03cada7",
+  measurementId: "G-H7L211LBSZ"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 const CadastroProfissional = () => {
+  const [empresa, setEmpresa] = useState(null);
+  const [selectedEmpresa, setSelectedEmpresa] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   const nomeRef = useRef(null);
   const emailRef = useRef(null);
   const cpfRef = useRef(null);
   const enderecoRef = useRef(null);
-  const empresaRef = useRef(null);
+  const empresaRef = collection(db, "empresa");
   const tipoServicoRef = useRef(null);
   const telefoneRef = useRef(null);
   const passwordRef = useRef(null);
@@ -20,6 +39,32 @@ const CadastroProfissional = () => {
 
   let nextId = 1;
 
+  
+  useEffect(() => {
+    async function fetchEmpresa() {
+      try {
+        setIsLoading(true);
+        const empresaQuerySnapshot = await getDocs(empresaRef);
+        const empresasData = [];
+  
+        empresaQuerySnapshot.forEach((doc) => {
+          empresasData.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+  
+        setEmpresa(empresasData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Erro ao buscar informações de horários disponíveis: ", error);
+        setIsLoading(false);
+      }
+    }
+  
+    fetchEmpresa();
+  }, []); 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -27,7 +72,7 @@ const CadastroProfissional = () => {
     const email = emailRef.current.value;
     const cpf = cpfRef.current.value;
     const endereco = enderecoRef.current.value;
-    const empresa = empresaRef.current.value;
+    const empresa = selectedEmpresa;
     const tipoServico = tipoServicoRef.current.value;
     const telefone = telefoneRef.current.value;
     const password = passwordRef.current.value;
@@ -152,7 +197,7 @@ const CadastroProfissional = () => {
   }
 
   function validate_cpf(cpf){
-    return cpf.length == 11;
+    return cpf.length == 14;
   }
 
   function validate_field(field){
@@ -181,9 +226,7 @@ const CadastroProfissional = () => {
           </div>
         </div>
         <div className={styles.formGroup}>
-          <div className={styles.inputContainer}>
-            <input type="text" ref={empresaRef} className={styles.inputField} placeholder="Empresa" />
-          </div>
+          
           <div className={styles.inputContainer}>
             <input type="text" ref={tipoServicoRef} className={styles.inputField} placeholder="Tipo de Serviço" />
           </div>
@@ -194,6 +237,22 @@ const CadastroProfissional = () => {
           </div>
           <div className={styles.inputContainer}>
             <input type="text" ref={passwordRef} className={styles.inputField} placeholder="Senha" />
+          </div>
+          <div className={styles.formGroup}>
+          <div className={styles.inputContainer}>
+          <select  
+            className="select-empresa"
+            value={selectedEmpresa}
+            onChange={(e) => setSelectedEmpresa(e.target.value)}
+          >
+            <option value="">Selecione Empresa</option>
+            {empresa && empresa.map((empresa, index) => (
+              <option key={index} value={empresa.id}>
+                {empresa.username}
+              </option>
+            ))}
+          </select>
+          </div>
           </div>
         </div>
         <button type="submit" className={styles.button}>

@@ -144,7 +144,7 @@ return(
             {isLoading ? (
                 <p>Carregando Informações...</p>
             ) : editMode ? (
-                <Form style={{ width: "400px", margin: "0 auto", padding: "0px", marginTop: "40px"}}>
+                <Form style={{ width: "700px", margin: "0 auto", padding: "0px", marginTop: "40px"}}>
                     <Row style={{margin: "10px 0", textAlign: "left"}}>
                         <Col md={3}>
                             <Form.Group>
@@ -157,6 +157,7 @@ return(
                                 type="text"
                                 value={profissionalInfo.username}
                                 onChange={(e)=> setProfissionalInfo({...profissionalInfo, username: e.target.value})}
+                                style={{width: "400px"}}
                                 />
                             </Form.Group>
                         </Col>
@@ -173,6 +174,7 @@ return(
                                 type="text"
                                 value={profissionalInfo.email}
                                 onChange={(e)=> setProfissionalInfo({...profissionalInfo, email: e.target.value})}
+                                style={{width: "400px"}}
                                 />
                             </Form.Group>
                         </Col>
@@ -189,6 +191,7 @@ return(
                                 type="text"
                                 value={profissionalInfo.cpf}
                                 onChange={(e)=> setProfissionalInfo({...profissionalInfo, cpf: e.target.value})}
+                                style={{width: "400px"}}
                                 />
                             </Form.Group>
                         </Col>
@@ -205,6 +208,7 @@ return(
                                 type="text"
                                 value={profissionalInfo.tipoServico}
                                 onChange={(e)=> setProfissionalInfo({...profissionalInfo, tipoServico: e.target.value})}
+                                style={{width: "400px"}}
                                 />
                             </Form.Group>
                         </Col>
@@ -221,6 +225,7 @@ return(
                                 type="text"
                                 value={profissionalInfo.telefone}
                                 onChange={(e)=> setProfissionalInfo({...profissionalInfo, telefone: e.target.value})}
+                                style={{width: "400px"}}
                                 />
                             </Form.Group>
                         </Col>
@@ -237,13 +242,14 @@ return(
                                 type="text"
                                 value={profissionalInfo.endereco}
                                 onChange={(e)=> setProfissionalInfo({...profissionalInfo, endereco: e.target.value})}
+                                style={{width: "400px"}}
                                 />
                             </Form.Group>
                         </Col>
                     </Row>
                     <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px"}}>
-                    <Button onClick={handleSaveClick} style={{padding: "2px", margin: "10px"}}>Salvar</Button>
-                    <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px"}}>Cancelar</Button>
+                    <Button onClick={handleSaveClick} style={{padding: "2px", margin: "10px", width: "130px", height: "30px"}}>Salvar</Button>
+                    <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px", width: "130px", height: "30px"}}>Cancelar</Button>
                     </div>
                 </Form>
             ) : (

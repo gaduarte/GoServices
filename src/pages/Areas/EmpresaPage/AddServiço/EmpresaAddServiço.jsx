@@ -32,11 +32,14 @@ const EmpresaAddServico = () => {
   const [serviceAdded, setServiceAdded] = useState(false);
   const history = useNavigate();
   const [mostrarAdicionarHorario, setMostrarAdicionarHorario] = useState(false);
+  const [profissionais, setProfissional] = useState(null);
+  const [selectedProfissional, setSelectedProfissional] = useState(null);
 
   const descricaoRef = useRef(null);
   const nomeRef = useRef(null);
   const valorRef = useRef(null);
   const empresaRef = useRef(null);
+  const profissionalRef = collection(db, "profissional");
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -86,6 +89,35 @@ const EmpresaAddServico = () => {
 
     checkUserRole();
   }, []);
+
+  useEffect(() => {
+    async function fetchProfissionaisDaEmpresa() {
+      try {
+        setIsLoading(true);
+    
+        // Consulta para buscar profissionais cujo campo "empresaId" corresponda ao ID da empresa
+        const q = query(collection(db, "profissional"), where("empresa", "==", id));
+        const querySnapshot = await getDocs(q);
+        const profissionaisData = [];
+    
+        querySnapshot.forEach((doc) => {
+          profissionaisData.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+    
+        setProfissional(profissionaisData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Erro ao buscar informações de profissionais da empresa: ", error);
+        setIsLoading(false);
+      }
+    }
+    
+    fetchProfissionaisDaEmpresa();    
+  }, []);
+  
 
   useEffect(() => {
     async function fetchEmpresa() {
@@ -157,6 +189,7 @@ const EmpresaAddServico = () => {
       const nome = nomeRef.current.value;
       const valor = parseFloat(valorRef.current.value);
       const empresa = empresaRef.current.value;
+      const profissional = selectedProfissional;
 
       try {
         const newService = {
@@ -165,6 +198,7 @@ const EmpresaAddServico = () => {
           valor,
           empresa,
           empresaId: uid,
+          profissional: profissional,
           img: imgUrl,
         };
         
@@ -304,7 +338,20 @@ const EmpresaAddServico = () => {
             <Form.Control type="file" accept="image/*" onChange={handleImageSelect} style={{width: "400px"}} />
           </Col>
         </Row>
-      
+      <Row>
+      <select  
+          className="select-profissional"
+          value={selectedProfissional}
+          onChange={(e) => setSelectedProfissional(e.target.value)}
+        >
+          <option value="">Selecione um Profissional</option>
+          {profissionais && profissionais.map((profissional) => (
+            <option key={profissional.id} value={profissional.id}>
+              {profissional.username}
+            </option>
+          ))}
+        </select>
+      </Row>
         <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px" }} >
           <Button variant="primary" onClick={handleServiceSubmit} style={{ margin: "10px" }}>
             Adicionar

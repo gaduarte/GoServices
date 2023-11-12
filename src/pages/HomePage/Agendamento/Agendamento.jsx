@@ -5,6 +5,7 @@ import { getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import './css/estilo.css';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
@@ -26,15 +27,23 @@ const Agendamento = () => {
   const [clienteData, setClienteData] = useState(null);
   const [cartao, setCartaoCliente] = useState(null);
   const [horarios, setHorarios] = useState(null);
+  const [selectedHorario, setSelectedHorario] = useState(null);
   const [empresaData, setEmpresaData] = useState(null);
-  const [profissionalData, setProfissionalData] = useState(null);
+  const [profissionais, setProfissionais] = useState([]);
+  const [selectedProfissional, setSelectedProfissional] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const history = useNavigate();
+  const [selectedCard, setSelectedCard] = useState(null);
+
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const servicoRef = collection(db, "servico");
   const clienteRef = collection(db, "cliente");
   const empresaRef = collection(db, "empresa");
   const profissionalRef = collection(db, "profissional");
+  const horarioRef = collection(db, "horariosDisponiveis");
+
 
   const checkUserInClienteCollection = async (email) => {
     const usersRef = collection(db, "cliente");
@@ -64,7 +73,6 @@ const Agendamento = () => {
           const cliente = querySnapshot.docs[0].data();
           setClienteData(cliente);
 
-          // Fetch the "cartao" subcollection within the specific "cliente" document
           const clienteId = querySnapshot.docs[0].id;
           const cartaoQuery = query(collection(clienteRef, clienteId, "cartao"));
           const cartaoSnapshot = await getDocs(cartaoQuery);
@@ -87,6 +95,38 @@ const Agendamento = () => {
   useEffect(() => {
     checkUserRole();
   }, [history]);
+
+  useEffect(() => {
+    async function fetchProfissionais(servicoId) {
+      try {
+        const profissionaisData = [];
+  
+        // Consulte o serviço específico usando servicoId
+        const servicoDoc = await getDoc(doc(db, 'servico', servicoId));
+  
+        if (servicoDoc.exists()) {
+          const profissional = servicoDoc.data().profissional;
+  
+          // Consulte o profissional com base no profissionalId
+          const profissionalDoc = await getDoc(doc(db, 'profissional', profissional));
+  
+          if (profissionalDoc.exists()) {
+            profissionaisData.push({ id: profissionalDoc.id, data: profissionalDoc.data() });
+          }
+        }
+  
+        setProfissionais(profissionaisData);
+      } catch (error) {
+        console.error('Erro ao buscar os profissionais:', error);
+      }
+    }
+  
+    if (servicoId) {
+      fetchProfissionais(servicoId);
+    }
+  }, [servicoId]);
+  
+  
 
   useEffect(() => {
     async function fetchServico() {
@@ -143,6 +183,31 @@ const Agendamento = () => {
     fetchClientes();
   }, [setCartaoCliente]);
   
+
+  useEffect(() => {
+    async function fetchHorarios() {
+      try {
+        setIsLoading(true);
+        const horariosQuerySnapshot = await getDocs(horarioRef);
+        const horariosData = [];
+  
+        horariosQuerySnapshot.forEach((doc) => {
+          horariosData.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+  
+        setHorarios(horariosData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Erro ao buscar informações de horários disponíveis: ", error);
+        setIsLoading(false);
+      }
+    }
+  
+    fetchHorarios();
+  }, []);  
   
 
   useEffect(() => {
@@ -182,17 +247,20 @@ const Agendamento = () => {
       try {
         setIsLoading(true);
   
-        // Consulta a subcoleção "cartao" dentro do documento do cliente
-        const cartaoQuery = query(collection(clienteRef, "cartao"));
-        const cartaoSnapshot = await getDocs(cartaoQuery);
+        if (clienteData && clienteData.id) {
+          // Consulta a subcoleção "cartao" dentro do documento do cliente
+          const clienteId = clienteData.id; // Get the client's ID
+          const cartaoQuery = query(collection(clienteRef, clienteId, "cartao")); 
+          const cartaoSnapshot = await getDocs(cartaoQuery);
   
-        if (!cartaoSnapshot.empty) {
-          // Se existirem documentos na subcoleção, você pode percorrê-los
-          const cartoes = [];
-          cartaoSnapshot.forEach((doc) => {
-            cartoes.push(doc.data());
-          });
-          setCartaoCliente(cartoes);
+          if (!cartaoSnapshot.empty) {
+            
+            const cartoes = [];
+            cartaoSnapshot.forEach((doc) => {
+              cartoes.push(doc.data());
+            });
+            setCartaoCliente(cartoes);
+          }
         }
       } catch (error) {
         console.error("Erro ao buscar os cartões do cliente:", error);
@@ -201,7 +269,8 @@ const Agendamento = () => {
       }
     }
     fetchCartaoCliente();
-  }, []);
+  }, [clienteData, clienteRef]);
+  
 
   const handleAgendamento = async () => {
     try {
@@ -209,11 +278,30 @@ const Agendamento = () => {
       const agendamentoData = {
         clienteId: clienteData.id, 
         empresaId: servicoData.empresaId,
-        profissionalId: servicoData.profissionalId,
+        profissionalId: selectedProfissional,
         servicoId: servicoId,
         cartao: cartao[0].id,
         dataAgendamento: horarios.id
       };
+
+      const configAgendamento = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(agendamentoData),
+      };
+
+      const response = await fetch("http://localhost:3000/addAgendamento", configAgendamento);
+
+      if(!response.ok){
+        throw new Error("Erro na solicitação da API");
+      }
+
+      const responseData = await response.json();
+      console.log('Resposta da API:', responseData);
+      setSuccessMessage('Serviço cadastrado com sucesso!');
+      setErrorMessage('');
 
       const agendamentoRef = collection(db, "agendamento");
 
@@ -225,59 +313,131 @@ const Agendamento = () => {
   };
 
   return (
-    <div>
-      {isLoading ? (
-        <p>Carregando...</p>
-      ) : (
-        <div className="card-container" style={{
-          backgroundColor: "#ffc0cb",
-          padding: "10px",
-          margin: "0 auto",
-          border: "1px solid #ddd",
-          borderRadius: "10px",
-          display: "flex",
-          flexDirection: "column",
-          width: "50vw",
-          height: "100vh",
-          marginTop: "100px",
-        }}>
-          {servicoData && servicoData.img && (
-            <img src={servicoData.img} alt={servicoData.nome} style={{ width: "200px", height: "100px", marginBottom: "-20px" }} />
-          )}
-          <div className="card-body" style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-            <div style={{ marginBottom: "-10px" }}>
-              {servicoData && (
-                <h5 className="card-title" style={{ fontSize: "24px", lineHeight: "32px", color: "#0F1111", fontWeight: "400", textRendering: "optimizeLegibility", marginBottom: "-10px" }}>
-                  {servicoData.nome}
-                </h5>
-              )}
-              {servicoData && (
-                <p style={{ fontSize: "16px", display: "flex", color: "#0F1111" }}>{servicoData.empresa}</p>
-              )}
+    <div className="card-container">
+  {isLoading ? (
+    <p>Carregando...</p>
+  ) : (
+    <div className="service-details">
+      {servicoData && servicoData.img && (
+        <img className="imagem" src={servicoData.img} alt={servicoData.nome} />
+      )}
 
-              <p style={{ fontSize: "16px", display: "flex", color: "#0F1111" }}>{clienteData && clienteData.username}</p>
-              {cartao && cartao.length > 0 && (
-              <div style={{ flex: "1", padding: "10px" }}>
-                {cartao.map((cartao, index) => (
+      <div className="professional-section">
+        <select 
+          value={selectedProfissional}
+          onChange={(e) => setSelectedProfissional(e.target.value)}
+        >
+          <option value="">Selecione um Profissional</option>
+          {profissionais.map((profissional) => (
+            <option key={profissional.id} value={profissional.id}>
+              {profissional.data.username}
+            </option>
+          ))}
+        </select>
+
+        {selectedProfissional && profissionais && (
+          <div>
+            {profissionais.map((profissional) => {
+              if (profissional.id === selectedProfissional) {
+                return (
+                  <div key={profissional.id}>
+                    <p>Profissional selecionado: {profissional.data.username}</p>
+                  </div>
+                );
+              } else {
+                return null;
+              }
+            })}
+          </div>
+        )}
+      </div>
+
+      <div className="schedule-section">
+        <select
+          value={selectedHorario}
+          onChange={(e) => setSelectedHorario(e.target.value)}
+        >
+          <option value="">Selecione Horário</option>
+          {horarios && horarios.map((horario, index) => (
+            <option key={index} value={horario.horario}>
+              {horario.horario}
+            </option>
+          ))}
+        </select>
+
+        {selectedHorario && horarios && (
+          <div>
+            {horarios.map((horario, index) => {
+              if (horario.horario === selectedHorario) {
+                return (
+                  <div key={index}>
+                    <p>Horário: {horario.horario}</p>
+                  </div>
+                );
+              } else {
+                return null;
+              }
+            })}
+          </div>
+        )}
+      </div>
+
+      <div className="card-section">
+        <select
+          value={selectedCard}
+          onChange={(e) => setSelectedCard(e.target.value)}
+        >
+          <option value="">Selecione um cartão</option>
+          {cartao && cartao.map((cartao, index) => (
+            <option key={index} value={cartao.numero}>
+              {cartao.numero}
+            </option>
+          ))}
+        </select>
+
+        {selectedCard && cartao && (
+          <div>
+            {cartao.map((cartao, index) => {
+              if (cartao.numero === selectedCard) {
+                return (
                   <div key={index}>
                     <p>Número do Cartão: {cartao.numero}</p>
                     <p>Nome no Cartão: {cartao.nome}</p>
                     <p>Data de Validade: {cartao.dataValidade}</p>
+                    <p>Código do Cartão: {cartao.codigo}</p>
                   </div>
-                ))}
-              </div>
-            )}
-
-              {servicoData && (
-                <p style={{ fontSize: "16px", display: "flex", color: "#0F1111" }}>Valor: {servicoData.valor}</p>
-              )}
-
-              <button onClick={handleAgendamento}>Agendar</button>
-            </div>
+                );
+              } else {
+                return null;
+              }
+            })}
           </div>
+        )}
+      </div>
+
+      <div className="service-details-bottom">
+        <div className="service-info">
+          {servicoData && (
+            <h3>{servicoData.nome}</h3>
+          )}
+          {servicoData && (
+            <p>Empresa: {servicoData.empresa}</p>
+          )}
+          {clienteData && (
+            <p>Cliente: {clienteData.username}</p>
+          )}
+          {clienteData && (
+            <p>Endereço: {clienteData.endereco}</p>
+          )}
+          {servicoData && (
+            <p>Valor: {servicoData.valor}</p>
+          )}
         </div>
-      )}
+        <button onClick={handleAgendamento}>Agendar</button>
+      </div>
     </div>
+  )}
+</div>
   );
 }
 
