@@ -36,6 +36,7 @@
  }
 
  .infoButtonProfileCli{
+  margin-top: 120px;
     padding: 2px;
     margin-right: 10px;
     width: 150px;
@@ -55,7 +56,7 @@
   font-weight: 700;
   background-color: #C26E7E;
   margin: 15px;
-  margin-left: 250px;
+  margin-left: 20px;
  }
 
  .logoutCli{

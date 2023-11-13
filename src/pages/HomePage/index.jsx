@@ -77,7 +77,7 @@ export function HomePage() {
 
 
   return (
-    <main>
+    <main className="main-home">
       <h1 className="h1-home">Lista de Serviços:</h1>
       <div className="container-home" style={{display: "flex", position: "relative", margin: 0, width: "30px"}}>
       {servicos.map((servico) => (

@@ -33,7 +33,7 @@ const EmpresaAddServico = () => {
   const history = useNavigate();
   const [mostrarAdicionarHorario, setMostrarAdicionarHorario] = useState(false);
   const [profissionais, setProfissional] = useState(null);
-  const [selectedProfissional, setSelectedProfissional] = useState(null);
+  const [selectedProfissional, setSelectedProfissional] = useState([]);
 
   const descricaoRef = useRef(null);
   const nomeRef = useRef(null);
@@ -95,8 +95,11 @@ const EmpresaAddServico = () => {
       try {
         setIsLoading(true);
     
+        const auth = getAuth();
+        const user = auth.currentUser;
+        const uid = user ? user.uid : null;
         // Consulta para buscar profissionais cujo campo "empresaId" corresponda ao ID da empresa
-        const q = query(collection(db, "profissional"), where("empresa", "==", id));
+        const q = query(collection(db, "profissional"), where("empresa", "==", uid));
         const querySnapshot = await getDocs(q);
         const profissionaisData = [];
     
@@ -345,9 +348,9 @@ const EmpresaAddServico = () => {
           onChange={(e) => setSelectedProfissional(e.target.value)}
         >
           <option value="">Selecione um Profissional</option>
-          {profissionais && profissionais.map((profissional) => (
-            <option key={profissional.id} value={profissional.id}>
-              {profissional.username}
+          {profissionais && profissionais.map((profissionais) => (
+            <option key={profissionais.id} value={profissionais.id}>
+              {profissionais.username}
             </option>
           ))}
         </select>

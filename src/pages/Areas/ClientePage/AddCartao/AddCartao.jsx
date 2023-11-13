@@ -3,7 +3,7 @@ import { Form, Button,  Container, Table, Col, Row } from "react-bootstrap";
 import { getDoc, collection, doc, addDoc, getFirestore, query, where, getDocs } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 
 const firebaseConfig = {
@@ -27,6 +27,7 @@ const ClienteAddCartao = () => {
     const [clienteInfo, setClienteInfo] = useState([]);
     const [dataValidade, setDataValidade] = useState("");
     const [showAddService, setShowAddService] = useState(false);
+    const history = useNavigate();
 
     const numeroRef = useRef(null);
     const nomRef = useRef(null);

@@ -16,6 +16,7 @@ import { AgendarDados } from "./pages/HomePage/Agendamento";
 import ClienteAddServico from "./pages/Areas/ClientePage/AddCartao/AddCartao";
 import { ClienteAdicionaCartao } from "./pages/Areas/ClientePage/AddCartao";
 import { EmpresaAdicionaHorario } from "./pages/Areas/EmpresaPage/AddServiço/Horarios";
+import QuemSomos from "./pages/goservicesInfos/SobreNos";
 
 
 function App() {
@@ -97,6 +98,7 @@ function App() {
         <header className="my-header">
           <nav>
             <ul className="my-list">
+              <li><NavLink to="/infos">GoServices</NavLink></li>
               <li>
                 <NavLink to="/">Home</NavLink>
               </li>
@@ -135,12 +137,13 @@ function App() {
 
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/infos" element={<QuemSomos />} />
           <Route path="/cadastro/*" element={<CadastrarUsuario />} />
           <Route path="/login" element={<LoginUsuario />} />
           {userRole === "cliente" && <Route path="/cliente/*" element={<ClienteDados />} />}
           {userRole === "cliente" && <Route path="/addCartao/*" element={<ClienteAdicionaCartao />} />}
           {userRole === "cliente" && <Route path="/agendamento/:servicoId" element={<AgendarDados />} />}
-          
+
           {userRole === "profissional" && <Route path="/profissional/*" element={<ProfissionalDados />} />}
           {userRole === "empresa" && <Route path="/empresa/*" element={<EmpresaDados />} />}
           {userRole === "empresa" && <Route path="/addServico/*" element={<EmpresaAdicionaServ />} />}
