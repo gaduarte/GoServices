@@ -111,6 +111,12 @@
   .footer {
     height: 60px; 
   }
+  .my-header{
+    width: 10px;
+  }
+  .my-list{
+    padding: 1px;
+  }
 }
 
 /* Estilos específicos para telas maiores que 1024px */

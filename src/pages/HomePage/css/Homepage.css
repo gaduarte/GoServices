@@ -78,7 +78,10 @@
     /* Estilos específicos para telas com largura entre 320px e 768px */
     @media (min-width: 320px) and (max-width: 768px) {
       .card-container-home {
-        width: 30%; /* Largura diferente para telas menores */
+        width: 300px; /* Largura diferente para telas menores */
+      }
+      .h1-home {
+        font-size: 13px;
       }
     }
     
