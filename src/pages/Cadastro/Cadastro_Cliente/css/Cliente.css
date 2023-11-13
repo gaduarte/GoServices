@@ -95,9 +95,16 @@
 }
 
 /* Estilos específicos para telas menores que 400px (o estilo original) */
-@media (max-width: 400px) {
+@media (max-width: 300px) {
   .centeredFormCli {
     width: 100%; /* Estilo original para telas menores que 400px */
     max-width: 100%; 
+  }
+  .inputFieldCli{
+    width: 250px;
+    margin-right: 50px;
+  }
+  .buttonCli{
+    margin-right: 50px;
   }
 }

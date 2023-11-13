@@ -9,3 +9,15 @@
     outline: none;
     color: black;
   }
+
+    @media (min-width: 320px) and (max-width: 760px){
+        .selec{
+            width: 113%;
+        }
+    }
+
+    @media(max-width: 300px){
+        .selec{
+            width: 115%;
+        }
+    }

@@ -57,3 +57,29 @@
     margin: 0 auto; 
   }
 }
+
+@media (min-width: 320px) and (max-width: 700px) {
+  .centeredFormEmp {
+    width: 400px; /* Estilo original para telas entre 401px e 700px */
+    max-width: 100%;
+    margin: 0 auto; /* Centralize o formulário na tela */
+  }
+  .buttonEmp{
+    margin-right: 50px;
+  }
+}
+
+/* Estilos específicos para telas menores que 400px (o estilo original) */
+@media (max-width: 300px) {
+  .centeredFormEmp {
+    width: 100%; 
+    max-width: 100%; 
+  }
+  .inputFieldEmp{
+    width: 250px;
+    margin-right: 50px;
+  }
+  .buttonEmp{
+    margin-right: 50px;
+  }
+}

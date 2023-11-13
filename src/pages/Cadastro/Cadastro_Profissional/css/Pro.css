@@ -84,18 +84,24 @@
   }
   
   /* Estilos específicos para telas com largura entre 401px e 700px (o estilo original) */
-  @media (min-width: 401px) and (max-width: 700px) {
-    form {
-      width: 400px; /* Estilo original para telas entre 401px e 700px */
+  @media (min-width: 320px) and (max-width: 700px) {
+    .centeredForm-pro{
+      width: 400px; 
       max-width: 100%;
       margin: 0 auto; /* Centralize o formulário na tela */
+    }
+    .button-pro{
+      margin-right: 50px;
+    }
+    .buttonpro1{
+      margin-right: 50px;
     }
   
   }
   
   /* Estilos específicos para telas menores que 400px (o estilo original) */
   @media (max-width: 400px) {
-    form {
+    .centeredForm-pro {
       width: 100%; /* Estilo original para telas menores que 400px */
       max-width: 100%; 
     }

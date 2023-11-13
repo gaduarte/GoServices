@@ -86,9 +86,9 @@
     }
     
     /* Estilos específicos para telas com largura menor que 320px */
-    @media (max-width: 319px) {
+    @media (max-width: 300px) {
       .card-container-home {
-        width: 10%; /* Largura diferente para telas muito pequenas */
+        width: 500px; /* Largura diferente para telas muito pequenas */
       }
     }
     

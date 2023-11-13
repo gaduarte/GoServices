@@ -86,18 +86,28 @@
   }
 }
 
-@media (min-width: 401px) and (max-width: 700px) {
+@media (min-width: 320px) and (max-width: 700px) {
   .centeredFormLoginEmp {
-    width: 400px; /* Estilo original para telas entre 401px e 700px */
+    width: 400px; 
     max-width: 100%;
     margin: 0 auto; /* Centralize o formulário na tela */
+  }
+  .buttonLoginEmp{
+    margin-right: 50px;
   }
 }
 
 /* Estilos específicos para telas menores que 400px (o estilo original) */
-@media (max-width: 400px) {
+@media (max-width: 300px) {
   .centeredFormLoginEmp {
     width: 100%; /* Estilo original para telas menores que 400px */
     max-width: 100%; 
+  }
+  .inputFieldLoginEmp{
+    width: 250px;
+    margin-right: 50px;
+  }
+  .buttonLoginEmp{
+    margin-right: 50px;
   }
 }
