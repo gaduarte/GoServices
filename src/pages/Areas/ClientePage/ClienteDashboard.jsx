@@ -4,6 +4,7 @@ import { collection, doc, getDoc, getDocs, getFirestore, query, setDoc, where } 
 import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col, Card, Button } from  "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import './css/ClientePg.css';
 
 const firebaseConfig = {
     apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
@@ -140,12 +141,13 @@ const ClienteDashboard = () => {
     }, []);
 
     return (
-        <Container>
+        <Container className="centeredFormProfileCli">
+          <h2>Suas Informações:</h2>
       {isLoading ? (
         <p>Carregando informações...</p>
       ) : editMode ? (
-        <Form style={{ width: "600px", margin: "0 auto", padding: "0px", marginTop: "40px"}}>
-          <Row style={{margin: "10px 0", textAlign: "left"}}>
+        <Form className="formProfileCli">
+          <Row className="rowProfileCli">
             <Col md={3}>
               <Form.Group>
                 <Form.Label style={{color: "black"}}>Nome de usuário:</Form.Label>
@@ -159,12 +161,12 @@ const ClienteDashboard = () => {
                   onChange={(e) =>
                     setClientInfo({ ...clientInfo, username: e.target.value })
                   }
-                  style={{width: "300px"}}
+                  style={{width: "380px",  height: "30px"}}
                 />
               </Form.Group>
             </Col>
           </Row>
-          <Row style={{margin: "10px 0", textAlign: "left"}}>
+          <Row className="rowProfileCli">
             <Col md={3}>
               <Form.Group>
                 <Form.Label  style={{color: "black"}}>Email:</Form.Label>
@@ -178,12 +180,12 @@ const ClienteDashboard = () => {
                   onChange={(e) =>
                     setClientInfo({ ...clientInfo, email: e.target.value })
                   }
-                  style={{width: "300px"}}
+                  style={{width: "380px",  height: "30px"}}
                 />
               </Form.Group>
             </Col>
           </Row>
-          <Row style={{margin: "10px 0", textAlign: "left"}}>
+          <Row className="rowProfileCli">
             <Col md={3}>
               <Form.Group>
                 <Form.Label  style={{color: "black"}}>Telefone:</Form.Label>
@@ -197,12 +199,12 @@ const ClienteDashboard = () => {
                   onChange={(e) =>
                     setClientInfo({ ...clientInfo, telefone: e.target.value })
                   }
-                  style={{width: "300px"}}
+                  style={{width: "380px",  height: "30px"}}
                 />
               </Form.Group>
             </Col>
           </Row>
-          <Row style={{margin: "10px 0", textAlign: "left"}}>
+          <Row className="rowProfileCli">
             <Col md={3}>
               <Form.Group>
                 <Form.Label  style={{color: "black"}}>CPF:</Form.Label>
@@ -216,12 +218,12 @@ const ClienteDashboard = () => {
                   onChange={(e) =>
                     setClientInfo({ ...clientInfo, cpf: e.target.value })
                   }
-                  style={{width: "300px"}}
+                  style={{width: "380px", height: "30px"}}
                 />
               </Form.Group>
             </Col>
           </Row>
-          <Row style={{margin: "10px 0", textAlign: "left"}}>
+          <Row className="rowProfileCli">
             <Col md={3}>
               <Form.Group>
                 <Form.Label style={{color: "black"}}>Endereço:</Form.Label>
@@ -235,14 +237,14 @@ const ClienteDashboard = () => {
                   onChange={(e) =>
                     setClientInfo({ ...clientInfo, endereco: e.target.value })
                   }
-                  style={{width: "300px"}}
+                  style={{width: "380px", height: "30px"}}
                 />
               </Form.Group>
             </Col>
           </Row>
           <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px"}}>
-            <Button onClick={handleSaveClick} style={{padding: "2px", margin: "10px", borderRadius: "5px", width: "100px"}}>Salvar</Button>
-            <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px", borderRadius: "5px", width: "100px"}}>Cancelar</Button>
+            <Button onClick={handleSaveClick}className="buttonProfileCli">Salvar</Button>
+            <Button onClick={handleCancelClick} className="buttonProfileCli">Cancelar</Button>
           </div>
         </Form>
       ) : (
@@ -251,7 +253,7 @@ const ClienteDashboard = () => {
           <Row>
         <Col md={12}>
           <Card>
-            <Card.Body>
+            <Card.Body className="infoProfileCli">
               <Row>
                 <Col md={3}>
                   <strong>Nome de usuário:</strong>
@@ -301,7 +303,7 @@ const ClienteDashboard = () => {
           </Card>
         </Col>
       </Row>
-            <Button onClick={handleEditClick}>
+            <Button className="infoButtonProfileCli" onClick={handleEditClick}>
               Editar
             </Button>
 

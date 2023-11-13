@@ -40,7 +40,7 @@ export function ClienteAdicionaCartao() {
             <>
             <ClienteAddCartao />
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-            <button onClick={logOut}>Sign Out</button>
+            <button className="logoutCli" onClick={logOut}>Sign Out</button>
             </>}
         </div>
     )

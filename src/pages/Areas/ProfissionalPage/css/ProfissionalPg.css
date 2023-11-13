@@ -1,0 +1,55 @@
+.centeredFormProfilePro{
+    font-family: Arial, sans-serif;
+    max-width: 500px;
+    height: 550px;
+    margin: 0 auto;
+    margin-top: 120px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #6E7EC2;
+}
+
+.rowProfilePro{
+    margin: 10px;
+    margin-left: -20px;
+    text-align: left;
+}
+
+.infoButtonProfilePro{
+    padding: 2px;
+    margin-top: 3px;
+    margin-right: 10px;
+    width: 150px;
+    height: 40px;
+    color: #fff;
+    background-color: #C26E7E;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.infoButtonPro{
+    padding: 2px;
+    margin: 14px;
+    margin-right: 1px;
+    width: 150px;
+    height: 40px;
+    color: #fff;
+    background-color: #C26E7E;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.logoutPro{
+  width: 150px;
+  height: 40px;
+  margin-top: 15px;
+  margin-left: 270px;
+  font-size: 15px;
+  font-weight: 700;
+  background-color: #C26E7E;
+}

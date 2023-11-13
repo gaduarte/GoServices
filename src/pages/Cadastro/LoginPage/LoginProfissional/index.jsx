@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import {  ref, update } from "firebase/database";
 import { useNavigate } from "react-router-dom";
-import styles from "./LoginPage.module.css";
+import './css/LoginPro.css';
 import { collection, getDocs, getFirestore, where, query } from "firebase/firestore";
 
 const LoginProfissional = ({onLogin}) => {
@@ -72,31 +72,33 @@ const LoginProfissional = ({onLogin}) => {
     }
 
     return (
-        <div className={styles.centeredForm}>
-          {successMessage && <div className={styles.successMessage}>   {successMessage}</div>}
-          {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.inputContainer}>
-              <input
-                type="text"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)} className={styles.inputField}
-              />
-            </div>
-            <div className={styles.inputContainer}>
-              <input
-                type="password"
-                placeholder="Senha"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)} className={styles.inputField}
-              />
-            </div>
-            <button type="submit" onClick={handleSubmit} className={styles.button}>
-              Entrar
-            </button>
-          </form>
+      <div className="centeredFormLoginPro"> 
+      {successMessage && <div className="successMessage">{successMessage}</div>}
+      {errorMessage && <div className="errorMessage">{errorMessage}</div>}
+      <form onSubmit={handleSubmit} className="form">
+        <div className="inputContainerLoginPro">
+          <input
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="inputFieldLoginPro"
+          />
         </div>
+        <div className="inputContainerLoginPro">
+          <input
+            type="password"
+            placeholder="Senha"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="inputFieldLoginPro"
+          />
+        </div>
+        <button type="submit" className="buttonLoginPro"> 
+          Entrar
+        </button>
+      </form>
+    </div>
       );
     };
     

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { ref, update } from "firebase/database";
 import { useNavigate } from "react-router-dom";
-import styles from "./LoginPage.module.css";
+import './css/LoginPage.css';
 import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
 
 const LoginCliente = ({ onLogin }) => {
@@ -75,31 +75,31 @@ const LoginCliente = ({ onLogin }) => {
   };
 
   return (
-    <div className={styles.centeredForm}>
-      {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
-      {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.inputContainer}>
+    <div className="centeredFormLoginCli"> 
+      {successMessage && <div className="successMessage">{successMessage}</div>}
+      {errorMessage && <div className="errorMessage">{errorMessage}</div>}
+      <form onSubmit={handleSubmit} className="form">
+        <div className="inputContainerLoginCli">
           <input
             type="text"
             placeholder="Email"
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className={styles.inputField}
+            className="inputFieldLoginCli"
           />
         </div>
-        <div className={styles.inputContainer}>
+        <div className="inputContainerLoginCli">
           <input
             type="password"
             placeholder="Senha"
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className={styles.inputField}
+            className="inputFieldLoginCli" 
           />
         </div>
-        <button type="submit" className={styles.button}>
+        <button type="submit" className="buttonLoginCli"> 
           Entrar
         </button>
       </form>

@@ -281,12 +281,12 @@ const EmpresaAddServico = () => {
 
 
   return (
-    <Container>
+    <Container className="centerdFormProfileEmp">
       {successMessage && <div className="successMessage">{successMessage}</div>}
       {errorMessage && <div className="errorMessage">{errorMessage}</div>}
-      <Form style={{ width: "850px", margin: "0 auto", padding: "0px", marginTop: "80px", marginBottom: "10px", borderRadius: "20px" }}>
-      <h2 style={{color: "#333333"}}>Adicionar Serviço:</h2>
-        <Row style={{ margin: "5px 0", textAlign: "left" }}>
+      <Form >
+      <h2>Adicionar Serviço:</h2>
+        <Row className="rowProfileEmp">
           <Col md={3}>
             <Form.Group>
               <Form.Label style={{ color: "black" }}>Empresa:</Form.Label>
@@ -294,48 +294,48 @@ const EmpresaAddServico = () => {
           </Col>
           <Col md={9} className="text-secundary">
             <Form.Group>
-              <Form.Control type="text" ref={empresaRef} value={empresaInfo.username || ""} readOnly style={{width: "400px"}} />
+              <Form.Control type="text" ref={empresaRef} value={empresaInfo.username || ""} readOnly style={{width: "400px", height: "30px"}} />
             </Form.Group>
           </Col>
         </Row>
-        <Row style={{ margin: "5px 0", textAlign: "left" }}>
+        <Row className="rowProfileEmp">
           <Col md={3}>
             <Form.Group>
               <Form.Label style={{ color: "black" }}>Nome do Serviço</Form.Label>
             </Form.Group>
           </Col>
           <Col md={9} className="text-secundary">
-            <Form.Control type="text" ref={nomeRef} style={{width: "400px"}} />
+            <Form.Control type="text" ref={nomeRef} style={{width: "400px", height: "30px"}} />
           </Col>
         </Row>
-        <Row style={{ margin: "5px 0", textAlign: "left" }}>
+        <Row className="rowProfileEmp">
           <Col md={3}>
             <Form.Group>
               <Form.Label style={{ color: "black" }}>Descrição do Serviço</Form.Label>
             </Form.Group>
           </Col>
           <Col md={9} className="text-secundary">
-            <Form.Control type="textarea" rows={3} ref={descricaoRef} style={{ backgroundColor: "white", width: "400px" }} />
+            <Form.Control type="textarea" rows={3} ref={descricaoRef} style={{ width: "400px" , height: "30px"}} />
           </Col>
         </Row>
-        <Row style={{ margin: "5px 0", textAlign: "left" }}>
+        <Row className="rowProfileEmp">
           <Col md={3}>
             <Form.Group>
               <Form.Label style={{ color: "black" }}>Valor do Serviço</Form.Label>
             </Form.Group>
           </Col>
           <Col md={9} className="text-secundary">
-            <Form.Control type="text" ref={valorRef} style={{width: "400px"}} />
+            <Form.Control type="text" ref={valorRef} style={{width: "400px", height: "30px"}} />
           </Col>
         </Row>
-        <Row style={{ margin: "5px 0", textAlign: "left" }}>
+        <Row className="rowProfileEmp">
           <Col md={3}>
             <Form.Group>
               <Form.Label style={{ color: "black" }}>Escolha uma imagem:</Form.Label>
             </Form.Group>
           </Col>
           <Col md={9}>
-            <Form.Control type="file" accept="image/*" onChange={handleImageSelect} style={{width: "400px"}} />
+            <Form.Control type="file" accept="image/*" onChange={handleImageSelect} style={{width: "400px", height: "30px", backgroundColor: " #333333"}} />
           </Col>
         </Row>
       <Row>
@@ -353,10 +353,10 @@ const EmpresaAddServico = () => {
         </select>
       </Row>
         <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px" }} >
-          <Button variant="primary" onClick={handleServiceSubmit} style={{ margin: "10px" }}>
+          <Button variant="primary" onClick={handleServiceSubmit} className="infoButtonEmp">
             Adicionar
           </Button>
-          <Button onClick={handleCancelClick} style={{ padding: "2px", margin: "10px",  borderRadius: "5px"}}>Cancelar</Button>
+          <Button onClick={handleCancelClick} className="infoButtonEmp">Cancelar</Button>
         </div>
       </Form>
     </Container>

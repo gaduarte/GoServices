@@ -1,6 +1,6 @@
 /* Estilos gerais do formulário */
-.centeredForm {
-  background-color: #ffc0cb;
+.centeredFormEmp {
+  background-color: #6E7EC2;
   padding: 20px;
   border-radius: 10px;
   display: flex;
@@ -10,25 +10,11 @@
   width: 800px; /* Define a largura do formulário como 60% */
   max-width: 400px; /* Define a largura máxima como 50% */
   margin: 0 auto;
-  height: 600px;
+  height: 450px;
 }
 
 
-/* Estilo para o seletor (select) */
-select {
-  width: 100%;
-  height: 30px;
-  margin-top: 70px; /* Reduz a margem superior para encaixar melhor */
-  border: none;
-  border-radius: 5px;
-  padding: 5px;
-  background-color: #b14f28;
-  outline: none;
-  color: black;
-}
-
-
-.inputContainer {
+.inputContainerEmp {
   width: 100vw; /* Ocupa 80% da largura do contêiner */
   max-width: 300px; 
   height: 26px;
@@ -40,24 +26,25 @@ select {
   color: black;
 }
 
-.inputField {
+.inputFieldEmp {
   width: 300px;
   height: 38px;
   border: none;
   border-radius: 5px;
-  padding: 5px;
+  padding: 2px;
   background-color: #fff; 
   outline: none;
   color: black;
 }
 
-.button {
+.buttonEmp {
   width: 60%; /* Define a largura do botão como 60% */
-  height: 30px;
-  background-color: #b14f28;
+  height: 40px;
+  background-color: #C26E7E;
   color: #fff;
   border: none;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-left: 50px;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;

@@ -27,8 +27,8 @@
 }
 
 /* Estilos gerais do formulário */
-.centeredForm {
-  background-color: #ffc0cb;
+.centeredFormLoginCli {
+  background-color: #6E7EC2;
   padding: 20px;
   border-radius: 10px;
   display: flex;
@@ -42,23 +42,7 @@
 }
 
 
-
-
-/* Estilo para o seletor (select) */
-select {
-  width: 100%;
-  height: 30px;
-  margin-top: 70px; /* Reduz a margem superior para encaixar melhor */
-  border: none;
-  border-radius: 5px;
-  padding: 5px;
-  background-color: #b14f28;
-  outline: none;
-  color: black;
-}
-
-
-.inputContainer {
+.inputContainerLoginCli {
   width: 100vw; /* Ocupa 80% da largura do contêiner */
   max-width: 300px; 
   height: 26px;
@@ -70,24 +54,25 @@ select {
   color: black;
 }
 
-.inputField {
+.inputFieldLoginCli {
   width: 300px;
   height: 38px;
   border: none;
   border-radius: 5px;
-  padding: 5px;
+  padding: 2px;
   background-color: #fff; 
   outline: none;
   color: black;
 }
 
-.button {
+.buttonLoginCli {
   width: 60%; /* Define a largura do botão como 60% */
   height: 40px;
-  background-color: #b14f28;
+  background-color: #C26E7E;
   color: #fff;
   border: none;
   margin-top: 20px;
+  margin-left: 50px;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
@@ -98,5 +83,21 @@ select {
     width: 700px;
     max-width: 71%;
     margin: 0 auto; 
+  }
+}
+
+@media (min-width: 401px) and (max-width: 700px) {
+  .centeredFormLoginCli {
+    width: 400px; /* Estilo original para telas entre 401px e 700px */
+    max-width: 100%;
+    margin: 0 auto; /* Centralize o formulário na tela */
+  }
+}
+
+/* Estilos específicos para telas menores que 400px (o estilo original) */
+@media (max-width: 400px) {
+  .centeredFormLoginCli {
+    width: 100%; /* Estilo original para telas menores que 400px */
+    max-width: 100%; 
   }
 }

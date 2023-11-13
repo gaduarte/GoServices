@@ -1,0 +1,11 @@
+.select-op {
+    width: 100%;
+    height: 30px;
+    margin-top: 70px; /* Reduz a margem superior para encaixar melhor */
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #C26E7E;
+    outline: none;
+    color: black;
+  }

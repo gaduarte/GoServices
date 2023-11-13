@@ -1,0 +1,215 @@
+/* Estilos padrão para todos os tamanhos de tela */
+.card-container-home {
+    background-color: #6E7EC2;
+    padding: 10px;
+    margin: 10px;
+    height: 390px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    display: flex; 
+    flex-direction: column; 
+    flex: 1;
+   
+  }
+  
+  /* Defina uma largura fixa para os cartões */
+  .card-container-home {
+    width: 150px; 
+  }
+  
+  .card-body-home{
+    padding: 2px;
+    margin: 2px;
+    
+  }
+  
+  .card-footer-home {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-description-home{
+    font-size: 14px;
+    display: flex;
+    text-align: left;
+    line-break: anywhere;
+  }
+
+  .card-title{
+    font-size: 19px;
+    font-weight: 400;
+    margin-bottom: 0px;
+  }
+
+  .favoritoButton{
+    margin-left: 17px;
+    border: none;
+    background-color: transparent;
+    position: relative;
+    left: 37px;
+    top: 13px;
+    font-size: 20px;
+    color: red;
+  }
+  
+  .agendarButton{
+    margin: auto 1px;
+    margin-left: 10px;
+    width: 100px;
+    background-color: #C26E7E;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+    
+    /* Estilos específicos para telas com largura maior que 768px */
+    @media (min-width: 769px) {
+      .card-container-home {
+        width: 150px /* Largura diferente para telas maiores */
+      }
+    }
+    
+    /* Estilos específicos para telas com largura entre 320px e 768px */
+    @media (min-width: 320px) and (max-width: 768px) {
+      .card-container-home {
+        width: 30%; /* Largura diferente para telas menores */
+      }
+    }
+    
+    /* Estilos específicos para telas com largura menor que 320px */
+    @media (max-width: 319px) {
+      .card-container-home {
+        width: 10%; /* Largura diferente para telas muito pequenas */
+      }
+    }
+    
+  
+    .card-container-agendamento {
+      background-color: #6E7EC2;
+      margin: 0 auto;
+      margin-left: 400px;
+      border: 1px solid #ddd;
+      border-radius: 7px;
+      display: flex;
+      flex-direction: column;
+      width: 40vw;
+      height: 450px;
+      margin-top: 100px;
+    }
+    
+    .imagem {
+      width: 250px;
+      height: 100px;
+      border-radius: 5px;
+    }
+    /* Estilos para a seção de detalhes do serviço */
+    .service-details {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Estilos para a seção de seleção do profissional */
+    .professional-section {
+      margin: -100px 200px;
+      margin-bottom: 1px;
+      margin-right: 10px;
+      text-align: right;
+      color: black;
+      font-size: 10px;
+  }
+    .select-dif {
+      text-align: center;
+      margin: 10px;
+      margin-left: 50px;
+      background-color: #C26E7E;
+      width: 250px;
+    }
+
+
+    /* Estilos para a seção de seleção de horário */
+    .schedule-section {
+       margin: 0 200px;
+       text-align: right;
+       margin-right: 10px;
+       color: black;
+       font-size: 10px;
+    }
+
+    
+    /* Estilos para a seção de seleção de cartão */
+    .card-section-agendamento {
+      margin: 0 200px; 
+      text-align: right;
+      margin-right: 10px;
+      color: black;
+      font-size: 10px;
+    }
+    
+    /* Estilos para a seção inferior com informações do serviço e botão de agendamento */
+    .service-details-bottom {
+      display: flex;
+      justify-content: space-between;
+      margin: 1px;
+      line-break: anywhere;
+      color: black;
+    }
+    
+    /* Estilos para informações do serviço */
+    .service-info {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      font-size: 14px;
+      margin-top: -190px;
+    }
+    
+    .buttonAgendar {
+      margin-top: 90px;
+      margin-right: 290px;
+      display: flex;
+      flex-direction: column;
+      width: 110px;
+      height: 40px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .buttonAgendar2 {
+        margin-top: -40px;
+        margin-left: 320px;
+        display: flex;
+        flex-direction: column;
+        width: 110px;
+        height: 40px;
+        text-align: center;
+        padding: 10px 32px;
+        font-weight: 400;
+      }
+      
+    
+    .h1-home{
+        color: whitesmoke;
+        font-size: 26px;
+        margin: 10px;
+    }
+
+    .img-home{
+        width: 120px;
+        height: 100px;
+        margin-bottom: -20px;
+        object-fit: cover;
+    }
+
+    .card-price-home{
+        position: fixed;
+        bottom: 0;
+        margin-left: -700px;
+        margin-bottom: 220px;
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+        font-size: 13px;
+    }

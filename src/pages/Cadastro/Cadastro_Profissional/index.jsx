@@ -1,6 +1,6 @@
 import React, { useRef , useState, useEffect} from "react";
 import { useCadastroProfissionalDispatch } from "./CadastroProfissionalContext";
-import styles from "./Profissional.module.css";
+import './css/Pro.css';
 import { getAuth, createUserWithEmailAndPassword } from "@firebase/auth";
 import { collection, doc, getDocs, getFirestore, setDoc } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
@@ -205,59 +205,59 @@ const CadastroProfissional = () => {
   }
 
   return (
-    <div className={styles.centeredForm}>
-      {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
-      {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
+    <div className="centeredForm-pro">
+      {successMessage && <div className="successMessage">{successMessage}</div>}
+      {errorMessage && <div className="errorMessage">{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
-        <div className={styles.formGroup}>
-          <div className={styles.inputContainer}>
-            <input type="text" ref={nomeRef} className={styles.inputField} placeholder="Nome" />
+        <div className="formGroup-pro">
+          <div className="inputContainer-pro">
+            <input type="text" ref={nomeRef} className="inputFieldPro" placeholder="Nome" />
           </div>
-          <div className={styles.inputContainer}>
-            <input type="text" ref={emailRef} className={styles.inputField} placeholder="Email" />
-          </div>
-        </div>
-        <div className={styles.formGroup}>
-          <div className={styles.inputContainer}>
-            <input type="text" ref={cpfRef} className={styles.inputField} placeholder="CPF" />
-          </div>
-          <div className={styles.inputContainer}>
-            <input type="text" ref={enderecoRef} className={styles.inputField} placeholder="Endereço" />
+          <div className="inputContainer-pro">
+            <input type="text" ref={emailRef} className="inputFieldPro" placeholder="Email" />
           </div>
         </div>
-        <div className={styles.formGroup}>
-          
-          <div className={styles.inputContainer}>
-            <input type="text" ref={tipoServicoRef} className={styles.inputField} placeholder="Tipo de Serviço" />
+        <div className="formGroup-pro">
+          <div className="inputContainer-pro">
+            <input type="text" ref={cpfRef} className="inputFieldPro"  placeholder="CPF" />
+          </div>
+          <div className="inputContainer-pro">
+            <input type="text" ref={enderecoRef} className="inputFieldPro"  placeholder="Endereço" />
           </div>
         </div>
-        <div className={styles.formGroup}>
-          <div className={styles.inputContainer}>
-            <input type="text" ref={telefoneRef} className={styles.inputField} placeholder="Telefone" />
-          </div>
-          <div className={styles.inputContainer}>
-            <input type="text" ref={passwordRef} className={styles.inputField} placeholder="Senha" />
-          </div>
-          <div className={styles.formGroup}>
-          <div className={styles.inputContainer}>
-          <select  
-            className="select-empresa"
-            value={selectedEmpresa}
-            onChange={(e) => setSelectedEmpresa(e.target.value)}
-          >
-            <option value="">Selecione Empresa</option>
-            {empresa && empresa.map((empresa, index) => (
-              <option key={index} value={empresa.id}>
-                {empresa.username}
-              </option>
-            ))}
-          </select>
-          </div>
+        <div className="formGroup-pro">
+          <div className="inputContainer-pro">
+            <input type="text" ref={tipoServicoRef} className="inputFieldPro" placeholder="Tipo de Serviço" />
           </div>
         </div>
-        <button type="submit" className={styles.button}>
+        <div className="formGroup-pro">
+          <div className="inputContainer-pro">
+            <input type="text" ref={telefoneRef} className="inputFieldPro" placeholder="Telefone" />
+          </div>
+          <div className="inputContainer-pro">
+            <input type="text" ref={passwordRef} className="inputFieldPro"  placeholder="Senha" />
+          </div>
+          <div className="formGroup-pro">
+            <div className="inputContainer-pro">
+              <select
+                className="select-empresa"
+                value={selectedEmpresa}
+                onChange={(e) => setSelectedEmpresa(e.target.value)}
+              >
+                <option value="">Selecione Empresa</option>
+                {empresa && empresa.map((empresa, index) => (
+                  <option key={index} value={empresa.id}>
+                    {empresa.username}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+        <button type="submit" className="button-pro">
           Cadastrar
         </button>
+        <button className="buttonpro1"><a href="/">Cancelar</a></button>
       </form>
     </div>
   );

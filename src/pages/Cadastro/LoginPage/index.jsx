@@ -4,6 +4,7 @@ import LoginEmpresa from "./LoginEmpresa";
 import LoginProfissional from "./LoginProfissional";
 import { getAuth } from "firebase/auth";
 import { getDatabase, ref, get } from "firebase/database";
+import './css/selectLogin.css';
 
 const LoginUsuario = () => {
   const [opcao, setOpcao] = useState("cliente");
@@ -52,7 +53,7 @@ const LoginUsuario = () => {
 
   return (
     <div style={{margin: "10px 0"}}>
-      <select value={opcao} onChange={handleChangeOpcao}>
+      <select className="selec" value={opcao} onChange={handleChangeOpcao}>
         <option value="cliente">Cliente</option>
         <option value="empresa">Empresa</option>
         <option value="profissional">Profissional</option>

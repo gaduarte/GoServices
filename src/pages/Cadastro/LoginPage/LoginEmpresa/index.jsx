@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import {  ref, update } from "firebase/database";
 import { useNavigate } from "react-router-dom";
-import styles from "./LoginPage.module.css";
+import './css/LoginEmp.css';
 import { collection,  getDocs, getFirestore, where, query } from "firebase/firestore";
 
 const LoginEmpresa = ({onLogin}) => {
@@ -72,33 +72,35 @@ const LoginEmpresa = ({onLogin}) => {
     };
 
     return (
-        <div className={styles.centeredForm}>
-           {successMessage && <div className={styles.successMessage}>   {successMessage}</div>}
-          {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.inputContainer}>
-              <input
-                type="text"
-                placeholder="Email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)} className={styles.inputField}
-              />
-            </div>
-            <div className={styles.inputContainer}>
-              <input
-                type="password"
-                placeholder="Senha"
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)} className={styles.inputField}
-              />
-            </div>
-            <button type="submit" onClick={handleSubmit} className={styles.button}>
-              Entrar
-            </button>
-          </form>
+      <div className="centeredFormLoginEmp"> 
+      {successMessage && <div className="successMessage">{successMessage}</div>}
+      {errorMessage && <div className="errorMessage">{errorMessage}</div>}
+      <form onSubmit={handleSubmit} className="form">
+        <div className="inputContainerLoginEmp">
+          <input
+            type="text"
+            placeholder="Email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="inputFieldLoginEmp" 
+          />
         </div>
+        <div className="inputContainerLoginEmp">
+          <input
+            type="password"
+            placeholder="Senha"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="inputFieldLoginEmp" 
+          />
+        </div>
+        <button type="submit" className="buttonLoginEmp"> 
+          Entrar
+        </button>
+      </form>
+    </div>
       );
     };
     

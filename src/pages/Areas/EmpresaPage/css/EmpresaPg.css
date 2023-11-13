@@ -1,0 +1,104 @@
+.centerdFormProfileEmp {
+    font-family: Arial, sans-serif;
+    max-width: 500px;
+    height: 600px;
+    margin: 0 auto;
+    margin-top: 120px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #6E7EC2;
+}
+
+.rowProfileEmp {
+    margin: 10px 0;
+    text-align: left;
+}
+
+.infoButtonEmp{
+    padding: 2px;
+    margin: 14px;
+    margin-right: 1px;
+    width: 150px;
+    height: 40px;
+    color: #fff;
+    background-color: #C26E7E;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.infoProfileEmp{
+    height: 120px;
+}
+
+.infoButtonProfileEmp{
+    padding: 2px;
+    margin-top: 3px;
+    margin-right: 10px;
+    width: 150px;
+    height: 40px;
+    color: #fff;
+    background-color: #C26E7E;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.logoutEmp{
+  width: 150px;
+  height: 40px;
+  margin-top: 15px;
+  margin-left: 270px;
+  font-size: 15px;
+  font-weight: 700;
+  background-color: #C26E7E;
+}
+
+.select-profissional{
+  width: 400px;
+  height: 30px;
+  margin-top: 2px; /* Reduz a margem superior para encaixar melhor */
+  border: none;
+  border-radius: 5px;
+  padding: 2px;
+  background-color: #C26E7E;
+  outline: none;
+  color: black;
+}
+
+.buttonpadEmp{
+  width: 150px;
+  height: 40px;
+  margin: 15px;
+  margin-left: 250px;
+  padding: 2px;
+  margin-right: -190px;
+  font-size: 14px;
+  font-weight: 700;
+  background-color: #C26E7E;
+}
+
+.centerdFormHorarioEmp {
+    font-family: Arial, sans-serif;
+    max-width: 500px;
+    height: 250px;
+    margin: 0 auto;
+    margin-top: 120px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #6E7EC2;
+}
+
+.inputEmpHorario{
+    height: 30px;
+    display: flex;
+    width: 450px;
+    margin: 5px;
+    margin-left: 20px;
+    padding: 10px;
+    
+}

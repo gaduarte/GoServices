@@ -133,20 +133,25 @@ export const AdicionarHorarioDisponivel = () => {
 
 
   return (
-    <div>
+    <div className="centerdFormHorarioEmp">
+      <label>Informe Horário: </label>
       <input
         type="text"
         placeholder="Horário (por exemplo, 08:00 AM)"
         value={horario}
         onChange={(e) => setHorario(e.target.value)}
+        className="inputEmpHorario"
       />
+      <label> Nome do Serviço: </label>
       <input
         type="text"
         placeholder="Serviço"
         value={servico}
         onChange={(e) => setServico(e.target.value)}
+        className="inputEmpHorario"
       />
-      <button onClick={handleAdicionarHorario}>Adicionar Horário</button>
+      <button className="infoButtonEmp" onClick={handleAdicionarHorario}>Adicionar Horário</button>
+      <button className="infoButtonEmp"><a href="/addServico">Voltar</a></button>
     </div>
   );
 };

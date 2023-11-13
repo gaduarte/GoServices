@@ -4,6 +4,7 @@ import { collection, doc, getDocs, getFirestore, setDoc, query , where, getDoc} 
 import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col, Card, Button } from  "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import './css/EmpresaPg.css';
 
 const firebaseConfig = {
     apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
@@ -171,13 +172,13 @@ const EmpresaDashboard = () => {
 
 
     return(
-        <Container>
+        <Container className="centerdFormProfileEmp">
             {isLoading ? (
                 <p>Carregando Informações...</p>
             ) : editMode ? (
-                <Form style={{width: "700px", margin: "0 auto", padding: "0px", marginTop: "40px"}}>
-                    <h2>Minhas Informações</h2>
-                    <Row style={{margin: "5px 0", textAlign: "left", color: "white"}}>
+                <Form>
+                    <h2>Minhas Informações:</h2>
+                    <Row className="rowProfileEmp">
                         <Col md={3}>
                             <Form.Group>
                                 <Form.Label style={{color: "black"}}>Nome da Empresa: </Form.Label>
@@ -191,12 +192,12 @@ const EmpresaDashboard = () => {
                                 onChange={(e) =>
                                     setEmpresaInfo({ ...empresaInfo, username: e.target.value })
                                 }
-                                style={{width: "400px"}}
+                                style={{width: "400px", height: "30px"}}
                                 />
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row style={{margin: "5px 0", textAlign: "left"}}>
+                    <Row className="rowProfileEmp">
                         <Col md={3}>
                             <Form.Group>
                                 <Form.Label style={{color: "black"}}>Email: </Form.Label>
@@ -208,12 +209,12 @@ const EmpresaDashboard = () => {
                                 type="text"
                                 value={empresaInfo.email}
                                 onChange={(e) => setNewEmail(e.target.value)}
-                                style={{width: "400px"}}
+                                style={{width: "400px", height: "30px"}}
                                 />
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row style={{margin: "5px 0", textAlign: "left"}}>
+                    <Row className="rowProfileEmp">
                         <Col md={3}>
                             <Form.Group>
                                 <Form.Label style={{color: "black"}}>CNPJ:</Form.Label>
@@ -225,12 +226,12 @@ const EmpresaDashboard = () => {
                                 type="text"
                                 value={empresaInfo.cnpj}
                                 onChange={(e)=> setEmpresaInfo({...empresaInfo, cnpj: e.target.value})}
-                                style={{width: "400px"}}
+                                style={{width: "400px", height: "30px"}}
                                 />
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row style={{margin: "5px 0", textAlign: "left"}}>
+                    <Row className="rowProfileEmp">
                         <Col md={3}>
                             <Form.Group>
                                 <Form.Label style={{color: "black"}}>Descrição:
@@ -243,12 +244,12 @@ const EmpresaDashboard = () => {
                                 type="text"
                                 value={empresaInfo.descricao}
                                 onChange={(e)=> setEmpresaInfo({...empresaInfo, descricao: e.target.value})}
-                                style={{width: "400px"}}
+                                style={{width: "400px", height: "30px"}}
                                 />
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row style={{margin: "5px 0", textAlign: "left"}}>
+                    <Row className="rowProfileEmp">
                         <Col md={3}>
                             <Form.Group>
                                 <Form.Label style={{color: "black"}}>Telefone:</Form.Label>
@@ -260,12 +261,12 @@ const EmpresaDashboard = () => {
                                 type="text"
                                 value={empresaInfo.telefone}
                                 onChange={(e)=> setEmpresaInfo({...empresaInfo, telefone: e.target.value})}
-                                style={{width: "400px"}}
+                                style={{width: "400px", height: "30px"}}
                                 />
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row style={{margin: "5px 0", textAlign: "left"}}>
+                    <Row className="rowProfileEmp">
                         <Col md={3}>
                             <Form.Group>
                                 <Form.Label style={{color: "black"}}>Endereço:</Form.Label>
@@ -277,19 +278,19 @@ const EmpresaDashboard = () => {
                                 type="text"
                                 value={empresaInfo.endereco}
                                 onChange={(e)=> setEmpresaInfo({...empresaInfo, endereco: e.target.value})}
-                                style={{width: "400px"}}
+                                style={{width: "400px", height: "30px"}}
                                 />
                             </Form.Group>
                         </Col>
                     </Row>
                     <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px"}}>
-                    <Button onClick={handleSaveClick} style={{padding: "2px", margin: "10px", width: "100px",height:"40px"}}>Salvar</Button>
-                    <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px",width: "100px", height:"40px"}}>Cancelar</Button>
+                    <Button onClick={handleSaveClick} className="infoButtonEmp">Salvar</Button>
+                    <Button onClick={handleCancelClick} className="infoButtonEmp">Cancelar</Button>
                     </div>
                 </Form>
             ) : (
                 <Card>
-                    <Card.Body style={{backgroundColor: "rgba(255, 192, 203, 0.5"}}>
+                    <Card.Body className="infoProfileEmp">
                         <Row>
                             <Col md={12}>
                                 <Card>
@@ -339,7 +340,7 @@ const EmpresaDashboard = () => {
                                 </Card>
                             </Col>
                         </Row>
-                        <Button onClick={handleEditClick}>Editar</Button>
+                        <Button className="infoButtonProfileEmp" onClick={handleEditClick}>Editar</Button>
                     </Card.Body>
                 </Card>
             )}

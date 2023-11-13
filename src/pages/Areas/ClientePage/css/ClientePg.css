@@ -1,0 +1,101 @@
+/* Estilo geral da seção de perfil */
+.centeredFormProfileCli {
+    font-family: Arial, sans-serif;
+    max-width: 500px;
+    margin: 0 auto;
+    margin-top: 120px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #6E7EC2;
+  }
+
+.rowProfileCli{
+  margin: 10px 0;
+  text-align: left;
+}
+  
+  /* Estilos do botão Salvar/Cancelar */
+  .buttonProfileCli {
+    padding: 2px;
+    margin: 10px;
+    margin-right: 3px;
+    width: 150px;
+    height: 40px;
+    color: #fff;
+    background-color: #C26E7E;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+ 
+ .infoProfileCli{
+  height: 130px;
+ }
+
+ .infoButtonProfileCli{
+    padding: 2px;
+    margin-right: 10px;
+    width: 150px;
+    height: 40px;
+    color: #fff;
+    background-color: #C26E7E;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+ }
+
+ .cartaoButton{
+  width: 150px;
+  height: 40px;
+  font-size: 14px;
+  font-weight: 700;
+  background-color: #C26E7E;
+  margin: 15px;
+  margin-left: 250px;
+ }
+
+ .logoutCli{
+  width: 150px;
+  height: 40px;
+  font-size: 15px;
+  font-weight: 700;
+  background-color: #C26E7E;
+ }
+
+ .cartaoRowCli{
+  margin: 2px;
+  text-align: center;
+  padding: 2px;
+  margin-right: 10px;
+ }
+
+ .centeredFormCartaoCli {
+  font-family: Arial, sans-serif;
+  max-width: 500px;
+  height: 500px;
+  margin: 0 auto;
+  margin-top: 120px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #6E7EC2;
+}
+
+.buttonCartaoCli{
+  padding: 12px;
+  margin: 24px;
+  margin-right: 1px;
+  width: 150px;
+  height: 40px;
+  font-weight: 700;
+  color: #fff;
+  background-color: #C26E7E;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}

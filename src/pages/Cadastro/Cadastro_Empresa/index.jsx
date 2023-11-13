@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useCadastroEmpresaDispatch } from "./CadastroEmpresaContext";
-import styles from "./Empresa.module.css";
+import "./css/Empresa.css";
 import { appF } from "../../../backend/Firebase/firebase";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
@@ -163,38 +163,39 @@ const CadastroEmpresa = () => {
   }
 
   return (
-    <div className={styles.centeredForm}>
-      {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
-      {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
+    <div className="centeredFormEmp">
+      {successMessage && <div className="successMessageEmp">{successMessage}</div>}
+      {errorMessage && <div className="errorMessageEmp">{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
-        <div className={styles.inputContainer}>
-          <input type="text" ref={nomeRef} className={styles.inputField} name="nome" placeholder="Nome" />
+        <div className="inputContainerEmp">
+          <input type="text" ref={nomeRef} className="inputFieldEmp" name="nome" placeholder="Nome" />
         </div>
-        <div className={styles.inputContainer}>
-          <input type="text" ref={emailRef} className={styles.inputField} name="email" placeholder="Email" />
+        <div className="inputContainerEmp">
+          <input type="text" ref={emailRef} className="inputFieldEmp" name="email" placeholder="Email" />
         </div>
-        <div className={styles.inputContainer}>
-          <input type="text" ref={enderecoRef} className={styles.inputField} name="endereco" placeholder="Endereço" />
+        <div className="inputContainerEmp">
+          <input type="text" ref={enderecoRef} className="inputFieldEmp" name="endereco" placeholder="Endereço" />
         </div>
-        <div className={styles.inputContainer}>
-          <input type="text" ref={descricaoRef} className={styles.inputField} name="descricao" placeholder="Descrição" />
+        <div className="inputContainerEmp">
+          <input type="text" ref={descricaoRef} className="inputFieldEmp" name="descricao" placeholder="Descrição" />
         </div>
-        <div className={styles.inputContainer}>
-          <input type="text" ref={cnpjRef} className={styles.inputField} name="cnpj" placeholder="CNPJ" />
+        <div className="inputContainerEmp">
+          <input type="text" ref={cnpjRef} className="inputFieldEmp" name="cnpj" placeholder="CNPJ" />
         </div>
-        <div className={styles.inputContainer}>
-          <input type="text" ref={telefoneRef} className={styles.inputField} name="telefone" placeholder="Telefone" />
+        <div className="inputContainerEmp">
+          <input type="text" ref={telefoneRef} className="inputFieldEmp" name="telefone" placeholder="Telefone" />
         </div>
-        <div className={styles.inputContainer}>
-          <input type="password" ref={passwordRef} className={styles.inputField} name="password" placeholder="Senha" />
+        <div className="inputContainerEmp">
+          <input type="password" ref={passwordRef} className="inputFieldEmp" name="password" placeholder="Senha" />
         </div>
-        <button type="submit" className={styles.button}>
+        <button type="submit" className="buttonEmp">
           Cadastrar
         </button>
-        <Button href="/" style={{backgroundColor: "#b14f28", margin: "5px", borderRadius: "5px", width: "60%", height:"30px"}}>Cancelar</Button>
+        <button className="buttonEmp"><a href="/">Cancelar</a></button>
       </form>
     </div>
   );
+  
 };
 
 export default CadastroEmpresa;

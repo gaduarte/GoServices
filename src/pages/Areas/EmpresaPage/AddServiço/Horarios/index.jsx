@@ -42,7 +42,7 @@ export function EmpresaAdicionaHorario() {
             <>
             < AdicionarHorarioDisponivel/>
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-            <button onClick={logOut} style={{margin: "10px", fontSize: "15px"}}>Sign Out</button>
+            <button onClick={logOut} className="logoutEmp">Sign Out</button>
             </>}
         </div>
     )

@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { doc, getDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs, query, where, addDoc } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import './css/estilo.css';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
@@ -274,14 +274,17 @@ const Agendamento = () => {
 
   const handleAgendamento = async () => {
     try {
-      
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const uid = user ? user.uid : null;
+
       const agendamentoData = {
-        clienteId: clienteData.id, 
+        clienteId: uid, 
         empresaId: servicoData.empresaId,
         profissionalId: selectedProfissional,
         servicoId: servicoId,
         cartao: cartao[0].id,
-        dataAgendamento: horarios.id
+        dataAgendamento: selectedHorario
       };
 
       const configAgendamento = {
@@ -313,7 +316,7 @@ const Agendamento = () => {
   };
 
   return (
-    <div className="card-container">
+    <div className="card-container-agendamento">
   {isLoading ? (
     <p>Carregando...</p>
   ) : (
@@ -323,7 +326,7 @@ const Agendamento = () => {
       )}
 
       <div className="professional-section">
-        <select 
+        <select className="select-dif"
           value={selectedProfissional}
           onChange={(e) => setSelectedProfissional(e.target.value)}
         >
@@ -353,13 +356,13 @@ const Agendamento = () => {
       </div>
 
       <div className="schedule-section">
-        <select
+        <select className="select-dif"
           value={selectedHorario}
           onChange={(e) => setSelectedHorario(e.target.value)}
         >
           <option value="">Selecione Horário</option>
           {horarios && horarios.map((horario, index) => (
-            <option key={index} value={horario.horario}>
+            <option key={index} value={horario.id}>
               {horario.horario}
             </option>
           ))}
@@ -382,8 +385,8 @@ const Agendamento = () => {
         )}
       </div>
 
-      <div className="card-section">
-        <select
+      <div className="card-section-agendamento">
+        <select className="select-dif"
           value={selectedCard}
           onChange={(e) => setSelectedCard(e.target.value)}
         >
@@ -433,8 +436,9 @@ const Agendamento = () => {
             <p>Valor: {servicoData.valor}</p>
           )}
         </div>
-        <button onClick={handleAgendamento}>Agendar</button>
+        <button className="buttonAgendar" onClick={handleAgendamento}>Agendar</button>
       </div>
+      <button className="buttonAgendar2"><a href="/">Voltar</a></button>
     </div>
   )}
 </div>

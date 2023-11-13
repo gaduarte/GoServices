@@ -202,12 +202,13 @@ const ClienteAddCartao = () => {
     }
 
     return(
-        <Container>
+        <Container className="centeredFormCartaoCli">
+            <h2>Informações do Cartão:</h2>
            {successMessage && <div className="successMessage">{successMessage}</div>}
           {errorMessage && <div className="errorMessage">{errorMessage}</div>}
 
-          <Form style={{width: "700px", margin: "0 auto", padding: "0px", marginTop: "40px"}}> 
-            <Row style={{margin: "5px 0", textAlign: "left"}}>
+          <Form> 
+            <Row className="cartaoRowCli">
                 <Col md={3}>
                     <Form.Group>
                         <Form.Label>Código do Cartão:</Form.Label>
@@ -219,12 +220,12 @@ const ClienteAddCartao = () => {
                         type="number"
                         ref={codSegRef}
                         required
-                        style={{width: "400px"}}
+                        style={{width: "400px", height: "30px"}}
                         />
                     </Form.Group>
                 </Col>
             </Row>
-            <Row style={{margin: "5px 0", textAlign: "left"}}>
+            <Row className="cartaoRowCli">
                 <Col md={3}>
                     <Form.Group>
                         <Form.Label>Nome Titular:</Form.Label>
@@ -236,12 +237,12 @@ const ClienteAddCartao = () => {
                         type="text"
                         ref={nomRef}
                         required
-                        style={{width: "400px"}}
+                        style={{width: "400px", height: "30px"}}
                         />
                     </Form.Group>
                 </Col>
             </Row>
-            <Row style={{margin: "5px 0", textAlign: "left"}}>
+            <Row className="cartaoRowCli">
                 <Col md={3}>
                     <Form.Group as={Col} controlId="formGridDataValidade">
                         <Form.Label>Data de Validade:</Form.Label>
@@ -256,12 +257,12 @@ const ClienteAddCartao = () => {
                         onChange={(e) => setDataValidade(e.target.value)}
                         value={dataValidade}
                         required
-                        style={{width: "400px"}}
+                        style={{width: "400px", height: "30px"}}
                         />
                     </Form.Group>
                 </Col>
             </Row>
-            <Row style={{margin: "5px 0", textAlign: "left"}}>
+            <Row className="cartaoRowCli">
                 <Col md={3}>
                     <Form.Group>
                         <Form.Label>Número do Cartão:</Form.Label>
@@ -273,12 +274,12 @@ const ClienteAddCartao = () => {
                         type="number"
                         ref={numeroRef}
                         required
-                        style={{width: "400px"}}
+                        style={{width: "400px", height: "30px"}}
                         />
                     </Form.Group>
                 </Col>
             </Row>
-            <Row style={{margin: "5px 0", textAlign: "left"}}>
+            <Row className="cartaoRowCli">
                 <Col md={3}>
                     <Form.Group>
                         <Form.Label>Endereço:</Form.Label>
@@ -292,16 +293,16 @@ const ClienteAddCartao = () => {
                         value={clienteInfo.endereco || ""}
                         required
                         readOnly
-                        style={{width: "400px"}}
+                        style={{width: "400px", height: "30px"}}
                         />
                     </Form.Group>
                 </Col>
             </Row>
             <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px"}} >
-                <Button variant="primary" onClick={handleCarataoSubmit} style={{margin: "10px"}}>
+                <Button variant="primary" onClick={handleCarataoSubmit} className="buttonCartaoCli">
                 Adicionar
                 </Button>
-                <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px", borderRadius: "5px", width: "100px"}}><NavLink to="/cliente">Cancelar</NavLink></Button>
+                <Button onClick={handleCancelClick} className="buttonCartaoCli"><NavLink to="/cliente">Cancelar</NavLink></Button>
             </div>
           </Form>
         </Container>

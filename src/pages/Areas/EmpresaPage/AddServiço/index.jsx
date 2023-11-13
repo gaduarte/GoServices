@@ -41,14 +41,14 @@ export function EmpresaAdicionaServ() {
             {id && 
             <>
             <EmpresaAddServico />
-            <button style={{margin: "10px", fontSize: "15px"}}>
+            <button className="buttonpadEmp">
                 <NavLink to="/atualizaServico" style={{color: "white"}}>Atualizar Serviço</NavLink>
             </button>
-            <button style={{margin: "10px", fontSize: "15px"}}>
+            <button className="buttonpadEmp">
                 <NavLink to="/horarios" style={{color: "white"}}>Adicionar Horário</NavLink>
             </button>
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-            <button onClick={logOut} style={{margin: "10px", fontSize: "15px"}}>Sign Out</button>
+            <button onClick={logOut} className="logoutEmp">Sign Out</button>
             </>}
         </div>
     )

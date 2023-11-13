@@ -5,7 +5,7 @@ import { getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { appF } from "../../backend/Firebase/firebase";
-import './css/style.css';
+import './css/Homepage.css';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
@@ -78,69 +78,51 @@ export function HomePage() {
 
   return (
     <main>
-      <h1 style={{color: "whitesmoke"}}>Lista de Serviços:</h1>
-      <div className="container" style={{display: "flex", flexWrap: "wrap", position: "relative", margin: 0}}>
+      <h1 className="h1-home">Lista de Serviços:</h1>
+      <div className="container-home" style={{display: "flex", position: "relative", margin: 0, width: "30px"}}>
       {servicos.map((servico) => (
         <div
-          className="card-container"
+          className="card-container-home"
           key={servico.id}
         >
           
           <img src={servico.data.img} alt={servico.data.nome}
-          style={{
-            width: "100%",
-            height: "100px",
-            marginBottom: "-20px"
-          }}/>
+          className="img-home"
+          />
 
-          <div className="card-body" style={{flex: "1", display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
+          <div className="card-body-home">
             <div style={{marginBottom: "-10px"}}>
-            <h5 className="card-title" style={{ fontSize: "24px", lineHeight: "32px", color: "#0F1111", fontWeight: "400", textRendering: "optimizeLegibility",marginBottom: "-10px" }}>
+            <h5 className="card-title" >
               {servico.data.nome}
             </h5>
 
-            <p style={{fontSize: "16px", display: "flex", color: "#0F1111"}}>
+            <p style={{fontSize: "15px", display: "flex", color: "#0F1111", textAlign: "left"}}>
               {servico.data.empresa}
             </p>
-            <p className="card-description" style={{ fontSize: "16px", display: "flex", color: "#0F1111"}}>
+            <p className="card-description-home" >
               {servico.data.descricao}
             </p>
     
             </div>
-            <div className="card-price" style={{ fontSize: "13px", top:"-.75em", color: "black", marginBottom: "-40px" }}>
+            <div className="card-price-home" >
             R$:{' '} 
-            <span style={{fontSize: "28px", color: "#0F1111", lineHeight: "normal"}}> {getDecimal(servico.data.valor).integerPart}
+            <span style={{fontSize: "28px", color: "#0F1111"}}> {getDecimal(servico.data.valor).integerPart}
             </span>
             <span style={{fontSize:"13px", top:"-.75em", color: "#0F1111"}}>.{getDecimal(servico.data.valor).decimalPart}</span>
           </div>
           
           </div>
-          <div className="card-footer" style={{ textAlign: "center", marginTop: "10px", fontSize: "14px", position: "relative" }}>
+          <div className="card-footer-home" >
           <button
             onClick={() => favoritaServico('empresaId', servico.id)}
-            style={{
-              border: "none",
-              backgroundColor: "transparent",
-              position: "relative",
-              right: "10px",
-              left: "40px",
-              top: "13px",
-              fontSize: "20px",
-              color: "red",
-            }}
+            className="favoritoButton"
           >
             ❤️
           </button>
 
           <button
               onClick={() => navigateToAgendamento(servico)}
-              style={{
-                backgroundColor: "#b14f28",
-                border: "none",
-                color: "white",
-                padding: "5px 10px",
-                cursor: "pointer",
-              }}
+              className="agendarButton"
             >
               Agendar
         </button>

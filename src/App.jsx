@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route, BrowserRouter, NavLink } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
 import './App.css'
-import './index.css'
 import CadastrarUsuario from "./pages/Cadastro";
 import LoginUsuario from "./pages/Cadastro/LoginPage";
 import { ClienteDados } from "./pages/Areas/ClientePage";
@@ -141,6 +140,7 @@ function App() {
           {userRole === "cliente" && <Route path="/cliente/*" element={<ClienteDados />} />}
           {userRole === "cliente" && <Route path="/addCartao/*" element={<ClienteAdicionaCartao />} />}
           {userRole === "cliente" && <Route path="/agendamento/:servicoId" element={<AgendarDados />} />}
+          
           {userRole === "profissional" && <Route path="/profissional/*" element={<ProfissionalDados />} />}
           {userRole === "empresa" && <Route path="/empresa/*" element={<EmpresaDados />} />}
           {userRole === "empresa" && <Route path="/addServico/*" element={<EmpresaAdicionaServ />} />}

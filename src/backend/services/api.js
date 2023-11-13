@@ -289,7 +289,7 @@ app.post('/addAgendamento', async (req, res)=>{
         const agendamentoData = {
             clienteId: req.body.clienteId,
             empresaId: req.body.empresaId,
-            profissionalId: req.body.profissional,
+            profissionalId: req.body.profissionalId,
             servicoId: req.body.servicoId,
             cartao: req.body.cartao,
             dataAgendamento: req.body.dataAgendamento,

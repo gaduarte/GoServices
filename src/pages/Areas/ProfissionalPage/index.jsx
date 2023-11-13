@@ -37,7 +37,7 @@ export function ProfissionalDados(){
         {id && 
         <>
         <ProfissionalDashboard/>
-        <button onClick={logOut}>Sign Out</button>
+        <button className="logoutPro" onClick={logOut}>Sign Out</button>
         </>}
     </div>
     )

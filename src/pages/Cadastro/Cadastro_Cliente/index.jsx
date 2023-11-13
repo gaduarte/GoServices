@@ -1,9 +1,10 @@
 import React, { useRef, useState } from "react";
 import { useCadastroDispatch } from "./CadastroClienteContext";
-import styles from "./Cliente.module.css";
+import "./css/Cliente.css";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 const CadastroCliente = () => {
   const nomeRef = useRef(null);
@@ -144,35 +145,36 @@ const CadastroCliente = () => {
   }
 
   return (
-    <div className={styles.centeredForm}>
-      {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
-      {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
+    <div className="centeredFormCli">
+      {successMessage && <div className="successMessageCli">{successMessage}</div>}
+      {errorMessage && <div className="errorMessageCli">{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
-        <div className={styles.inputContainer}>
-          <input type="text" ref={nomeRef} className={styles.inputField} name="nome" placeholder="Nome" />
+        <div className="inputContainerCli">
+          <input type="text" ref={nomeRef} className="inputFieldCli" name="nome" placeholder="Nome" />
         </div>
-        <div className={styles.inputContainer}>
-          <input type="text" ref={emailRef} className={styles.inputField} name="email" placeholder="Email" />
+        <div className="inputContainerCli">
+          <input type="text" ref={emailRef} className="inputFieldCli" name="email" placeholder="Email" />
         </div>
-        <div className={styles.inputContainer}>
-          <input type="text" ref={enderecoRef} className={styles.inputField} name="endereco" placeholder="Endereço" />
+        <div className="inputContainerCli">
+          <input type="text" ref={enderecoRef} className="inputFieldCli" name="endereco" placeholder="Endereço" />
         </div>
-        <div className={styles.inputContainer}>
-          <input type="text" ref={cpfRef} className={styles.inputField} name="cpf" placeholder="Cpf" />
+        <div className="inputContainerCli">
+          <input type="text" ref={cpfRef} className="inputFieldCli" name="cpf" placeholder="Cpf" />
         </div>
-        <div className={styles.inputContainer}>
-          <input type="text" ref={telefoneRef} className={styles.inputField} placeholder="Telefone" />
+        <div className="inputContainerCli">
+          <input type="text" ref={telefoneRef} className="inputFieldCli" placeholder="Telefone" />
         </div>
-        <div className={styles.inputContainer}>
-          <input type="password" ref={passwordRef} className={styles.inputField} placeholder="Senha" />
+        <div className="inputContainerCli">
+          <input type="password" ref={passwordRef} className="inputFieldCli" placeholder="Senha" />
         </div>
         
-        <button type="submit" className={styles.button}>
+        <button type="submit" className="buttonCli">
           Cadastrar
         </button>
+        <button className="buttonCli"><a href="/">Cancelar</a></button>
       </form>
     </div>
-  );
+  );  
 };
 
 export default CadastroCliente;

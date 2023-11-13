@@ -4,6 +4,7 @@ import { collection, doc, getDocs, getFirestore, setDoc, query , where, getDoc} 
 import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col, Card, Button } from  "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import './css/ProfissionalPg.css';
 
 const firebaseConfig = {
     apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
@@ -140,12 +141,12 @@ const ProfissionalDashboard = () => {
 
 
 return(
-        <Container>
+        <Container className="centeredFormProfilePro">
             {isLoading ? (
                 <p>Carregando Informações...</p>
             ) : editMode ? (
-                <Form style={{ width: "700px", margin: "0 auto", padding: "0px", marginTop: "40px"}}>
-                    <Row style={{margin: "10px 0", textAlign: "left"}}>
+                <Form >
+                    <Row className="rowProfilePro">
                         <Col md={3}>
                             <Form.Group>
                                 <Form.Label style={{color: "black" }}>Nome da Pessoa Prestadora de Serviço:</Form.Label>
@@ -157,12 +158,12 @@ return(
                                 type="text"
                                 value={profissionalInfo.username}
                                 onChange={(e)=> setProfissionalInfo({...profissionalInfo, username: e.target.value})}
-                                style={{width: "400px"}}
+                                style={{width: "400px", height: "30px"}}
                                 />
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row style={{margin: "5px 0", textAlign: "left"}}>
+                    <Row className="rowProfilePro">
                         <Col md={3} >
                             <Form.Group>
                                 <Form.Label style={{ color: "black"}}>Email: </Form.Label>
@@ -174,12 +175,12 @@ return(
                                 type="text"
                                 value={profissionalInfo.email}
                                 onChange={(e)=> setProfissionalInfo({...profissionalInfo, email: e.target.value})}
-                                style={{width: "400px"}}
+                                style={{width: "400px", height: "30px"}}
                                 />
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row style={{margin: "5px 0", textAlign: "left"}}>
+                    <Row className="rowProfilePro">
                         <Col md={3}>
                             <Form.Group>
                                 <Form.Label style={{color: "black"}}>CPF:</Form.Label>
@@ -191,12 +192,12 @@ return(
                                 type="text"
                                 value={profissionalInfo.cpf}
                                 onChange={(e)=> setProfissionalInfo({...profissionalInfo, cpf: e.target.value})}
-                                style={{width: "400px"}}
+                                style={{width: "400px", height: "30px"}}
                                 />
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row style={{margin: "5px 0", textAlign: "left"}}>
+                    <Row className="rowProfilePro">
                         <Col md={3}>
                             <Form.Group>
                                 <Form.Label style={{color: "black"}}>Tipo de Serviço:</Form.Label>
@@ -208,12 +209,12 @@ return(
                                 type="text"
                                 value={profissionalInfo.tipoServico}
                                 onChange={(e)=> setProfissionalInfo({...profissionalInfo, tipoServico: e.target.value})}
-                                style={{width: "400px"}}
+                                style={{width: "400px", height: "30px"}}
                                 />
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row style={{margin: "5px 0", textAlign: "left"}}>
+                    <Row className="rowProfilePro">
                         <Col md={3}>
                             <Form.Group>
                                 <Form.Label  style={{color: "black"}}>Telefone:</Form.Label>
@@ -225,12 +226,12 @@ return(
                                 type="text"
                                 value={profissionalInfo.telefone}
                                 onChange={(e)=> setProfissionalInfo({...profissionalInfo, telefone: e.target.value})}
-                                style={{width: "400px"}}
+                                style={{width: "400px", height: "30px"}}
                                 />
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Row style={{margin: "5px 0", textAlign: "left"}}>
+                    <Row className="rowProfilePro">
                         <Col md={3}>
                             <Form.Group>
                                 <Form.Label  style={{color: "black"}}>Endereço:</Form.Label>
@@ -242,14 +243,14 @@ return(
                                 type="text"
                                 value={profissionalInfo.endereco}
                                 onChange={(e)=> setProfissionalInfo({...profissionalInfo, endereco: e.target.value})}
-                                style={{width: "400px"}}
+                                style={{width: "400px", height: "30px"}}
                                 />
                             </Form.Group>
                         </Col>
                     </Row>
                     <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px"}}>
-                    <Button onClick={handleSaveClick} style={{padding: "2px", margin: "10px", width: "130px", height: "30px"}}>Salvar</Button>
-                    <Button onClick={handleCancelClick} style={{padding: "2px", margin: "10px", width: "130px", height: "30px"}}>Cancelar</Button>
+                    <Button onClick={handleSaveClick} className="infoButtonPro">Salvar</Button>
+                    <Button onClick={handleCancelClick} className="infoButtonPro">Cancelar</Button>
                     </div>
                 </Form>
             ) : (
@@ -258,7 +259,7 @@ return(
                         <Row>
                             <Col md={12}>
                                 <Card>
-                                    <Card.Body>
+                                    <Card.Body className="infoProfilePro">
                                         <Row>
                                             <Col md={3}>
                                                 <strong>Nome do Profissional:</strong>
@@ -308,7 +309,7 @@ return(
                                 </Card>
                             </Col>
                         </Row>
-                        <Button onClick={handleEditClick}>Editar</Button>
+                        <Button onClick={handleEditClick} className="infoButtonProfilePro">Editar</Button>
                     </Card.Body>
                 </Card>
             )}
