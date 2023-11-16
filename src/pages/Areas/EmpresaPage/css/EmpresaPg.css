@@ -1,7 +1,7 @@
 .centerdFormProfileEmp {
     font-family: Arial, sans-serif;
     max-width: 500px;
-    height: 600px;
+    height: 500px;
     margin: 0 auto;
     margin-top: 120px;
     padding: 20px;
@@ -99,6 +99,35 @@
     width: 450px;
     margin: 5px;
     margin-left: 20px;
-    padding: 10px;
-    
+    padding: 10px; 
+}
+
+.historicoEmp{
+    background-color: #6E7EC2;
+    width: 350px;
+    height: 410px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    border-radius: 7px;
+}
+
+.rowHistoricoEmp {
+    border: 1px solid #ccc; 
+    padding: 1px; 
+    margin-top: -4px;
+    margin-bottom: 1px; 
+    border-radius: 5px; 
+    background-color: #f9f9f9; 
+    color: black;
+}
+
+.rowHistoricoEmp:hover {
+    background-color: #e0e0e0; 
+}
+
+
+.buttonHistoricoEmp{
+    width: 100px;
+    margin-bottom: auto;
 }

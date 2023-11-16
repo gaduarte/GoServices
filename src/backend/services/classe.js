@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 
 const serviceAccount = require('../Firebase/key.json');
+const { collection } = require('firebase/firestore');
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
@@ -208,6 +209,51 @@ let Goservice = class {
             return null;
         }
         return cartaoDoc.data();
+    }
+
+    async retrieveAgendamento(id){
+        const userRef = db.collection("agendamento").doc(id);
+        const doc = await userRef.get();
+
+        if(!doc.exists()){
+            return null;
+        }
+        return doc.data();
+    }
+
+    async retrieveAllAgendamentos(id){
+        const userRef = db.collection("agendamento").doc(id);
+        const doc = await userRef.get();
+        const agendamento = [];
+        doc.forEach(doc => {
+            agendamento.push(doc.data());
+        });
+        return agendamento;
+    }
+
+    async excluirConta(id){
+        const useRef = db.collection("cliente").doc(id);
+        await useRef.delete();
+    }
+
+    async excluirCartao(id, cartaoId) {
+        console.log(`Excluindo cartão - id: ${id}, cartaoId: ${cartaoId}`);
+        const clienteRef = db.collection("cliente").doc(id);
+        const docRef = doc(collection(clienteRef, "cartao"), cartaoId);
+    
+        const docSnapshot = await getDoc(docRef);
+        if (docSnapshot.exists()) {
+            await docRef.delete();
+            console.log("Documento excluído com sucesso.");
+        } else {
+            console.log("Documento não encontrado.");
+        }
+    }
+    
+
+    async excluirServico(id){
+        const userRef = db.collection("servico").doc(id);
+        await userRef.delete();
     }
 
 }

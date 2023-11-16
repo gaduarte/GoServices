@@ -13,10 +13,15 @@ import { SearchT } from "./pages/Search/Search";
 import { EmpresaAdicionaServ } from "./pages/Areas/EmpresaPage/AddServiço";
 import { EmpresaAtualiza } from "./pages/Areas/EmpresaPage/AtualizarServiço";
 import { AgendarDados } from "./pages/HomePage/Agendamento";
-import ClienteAddServico from "./pages/Areas/ClientePage/AddCartao/AddCartao";
-import { ClienteAdicionaCartao } from "./pages/Areas/ClientePage/AddCartao";
+import { ClienteAdicionaCartao} from "./pages/Areas/ClientePage/AddCartao";
 import { EmpresaAdicionaHorario } from "./pages/Areas/EmpresaPage/AddServiço/Horarios";
 import QuemSomos from "./pages/goservicesInfos/SobreNos";
+import Privacidade from "./pages/goservicesInfos/PoliticaPrivacidade";
+import { ClienteAgendamentoDados } from "./pages/Areas/ClientePage/AgendamentosCliente";
+import CartoesCliente from "./pages/Areas/ClientePage/AddCartao/cartoes/Cartoes";
+import { CartoesdoCliente } from "./pages/Areas/ClientePage/AddCartao/cartoes";
+import { EmpresaAgendamentoDados } from "./pages/Areas/EmpresaPage/AgendamentosEmpresa";
+import { ProfissionalAgendamentoDados } from "./pages/Areas/ProfissionalPage/AgendamentoProfissional";
 
 
 function App() {
@@ -108,6 +113,11 @@ function App() {
                 ) : null}
               </li>
               <li>
+                {userRole === "cliente" ? (
+                  <NavLink to="/agendamentosCliente">Meus Agendamentos</NavLink>
+                ) : null}
+              </li>
+              <li>
               </li>
               <li>
                 {userRole === "profissional" ? (
@@ -115,8 +125,18 @@ function App() {
                 ) : null}
               </li>
               <li>
+                {userRole === "profissional" ? (
+                  <NavLink to="/agendamentosProfissional">Relatório de Agendamentos</NavLink>
+                ) : null}
+              </li>
+              <li>
               {userRole === "empresa" ? (
                   <NavLink to="/addServico">Adicionar Serviço</NavLink>
+                ) : null}
+              </li>
+              <li>
+                {userRole === "empresa" ? (
+                  <NavLink to="/agendamentosEmpresa">Relatório de Agendamentos</NavLink>
                 ) : null}
               </li>
               <li>
@@ -138,23 +158,29 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/infos" element={<QuemSomos />} />
+          <Route path="/privacidade" element={<Privacidade />} />
           <Route path="/cadastro/*" element={<CadastrarUsuario />} />
           <Route path="/login" element={<LoginUsuario />} />
           {userRole === "cliente" && <Route path="/cliente/*" element={<ClienteDados />} />}
           {userRole === "cliente" && <Route path="/addCartao/*" element={<ClienteAdicionaCartao />} />}
+          {userRole === "cliente" && <Route path="/cartoes/*" element={<CartoesdoCliente />} />}
           {userRole === "cliente" && <Route path="/agendamento/:servicoId" element={<AgendarDados />} />}
-
+          {userRole === "cliente" && <Route path="/agendamentosCliente/*" element={<ClienteAgendamentoDados />} />}
           {userRole === "profissional" && <Route path="/profissional/*" element={<ProfissionalDados />} />}
+          {userRole === "profissional" && <Route path="/agendamentosProfissional" element={<ProfissionalAgendamentoDados />}/>}
           {userRole === "empresa" && <Route path="/empresa/*" element={<EmpresaDados />} />}
           {userRole === "empresa" && <Route path="/addServico/*" element={<EmpresaAdicionaServ />} />}
           {userRole === "empresa" && <Route path="/atualizaServico/*" element={<EmpresaAtualiza/>} />}
           {userRole === "empresa" && <Route  path="/horarios/*" element={<EmpresaAdicionaHorario />}/>}
+          {userRole === "empresa" && <Route path="/agendamentosEmpresa" element={<EmpresaAgendamentoDados />} />}
         </Routes>
       </div>
 
       <footer className="footer">
-        <p>@Goservices; 2023 
+        <p>@Goservices; 2023 <br />
+        <a href="/privacidade">Política de Privacidade</a>
         </p>
+        <p></p>
       </footer>
     </BrowserRouter>
   );

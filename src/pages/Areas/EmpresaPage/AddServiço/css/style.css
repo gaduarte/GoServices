@@ -1,0 +1,27 @@
+/* Estilos específicos para telas com largura maior que 700px */
+@media (min-width: 701px) {
+    Form {
+      width: 700px; /* Defina a largura desejada para telas maiores */
+      max-width: 71%; /* Defina uma largura máxima para evitar que o formulário fique muito largo */
+      margin: 0 auto; /* Centralize o formulário na tela */
+    }
+  }
+  
+  /* Estilos específicos para telas com largura entre 401px e 700px (o estilo original) */
+  @media (min-width: 401px) and (max-width: 700px) {
+    Form {
+      width: 400px; /* Estilo original para telas entre 401px e 700px */
+      max-width: 100%;
+      margin: 0 auto; /* Centralize o formulário na tela */
+    }
+  
+  }
+  
+  /* Estilos específicos para telas menores que 400px (o estilo original) */
+  @media (max-width: 400px) {
+    Form {
+      width: 100%; /* Estilo original para telas menores que 400px */
+      max-width: 100%; 
+    }
+  }
+  

@@ -100,3 +100,64 @@
   cursor: pointer;
   font-weight: bold;
 }
+
+.agendamentoCliente{
+  width: 270px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 7px;
+  background-color: #6E7EC2;
+}
+
+.rowAgendCliente{
+    border: 1px solid #ccc; 
+    padding: 1px; 
+    width: 240px;
+    margin: 5px;
+    margin-left: -19px;
+    margin-bottom: 1px; 
+    font-size: 17px;
+    border-radius: 5px; 
+    background-color: #f9f9f9; 
+    color: black;
+}
+
+.rowAgendCliente:hover{
+  background-color: #e0e0e0;
+}
+
+.containerCartao{
+  width: 370px;
+  height: 350px;
+  margin: 25px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  border-radius: 5px;
+  background-color: #6E7EC2;
+}
+
+.cartaoCli {
+  border: 1px solid #ccc; 
+  padding: 15px; 
+  margin: 5px;
+  margin-bottom: 1px; 
+  border-radius: 5px; 
+  background-color: #f9f9f9; 
+  color: black;
+}
+
+.cartaoCli:hover {
+  background-color: #e0e0e0; 
+}
+
+.buttonExcluirCartao{
+  width: 45%;
+  margin: 2px auto;
+  padding: 10px;
+  font-weight: 400;
+  background-color: #C26E7E;
+}
+
+

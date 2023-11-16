@@ -2,7 +2,6 @@ import { getAuth, signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ClienteDashboard from "./ClienteDashboard";
-import { ClienteAdicionaCartao } from "./AddCartao";
 import { NavLink } from "react-router-dom";
 import './css/ClientePg.css';
 

@@ -71,8 +71,7 @@
   background-color: #C26E7E;
   color: #fff;
   border: none;
-  margin-top: 20px;
-  margin-left: 50px;
+  margin: 20px auto;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
@@ -108,6 +107,6 @@
     margin-right: 50px;
   }
   .buttonLoginEmp{
-    margin-right: 50px;
+    margin-right: 20px;
   }
 }

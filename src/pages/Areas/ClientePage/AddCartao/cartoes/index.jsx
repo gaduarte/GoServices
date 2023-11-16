@@ -1,9 +1,9 @@
 import { getAuth, signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import ClienteAddCartao from "./AddCartao";
+import { useNavigate } from "react-router-dom";
+import CartoesCliente from "./Cartoes";
 
-export function ClienteAdicionaCartao() {
+export function CartoesdoCliente() {
     const history = useNavigate();
     const[id, setId] = useState(null);
 
@@ -38,14 +38,10 @@ export function ClienteAdicionaCartao() {
         <div>
             {id && 
             <>
-            <ClienteAddCartao />
-            <button>
-                <NavLink to="/cartoes" state={{color: "white"}}>Meus Cartões</NavLink>
-            </button>
+            <CartoesCliente />
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-            <button className="logoutCli" onClick={logOut}>Sign Out</button>
+            <button onClick={logOut}>Sign Out</button>
             </>}
         </div>
     )
-
 }

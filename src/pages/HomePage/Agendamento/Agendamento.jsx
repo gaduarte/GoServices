@@ -325,6 +325,24 @@ const Agendamento = () => {
         <img className="imagem" src={servicoData.img} alt={servicoData.nome} />
       )}
 
+<div className="service-info">
+          {servicoData && (
+            <h3>{servicoData.nome}</h3>
+          )}
+          {servicoData && (
+            <p>Empresa: {servicoData.empresa}</p>
+          )}
+          {clienteData && (
+            <p>Cliente: {clienteData.username}</p>
+          )}
+          {clienteData && (
+            <p>Endereço: {clienteData.endereco}</p>
+          )}
+          {servicoData && (
+            <p>Valor: {servicoData.valor}</p>
+          )}
+        </div>
+
       <div className="professional-section">
         <select className="select-dif"
           value={selectedProfissional}
@@ -332,7 +350,7 @@ const Agendamento = () => {
         >
           <option value="">Selecione um Profissional</option>
           {profissionais.map((profissional) => (
-            <option key={profissional.id} value={profissional.id}>
+            <option key={profissional.id} value={profissional.id} >
               {profissional.data.username}
             </option>
           ))}
@@ -404,9 +422,7 @@ const Agendamento = () => {
               if (cartao.numero === selectedCard) {
                 return (
                   <div key={index}>
-                    <p>Número do Cartão: {cartao.numero}</p>
                     <p>Nome no Cartão: {cartao.nome}</p>
-                    <p>Data de Validade: {cartao.dataValidade}</p>
                     <p>Código do Cartão: {cartao.codigo}</p>
                   </div>
                 );
@@ -419,23 +435,6 @@ const Agendamento = () => {
       </div>
 
       <div className="service-details-bottom">
-        <div className="service-info">
-          {servicoData && (
-            <h3>{servicoData.nome}</h3>
-          )}
-          {servicoData && (
-            <p>Empresa: {servicoData.empresa}</p>
-          )}
-          {clienteData && (
-            <p>Cliente: {clienteData.username}</p>
-          )}
-          {clienteData && (
-            <p>Endereço: {clienteData.endereco}</p>
-          )}
-          {servicoData && (
-            <p>Valor: {servicoData.valor}</p>
-          )}
-        </div>
         <button className="buttonAgendar" onClick={handleAgendamento}>Agendar</button>
       </div>
       <button className="buttonAgendar2"><a href="/">Voltar</a></button>

@@ -88,6 +88,18 @@ app.post('/cadastro/cliente', async (req, res) => {
     console.log('Cadastro de cliente realizado com sucesso.');
 });
 
+app.delete('/cliente/remove/:id', async(req,res)=>{
+    const id = req.params.id;
+    try{
+        await gs.excluirConta(id);
+        res.status(200).send('Conta excluída com sucesso!');
+    } catch (error) {
+        console.error("Erro ao excluir conta", error);
+        res.status(500).send('Erro ao excluir conta');
+    }
+    
+})
+
 // Cartão
 app.post('/addCartao', async(req,res)=>{
     try{
@@ -124,6 +136,21 @@ app.get('/cartao/1/:id', async(req,res)=>{
     if(mensagem == -1){res.status(404).send('Não encontrado.')}
     res.json(mensagem);
 })
+
+app.delete('/cliente/remove/cartao/:id/:cartaoId', async (req, res) => {
+    const id = req.params.id;
+    const cartaoId = req.params.cartaoId;
+
+    try {
+        console.log(`Excluindo cartão - id: ${id}, cartaoId: ${cartaoId}`);
+        await gs.excluirCartao(id, cartaoId);
+        res.status(200).json('Cartão excluído com Sucesso!');
+    } catch (error) {
+        console.error("Erro ao excluir cartão:", error);
+        res.status(500).json('Erro ao excluir cartão.');
+    }
+});
+
 
 // Empresa 
 app.get('/empresa/:email', async (req, res) => {
@@ -282,6 +309,21 @@ app.post('/cadastro/profissional', async (req, res) => {
 });
 
 //Agendamento
+app.get('/agendamento/:id', async(req, res)=>{
+    const id = req.params.id;
+    const mensagem = await gs.retrieveAgendamento(id)
+    
+    if(mensagem == -1){res.status(404).send('Não encontrado')}
+    res.json(mensagem);
+})
+
+//Retorna todos os agendamentos
+app.get('/agendamentos', async (req,res)=>{
+    const mensagem = await gs.retrieveAllAgendamentos()
+    res.json(mensagem);
+})
+
+// Adiciona um agendamento.
 app.post('/addAgendamento', async (req, res)=>{
     try{
         const generatedId = generateUniqueId();

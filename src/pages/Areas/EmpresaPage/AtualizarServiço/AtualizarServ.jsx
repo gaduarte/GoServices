@@ -22,12 +22,12 @@ const db = getFirestore(app);
 const EmpresaAtualizaServico = () => {
   const [editMode, setEditMode] = useState(false);
   const [empresaInfo, setEmpresaInfo] = useState({});
-  const [servicoInfo, setServicoInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [id, setId] = useState(null);
   const [servicosDaEmpresa, setServicosDaEmpresa] = useState([]);
   const history = useNavigate();
   const [selectedServicoId, setSelectedServicoId] = useState(null);
+
   const empresaRef = useRef(null);
   const nomeRef = useRef(null);
   const descricaoRef = useRef(null);
@@ -73,8 +73,8 @@ const EmpresaAtualizaServico = () => {
           sessionStorage.setItem("role", "empresa");
           setIsLoading(false);
         }
-      } 
-    }catch (error) {
+      }
+    } catch (error) {
       console.error("Erro ao verificar a função do usuário: ", error);
       setIsLoading(false);
     }
@@ -84,22 +84,46 @@ const EmpresaAtualizaServico = () => {
     checkUserRole();
   }, [history]);
 
-  const fetchServicosEmpresa = async (empresaId) => {
-    try {
-      const servicoRef = collection(db, "servico");
-      const q = query(servicoRef, where("empresaId", "==", empresaId));
-      const querySnapshot = await getDocs(q);
-
-      const servicos = [];
-      querySnapshot.forEach((doc) => {
-        servicos.push({ id: doc.id, ...doc.data() });
-      });
-
-      setServicosDaEmpresa(servicos);
-    } catch (error) {
-      console.error("Erro ao buscar serviços da empresa: ", error);
+  useEffect(()=>{
+    async function fetchServicosEmpresa() {
+      try {
+        setIsLoading(true);
+        const auth = getAuth();
+        const user = auth.currentUser;
+        const uid = user ? user.uid : null;
+    
+        console.log("Fetching services for empresa with ID:", uid);
+    
+        const servicoRef = query(collection(db, "servico"), where("empresaId", "==", uid));
+        const querySnapshot = await getDocs(servicoRef);
+        const servicoInfo = [];
+    
+        for (const docSnapshot of querySnapshot.docs) {
+          const servicoData = docSnapshot.data();
+    
+          servicoInfo.push({
+            id: docSnapshot.id,
+            ...servicoData,
+          });
+        }
+    
+        console.log("Fetched services:", servicoInfo);
+    
+        setServicosDaEmpresa(servicoInfo);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Erro ao buscar serviços da empresa: ", error);
+      }
     }
-  };
+    fetchServicosEmpresa();
+  }, [])
+  
+  useEffect(() => {
+    if (empresaInfo && empresaInfo.id) {
+      setServicosDaEmpresa(empresaInfo.servicos || []);
+    }
+  }, [empresaInfo]);
+  
 
   useEffect(() => {
     async function fetchEmpresa() {
@@ -117,7 +141,7 @@ const EmpresaAtualizaServico = () => {
           if (docSnapshot.exists()) {
             const data = docSnapshot.data();
             setEmpresaInfo(data);
-            setServicoInfo({ ...servicoInfo, id: data.id }); 
+            setServicosDaEmpresa(data.servicos || []); 
           }
   
           setIsLoading(false);
@@ -129,13 +153,7 @@ const EmpresaAtualizaServico = () => {
     }
   
     fetchEmpresa();
-  }, [servicoInfo, setServicoInfo]);
-  
-  useEffect(() => {
-    if (empresaInfo && servicoInfo.id) {
-      fetchServicosEmpresa(servicoInfo.id);
-    }
-  }, [servicoInfo, setServicoInfo]);
+  }, []);
   
 
   const handleEditClick = () => {
@@ -146,15 +164,12 @@ const EmpresaAtualizaServico = () => {
     try {
       const servicoRef = doc(db, "servico", id);
 
-      await setDoc(servicoRef, servicoInfo, { merge: true });
+      await setDoc(servicoRef, {
+        nome: nomeRef.current.value,
+        descricao: descricaoRef.current.value,
+        valor: valorRef.current.value,
+      });
 
-      const response = await fetch(`http://localhost:3000/servicos/${id}`);
-
-      if (!response.ok) {
-        throw new Error("Erro ao enviar solicitação API");
-      }
-      const data = await response.json();
-      setServicoInfo(data);
       setSuccessMessage("Dados encontrados com sucesso!");
       setErrorMessage("");
       setEditMode(false);
@@ -172,6 +187,7 @@ const EmpresaAtualizaServico = () => {
 
   const handleServicoSelect = (servicoId) => {
     setSelectedServicoId(servicoId);
+    setEditMode(true);
   };
 
   return (
@@ -204,7 +220,7 @@ const EmpresaAtualizaServico = () => {
                 </Col>
                 <Col md={9} className="text-secondary">
                   <Form.Group>
-                    <Form.Control type="text" ref={nomeRef} value={servicosDaEmpresa[selectedServicoId].nome || ""} />
+                    <Form.Control type="text" ref={nomeRef} defaultValue={servicosDaEmpresa[selectedServicoId].nome || ""} />
                   </Form.Group>
                 </Col>
               </Row>
@@ -216,7 +232,13 @@ const EmpresaAtualizaServico = () => {
                 </Col>
                 <Col md={9} className="text-secondary">
                   <Form.Group>
-                    <Form.Control as="textarea" rows={3} ref={descricaoRef} style={{ backgroundColor: "white", width: "20vw" }} value={servicosDaEmpresa[selectedServicoId].descricao || ""} />
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      ref={descricaoRef}
+                      style={{ backgroundColor: "white", width: "20vw" }}
+                      defaultValue={servicosDaEmpresa[selectedServicoId].descricao || ""}
+                    />
                   </Form.Group>
                 </Col>
               </Row>
@@ -228,7 +250,7 @@ const EmpresaAtualizaServico = () => {
                 </Col>
                 <Col md={9} className="text-secondary">
                   <Form.Group>
-                    <Form.Control type="text" ref={valorRef} value={servicosDaEmpresa[selectedServicoId].valor || ""} />
+                    <Form.Control type="text" ref={valorRef} defaultValue={servicosDaEmpresa[selectedServicoId].valor || ""} />
                   </Form.Group>
                 </Col>
               </Row>
@@ -247,55 +269,56 @@ const EmpresaAtualizaServico = () => {
         </Form>
       ) : (
         <div>
-          {servicosDaEmpresa.map((servico, index) => (
-            <div key={index}>
-              <Card>
-                <Card.Body>
-                  <Row>
-                    <Col md={3}>
-                      <strong>Nome do Serviço:</strong>
-                    </Col>
-                    <Col md={9} className="text-secondary">
-                      {servico.nome}
-                    </Col>
-                  </Row>
-                  <hr />
-                  <Row>
-                    <Col md={3}>
-                      <strong>Descrição:</strong>
-                    </Col>
-                    <Col md={9} className="text-secondary">
-                      {servico.descricao}
-                    </Col>
-                  </Row>
-                  <hr />
-                  <Row>
-                    <Col md={3}>
-                      <strong>Valor:</strong>
-                    </Col>
-                    <Col md={9} className="text-secondary">
-                      R$ {servico.valor}
-                    </Col>
-                  </Row>
-                  <hr />
-                  <Row>
-                    <Col md={3}>
-                      <strong>Empresa:</strong>
-                    </Col>
-                    <Col md={9} className="text-secondary">
-                      {empresaInfo.nome}
-                    </Col>
-                  </Row>
-                  <hr />
-                  <Button onClick={() => handleServicoSelect(index)}>Editar</Button>
-                </Card.Body>
-              </Card>
-            </div>
-          ))}
-        </div>
+        {servicosDaEmpresa.map((servico, index) => (
+          <div key={index}>
+            <Card>
+              <Card.Body>
+                <Row>
+                  <Col md={3}>
+                    <strong>Nome do Serviço:</strong>
+                  </Col>
+                  <Col md={9} className="text-secondary">
+                    {servico.nome && <span>{servico.nome}</span>}
+                  </Col>
+                </Row>
+                <hr />
+                <Row>
+                  <Col md={3}>
+                    <strong>Descrição:</strong>
+                  </Col>
+                  <Col md={9} className="text-secondary">
+                    {servico.descricao && <span>{servico.descricao}</span>}
+                  </Col>
+                </Row>
+                <hr />
+                <Row>
+                  <Col md={3}>
+                    <strong>Valor:</strong>
+                  </Col>
+                  <Col md={9} className="text-secondary">
+                    {servico.valor && <span>R$ {servico.valor}</span>}
+                  </Col>
+                </Row>
+                <hr />
+                <Row>
+                  <Col md={3}>
+                    <strong>Empresa:</strong>
+                  </Col>
+                  <Col md={9} className="text-secondary">
+                    {empresaInfo.nome && <span>{empresaInfo.nome}</span>}
+                  </Col>
+                </Row>
+                <hr />
+                <Button onClick={() => handleServicoSelect(index)}>Editar</Button>
+              </Card.Body>
+            </Card>
+          </div>
+        ))}
+      </div>
       )}
     </Container>
   );
+  
 };
 
 export default EmpresaAtualizaServico;

@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col, Card, Button } from  "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -110,6 +110,38 @@ const ClienteDashboard = () => {
 
     const handleCancelClick = () => {
         setEditMode(false);
+    }
+
+    const handleDeleteClick = async () =>{
+      try{
+        const confirmDelete = window.confirm("Tem cereteza que deseja excluir conta?");
+        if(confirmDelete){
+          const clienteDocRef = doc(db, "cliente", id);
+          await deleteDoc(clienteDocRef);
+
+          const deleteConfig = {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          };
+
+          const response = await fetch(`http://localhost:3000/cliente/remove/${id}`, deleteConfig);
+
+          if(!response.ok){
+            throw new Error("Erro na solicitação da API");
+          }
+
+          const responseData = await response.json();
+          console.log('Resposta da API:', responseData);
+          setSuccessMessage('Conta excluída com sucesso!');
+          setErrorMessage('');
+          history("/login");
+        }
+      }catch (error) {
+        console.error("Erro ao excluir conta", error);
+        setErrorMessage('Erro ao excluir conta: ' + error.message);
+      }
     }
 
     useEffect(()=>{
@@ -306,7 +338,7 @@ const ClienteDashboard = () => {
             <Button className="infoButtonProfileCli" onClick={handleEditClick}>
               Editar
             </Button>
-
+            <Button className="infoButtonProfileCli" onClick={handleDeleteClick}>Excluir Conta</Button>
           </Card.Body>
         </Card>
       )}

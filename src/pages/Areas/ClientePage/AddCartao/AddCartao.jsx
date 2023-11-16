@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Form, Button,  Container, Table, Col, Row } from "react-bootstrap";
-import { getDoc, collection, doc, addDoc, getFirestore, query, where, getDocs } from "firebase/firestore";
+import { getDoc, collection, doc, addDoc, getFirestore, query, where, getDocs, deleteDoc } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -201,6 +201,7 @@ const ClienteAddCartao = () => {
         }
     }
     }
+
 
     return(
         <Container className="centeredFormCartaoCli">
