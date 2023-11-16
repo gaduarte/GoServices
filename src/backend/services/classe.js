@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 
 const serviceAccount = require('../Firebase/key.json');
-const { collection } = require('firebase/firestore');
+const { doc, deleteDoc, collection, getDocs } = require('firebase/firestore');
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
@@ -199,18 +199,30 @@ let Goservice = class {
         return doc.data();
     }
 
-    async retrieveCartao(id){
-        const userRef = db.collection("cliente").doc(id);
-        const cartaoRef = userRef.collection("cartao");
-
-        const cartaoDoc = await cartaoRef.get();
-
-        if(!cartaoDoc.exists()){
+    async retrieveCartao(clienteId) {
+        try {
+            const userRef = doc(db, "cliente", clienteId);
+            console.log("userRef:", userRef);
+    
+            const cartaoRef = collection(userRef, "cartao");
+            console.log("cartaoRef:", cartaoRef);
+    
+            const cartaoSnapshot = await getDocs(cartaoRef);
+    
+            if (cartaoSnapshot.empty) {
+                console.log("Cartao not found.");
+                return null;
+            }
+    
+            const cartaoData = cartaoSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            console.log("Cartao data:", cartaoData); // Add this line for debugging
+            return cartaoData;
+        } catch (error) {
+            console.error("Error retrieving cartao:", error);
             return null;
         }
-        return cartaoDoc.data();
     }
-
+    
     async retrieveAgendamento(id){
         const userRef = db.collection("agendamento").doc(id);
         const doc = await userRef.get();
@@ -236,19 +248,12 @@ let Goservice = class {
         await useRef.delete();
     }
 
-    async excluirCartao(id, cartaoId) {
-        console.log(`Excluindo cartão - id: ${id}, cartaoId: ${cartaoId}`);
-        const clienteRef = db.collection("cliente").doc(id);
-        const docRef = doc(collection(clienteRef, "cartao"), cartaoId);
+    async excluirCartao(id) {
+        const userRef = db.collection("cliente").doc(id);
+        const cartaoRef = userRef.collection("cartao");
     
-        const docSnapshot = await getDoc(docRef);
-        if (docSnapshot.exists()) {
-            await docRef.delete();
-            console.log("Documento excluído com sucesso.");
-        } else {
-            console.log("Documento não encontrado.");
-        }
-    }
+        await deleteDoc(cartaoRef);
+    }    
     
 
     async excluirServico(id){

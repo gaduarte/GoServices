@@ -129,21 +129,30 @@ app.post('/addCartao', async(req,res)=>{
       }
 })
 
-app.get('/cartao/1/:id', async(req,res)=>{
-    const id = req.params.id;
-    const mensagem = await gs.retrieveCartao(id);
-
-    if(mensagem == -1){res.status(404).send('Não encontrado.')}
-    res.json(mensagem);
-})
-
-app.delete('/cliente/remove/cartao/:id/:cartaoId', async (req, res) => {
-    const id = req.params.id;
-    const cartaoId = req.params.cartaoId;
+app.get('/cartao/1/:id', async (req, res) => {
+    const clienteId = req.params.id;
 
     try {
-        console.log(`Excluindo cartão - id: ${id}, cartaoId: ${cartaoId}`);
-        await gs.excluirCartao(id, cartaoId);
+        const cartaoData = await gs.retrieveCartao(clienteId);
+
+        if (!cartaoData) {
+            res.status(404).send('Cartao not found.');
+        } else {
+            res.json(cartaoData);
+        }
+    } catch (error) {
+        console.error("Error retrieving cartao:", error);
+        res.status(500).send('Error retrieving cartao.');
+    }
+});
+
+
+
+app.delete('/cartao/remove/1/:id/', async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        await gs.excluirCartao(id);
         res.status(200).json('Cartão excluído com Sucesso!');
     } catch (error) {
         console.error("Erro ao excluir cartão:", error);

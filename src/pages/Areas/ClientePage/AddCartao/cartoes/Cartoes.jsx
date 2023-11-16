@@ -73,7 +73,7 @@ const CartoesCliente = () => {
       
             if (clienteData && clienteData.id) {
               // Consulta a subcoleção "cartao" dentro do documento do cliente
-              const clienteId = clienteData.id; // Get the client's ID
+              const clienteId = clienteData.id;
               const cartaoQuery = query(collection(clienteRef, clienteId, "cartao")); 
               const cartaoSnapshot = await getDocs(cartaoQuery);
       
@@ -115,11 +115,9 @@ const CartoesCliente = () => {
                             'Content-Type': 'application/json',
                         },
                     };
-                    console.log(uid);
-                    console.log(cartaoId);
-                    
-                    const response = await fetch(`http://localhost:3000/cliente/remove/cartao/${uid}/${cartaoId}`, deleteConfig);
-
+    
+                    // Use cartaoId instead of id in the API endpoint
+                    const response = await fetch(`http://localhost:3000/cartao/remove/1/${cartaoId}`, deleteConfig);
     
                     if (!response.ok) {
                         throw new Error("Erro na solicitação da API");
@@ -139,7 +137,8 @@ const CartoesCliente = () => {
             console.error("Erro ao excluir cartão", error);
             setErrorMessage('Erro ao excluir cartão: ' + error.message);
         }
-    }
+    };
+    
     
 
       return (

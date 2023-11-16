@@ -34,6 +34,8 @@ const Agendamento = () => {
   const [isLoading, setIsLoading] = useState(true);
   const history = useNavigate();
   const [selectedCard, setSelectedCard] = useState(null);
+  const [isAgendado, setIsAgendado] = useState(false);
+
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -310,6 +312,7 @@ const Agendamento = () => {
 
       const docRef = await addDoc(agendamentoRef, agendamentoData);
       console.log("Agendamento adicionado com sucesso! Document ID: ", docRef.id);
+      setIsAgendado(true);
     } catch (error) {
       console.error("Erro ao adicionar agendamento: ", error);
     }
@@ -317,131 +320,137 @@ const Agendamento = () => {
 
   return (
     <div className="card-container-agendamento">
-  {isLoading ? (
-    <p>Carregando...</p>
-  ) : (
-    <div className="service-details">
-      {servicoData && servicoData.img && (
-        <img className="imagem" src={servicoData.img} alt={servicoData.nome} />
-      )}
-
-<div className="service-info">
-          {servicoData && (
-            <h3>{servicoData.nome}</h3>
-          )}
-          {servicoData && (
-            <p>Empresa: {servicoData.empresa}</p>
-          )}
-          {clienteData && (
-            <p>Cliente: {clienteData.username}</p>
-          )}
-          {clienteData && (
-            <p>Endereço: {clienteData.endereco}</p>
-          )}
-          {servicoData && (
-            <p>Valor: {servicoData.valor}</p>
+      {isLoading ? (
+        <p>Carregando...</p>
+      ) : (
+        <div className="service-details">
+          {isAgendado ? (
+            <p>Status: Agendado</p>
+          ) : (
+            <>
+              {servicoData && servicoData.img && (
+                <img className="imagem" src={servicoData.img} alt={servicoData.nome} />
+              )}
+  
+              <div className="service-info">
+                {servicoData && <h3>{servicoData.nome}</h3>}
+                {servicoData && <p>Empresa: {servicoData.empresa}</p>}
+                {clienteData && <p>Cliente: {clienteData.username}</p>}
+                {clienteData && <p>Endereço: {clienteData.endereco}</p>}
+                {servicoData && <p>Valor: {servicoData.valor}</p>}
+              </div>
+  
+              <div className="professional-section">
+                <select
+                  className="select-dif"
+                  value={selectedProfissional}
+                  onChange={(e) => setSelectedProfissional(e.target.value)}
+                >
+                  <option value="">Selecione um Profissional</option>
+                  {profissionais.map((profissional) => (
+                    <option key={profissional.id} value={profissional.id}>
+                      {profissional.data.username}
+                    </option>
+                  ))}
+                </select>
+  
+                {selectedProfissional && profissionais && (
+                  <div>
+                    {profissionais.map((profissional) => {
+                      if (profissional.id === selectedProfissional) {
+                        return (
+                          <div key={profissional.id}>
+                            <p>Profissional selecionado: {profissional.data.username}</p>
+                          </div>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
+                  </div>
+                )}
+              </div>
+  
+              <div className="schedule-section">
+                <select
+                  className="select-dif"
+                  value={selectedHorario}
+                  onChange={(e) => setSelectedHorario(e.target.value)}
+                >
+                  <option value="">Selecione Horário</option>
+                  {horarios &&
+                    horarios.map((horario, index) => (
+                      <option key={index} value={horario.id}>
+                        {horario.horario}
+                      </option>
+                    ))}
+                </select>
+  
+                {selectedHorario && horarios && (
+                  <div>
+                    {horarios.map((horario, index) => {
+                      if (horario.horario === selectedHorario) {
+                        return (
+                          <div key={index}>
+                            <p>Horário: {horario.horario}</p>
+                          </div>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
+                  </div>
+                )}
+              </div>
+  
+              <div className="card-section-agendamento">
+                <select
+                  className="select-dif"
+                  value={selectedCard}
+                  onChange={(e) => setSelectedCard(e.target.value)}
+                >
+                  <option value="">Selecione um cartão</option>
+                  {cartao &&
+                    cartao.map((cartao, index) => (
+                      <option key={index} value={cartao.numero}>
+                        {cartao.numero}
+                      </option>
+                    ))}
+                </select>
+  
+                {selectedCard && cartao && (
+                  <div>
+                    {cartao.map((cartao, index) => {
+                      if (cartao.numero === selectedCard) {
+                        return (
+                          <div key={index}>
+                            <p>Nome no Cartão: {cartao.nome}</p>
+                            <p>Código do Cartão: {cartao.codigo}</p>
+                          </div>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
+                  </div>
+                )}
+              </div>
+  
+              <div className="service-details-bottom">
+                <button className="buttonAgendar" onClick={handleAgendamento}>
+                  Agendar
+                </button>
+              </div>
+              <button className="buttonAgendar2">
+                <a href="/">Voltar</a>
+              </button>
+            </>
           )}
         </div>
-
-      <div className="professional-section">
-        <select className="select-dif"
-          value={selectedProfissional}
-          onChange={(e) => setSelectedProfissional(e.target.value)}
-        >
-          <option value="">Selecione um Profissional</option>
-          {profissionais.map((profissional) => (
-            <option key={profissional.id} value={profissional.id} >
-              {profissional.data.username}
-            </option>
-          ))}
-        </select>
-
-        {selectedProfissional && profissionais && (
-          <div>
-            {profissionais.map((profissional) => {
-              if (profissional.id === selectedProfissional) {
-                return (
-                  <div key={profissional.id}>
-                    <p>Profissional selecionado: {profissional.data.username}</p>
-                  </div>
-                );
-              } else {
-                return null;
-              }
-            })}
-          </div>
-        )}
-      </div>
-
-      <div className="schedule-section">
-        <select className="select-dif"
-          value={selectedHorario}
-          onChange={(e) => setSelectedHorario(e.target.value)}
-        >
-          <option value="">Selecione Horário</option>
-          {horarios && horarios.map((horario, index) => (
-            <option key={index} value={horario.id}>
-              {horario.horario}
-            </option>
-          ))}
-        </select>
-
-        {selectedHorario && horarios && (
-          <div>
-            {horarios.map((horario, index) => {
-              if (horario.horario === selectedHorario) {
-                return (
-                  <div key={index}>
-                    <p>Horário: {horario.horario}</p>
-                  </div>
-                );
-              } else {
-                return null;
-              }
-            })}
-          </div>
-        )}
-      </div>
-
-      <div className="card-section-agendamento">
-        <select className="select-dif"
-          value={selectedCard}
-          onChange={(e) => setSelectedCard(e.target.value)}
-        >
-          <option value="">Selecione um cartão</option>
-          {cartao && cartao.map((cartao, index) => (
-            <option key={index} value={cartao.numero}>
-              {cartao.numero}
-            </option>
-          ))}
-        </select>
-
-        {selectedCard && cartao && (
-          <div>
-            {cartao.map((cartao, index) => {
-              if (cartao.numero === selectedCard) {
-                return (
-                  <div key={index}>
-                    <p>Nome no Cartão: {cartao.nome}</p>
-                    <p>Código do Cartão: {cartao.codigo}</p>
-                  </div>
-                );
-              } else {
-                return null;
-              }
-            })}
-          </div>
-        )}
-      </div>
-
-      <div className="service-details-bottom">
-        <button className="buttonAgendar" onClick={handleAgendamento}>Agendar</button>
-      </div>
-      <button className="buttonAgendar2"><a href="/">Voltar</a></button>
+      )}
     </div>
-  )}
-</div>
   );
+  
 }
 
 export default Agendamento;
