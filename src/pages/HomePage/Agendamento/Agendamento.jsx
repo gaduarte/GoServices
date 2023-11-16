@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { doc, getDoc, collection, getDocs, query, where, addDoc } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs, query, where, addDoc, updateDoc } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -190,14 +190,27 @@ const Agendamento = () => {
     async function fetchHorarios() {
       try {
         setIsLoading(true);
-        const horariosQuerySnapshot = await getDocs(horarioRef);
+  
+        // Verificar se servicoData está definido
+        if (!servicoData) {
+          console.error("Erro: servicoData não está definido");
+          setIsLoading(false);
+          return;
+        }
+  
+        const horariosQuerySnapshot = await getDocs(query(horarioRef, where("empresaId", "==", servicoData.empresaId)));
         const horariosData = [];
   
         horariosQuerySnapshot.forEach((doc) => {
-          horariosData.push({
-            id: doc.id,
-            ...doc.data(),
-          });
+          const horarioInfo = doc.data();
+  
+          // Verificar se o horário está disponível (status 0)
+          if (horarioInfo.status === false) {
+            horariosData.push({
+              id: doc.id,
+              ...horarioInfo,
+            });
+          }
         });
   
         setHorarios(horariosData);
@@ -209,40 +222,9 @@ const Agendamento = () => {
     }
   
     fetchHorarios();
-  }, []);  
-  
-
-  useEffect(() => {
-    async function fetchEmpresa(empresaId) {
-      try {
-        const querySnapshot = await getDocs(empresaRef);
-        const empresasData = [];
-        querySnapshot.forEach((doc) => {
-          empresasData.push({ id: doc.id, data: doc.data() });
-        });
-      
-      } catch (error) {
-        console.error("Erro ao buscar as empresas:", error);
-      }
-    }
+  }, [servicoData, horarioRef]);
    
-  }, []);
 
-  useEffect(() => {
-    async function fetchProfissional(profissionalId) {
-      try {
-        const querySnapshot = await getDocs(profissionalRef);
-        const profissionaisData = [];
-        querySnapshot.forEach((doc) => {
-          profissionaisData.push({ id: doc.id, data: doc.data() });
-        });
-       
-      } catch (error) {
-        console.error("Erro ao buscar os profissionais:", error);
-      }
-    }
-    
-  }, []);
 
   useEffect(() => {
     async function fetchCartaoCliente() {
@@ -312,6 +294,8 @@ const Agendamento = () => {
 
       const docRef = await addDoc(agendamentoRef, agendamentoData);
       console.log("Agendamento adicionado com sucesso! Document ID: ", docRef.id);
+      const horarioDocRef = doc(db, "horariosDisponiveis", selectedHorario);
+      await updateDoc(horarioDocRef, {status: true});
       setIsAgendado(true);
     } catch (error) {
       console.error("Erro ao adicionar agendamento: ", error);

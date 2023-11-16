@@ -248,9 +248,10 @@ app.post('/addHorario', async(req,res)=>{
         const generatedId = generateUniqueId();
 
         const horarioData = {
-            diasSelecionados: req.body.diasSelecionados,
-            empresaID: req.body.empresaID,
-            servicoId: req.body.servicoId,
+            diasSelecionados: req.body.horario,
+            empresaID: req.body.empresaId,
+            servicoId: req.body.servico,
+            status: req.body.status,
             id: generatedId
         };
 
@@ -259,6 +260,7 @@ app.post('/addHorario', async(req,res)=>{
         horarioData.diasSelecionados,
         horarioData.empresaID,
         horarioData.servicoId,
+        horarioData.status,
         horarioData.id
 
       console.log('Simulação: Cadastro de serviço realizado com sucesso.');

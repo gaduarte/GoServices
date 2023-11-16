@@ -331,17 +331,7 @@ const EmpresaAddServico = () => {
             <Form.Control type="text" ref={valorRef} style={{width: "400px", height: "30px"}} />
           </Col>
         </Row>
-        <Row className="rowProfileEmp">
-          <Col md={3}>
-            <Form.Group>
-              <Form.Label style={{ color: "black" }}>Escolha uma imagem:</Form.Label>
-            </Form.Group>
-          </Col>
-          <Col md={9}>
-            <Form.Control type="file" accept="image/*" onChange={handleImageSelect} style={{width: "400px", height: "30px", backgroundColor: " #333333"}} />
-          </Col>
-        </Row>
-      <Row>
+        <Row>
       <select  
           className="select-profissional"
           value={selectedProfissional}
@@ -355,6 +345,17 @@ const EmpresaAddServico = () => {
           ))}
         </select>
       </Row>
+        <Row className="rowProfileEmp">
+          <Col md={3}>
+            <Form.Group>
+              <Form.Label style={{ color: "black" }}>Escolha uma imagem:</Form.Label>
+            </Form.Group>
+          </Col>
+          <Col md={9}>
+            <Form.Control type="file" accept="image/*" onChange={handleImageSelect} style={{width: "400px", height: "30px", backgroundColor: " #333333"}} />
+          </Col>
+        </Row>
+      
         <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px" }} >
           <Button variant="primary" onClick={handleServiceSubmit} className="infoButtonEmp">
             Adicionar

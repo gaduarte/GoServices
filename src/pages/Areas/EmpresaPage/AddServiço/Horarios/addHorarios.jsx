@@ -27,6 +27,9 @@ export const AdicionarHorarioDisponivel = () => {
   const [empresaInfo, setEmpresaInfo] = useState([]);
   //const { servicoId } = useParams();
 
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
   const history = useNavigate();
 
   const checkUserInEmpresaCollection = async (email) => {
@@ -111,7 +114,11 @@ export const AdicionarHorarioDisponivel = () => {
   }, []);
 
   const handleAdicionarHorario = async () => {
-    if (!id || !horario || !servico) {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        const uid = user ? user.uid : null;
+
+    if (!horario || !servico) {
       console.log("Preencha todos os campos necessários.");
       return;
     }
@@ -120,8 +127,28 @@ export const AdicionarHorarioDisponivel = () => {
     const novoHorario = {
       horario: horario,
       servico: servico,
-      empresaId: id,
+      empresaId: uid,
+      status: false,
     };
+
+    const configHorario = {
+      method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(novoHorario),
+    }
+
+    const response = await fetch("http://localhost:3000/addHorario", configHorario);
+
+    if (!response.ok) {
+      throw new Error("Erro na solicitação da API");
+    }
+
+    const responseData = await response.json();
+    console.log('Resposta da API:', responseData);
+    setSuccessMessage('Serviço cadastrado com sucesso!');
+    setErrorMessage('');
 
     try {
       await addDoc(horariosDisponiveisRef, novoHorario);
