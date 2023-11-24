@@ -10,6 +10,7 @@
     background-color: #6E7EC2;
   }
 
+
 .rowProfileCli{
   margin: 10px 0;
   text-align: left;
@@ -159,5 +160,20 @@
   font-weight: 400;
   background-color: #C26E7E;
 }
+
+.containerFavs{
+  background-color: #6E7EC2;
+  width: 200px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  flex-basis: calc(11.1% - 20px); /* 100% / 9 - 20px de margem entre os itens */
+}
+
+.containerFavs:nth-child(1n){
+  margin-right: 0;
+}
+
+
 
 

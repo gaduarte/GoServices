@@ -4,6 +4,7 @@ import { getDoc, collection, doc, getFirestore, query, where, getDocs, setDoc } 
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { ref, getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
@@ -18,6 +19,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 const EmpresaAtualizaServico = () => {
   const [editMode, setEditMode] = useState(false);
@@ -27,11 +29,13 @@ const EmpresaAtualizaServico = () => {
   const [servicosDaEmpresa, setServicosDaEmpresa] = useState([]);
   const history = useNavigate();
   const [selectedServicoId, setSelectedServicoId] = useState(null);
+  const [imgUrl, setImgUrl] = useState(null);
 
   const empresaRef = useRef(null);
   const nomeRef = useRef(null);
   const descricaoRef = useRef(null);
   const valorRef = useRef(null);
+  const imgRef = useRef(null);
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -84,39 +88,6 @@ const EmpresaAtualizaServico = () => {
     checkUserRole();
   }, [history]);
 
-  useEffect(()=>{
-    async function fetchServicosEmpresa() {
-      try {
-        setIsLoading(true);
-        const auth = getAuth();
-        const user = auth.currentUser;
-        const uid = user ? user.uid : null;
-    
-        console.log("Fetching services for empresa with ID:", uid);
-    
-        const servicoRef = query(collection(db, "servico"), where("empresaId", "==", uid));
-        const querySnapshot = await getDocs(servicoRef);
-        const servicoInfo = [];
-    
-        for (const docSnapshot of querySnapshot.docs) {
-          const servicoData = docSnapshot.data();
-    
-          servicoInfo.push({
-            id: docSnapshot.id,
-            ...servicoData,
-          });
-        }
-    
-        console.log("Fetched services:", servicoInfo);
-    
-        setServicosDaEmpresa(servicoInfo);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Erro ao buscar serviços da empresa: ", error);
-      }
-    }
-    fetchServicosEmpresa();
-  }, [])
   
   useEffect(() => {
     if (empresaInfo && empresaInfo.id) {
@@ -141,7 +112,7 @@ const EmpresaAtualizaServico = () => {
           if (docSnapshot.exists()) {
             const data = docSnapshot.data();
             setEmpresaInfo(data);
-            setServicosDaEmpresa(data.servicos || []); 
+            setServicosDaEmpresa(data.servicos);
           }
   
           setIsLoading(false);
@@ -154,31 +125,52 @@ const EmpresaAtualizaServico = () => {
   
     fetchEmpresa();
   }, []);
-  
 
   const handleEditClick = () => {
     setEditMode(true);
   };
 
-  const handleSaveClick = async () => {
+  const fetchServicosEmpresa = async () => {
     try {
-      const servicoRef = doc(db, "servico", id);
-
-      await setDoc(servicoRef, {
-        nome: nomeRef.current.value,
-        descricao: descricaoRef.current.value,
-        valor: valorRef.current.value,
-      });
-
-      setSuccessMessage("Dados encontrados com sucesso!");
-      setErrorMessage("");
-      setEditMode(false);
+      setIsLoading(true);
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const uid = user ? user.uid : null;
+  
+      console.log("Fetching services for empresa with ID:", uid);
+  
+      const servicoRef = query(collection(db, "servico"), where("empresaId", "==", uid));
+      const querySnapshot = await getDocs(servicoRef);
+      const servicoInfo = [];
+  
+      for (const docSnapshot of querySnapshot.docs) {
+        const servicoData = docSnapshot.data();
+  
+        servicoInfo.push({
+          id: docSnapshot.id,
+          ...servicoData,
+        });
+      }
+  
+      console.log("Fetched services:", servicoInfo);
+  
+      return servicoInfo; // Alteração aqui
     } catch (error) {
-      console.error("Erro ao salvar informações", error);
-      setErrorMessage("Erro ao salvar informações: " + error.message);
+      console.error("Erro ao buscar serviços da empresa: ", error);
+    } finally {
+      setIsLoading(false);
     }
-    setEditMode(false);
   };
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const services = await fetchServicosEmpresa();
+      setServicosDaEmpresa(services);
+    };
+  
+    fetchData();
+  }, []); // Remova a chamada direta aqui  
+
 
   const handleCancelClick = () => {
     setSelectedServicoId(null);
@@ -188,46 +180,157 @@ const EmpresaAtualizaServico = () => {
   const handleServicoSelect = (servicoId) => {
     setSelectedServicoId(servicoId);
     setEditMode(true);
+  
+    const selectedServico = servicosDaEmpresa[servicoId];
+    if (nomeRef.current) {
+      nomeRef.current.value = selectedServico.nome || "";
+    }   
+    if(descricaoRef.current){
+      descricaoRef.current.value = selectedServico.descricao || "";
+    } 
+    if(valorRef.current){
+      valorRef.current.value = selectedServico.valor || "";
+    }
+    if(imgRef.current){
+      imgRef.current.value = selectedServico.img || null;
+    }
+  };
+  
+  const handleSaveClick = async () => {
+    try {
+      setIsLoading(true);
+  
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const uid = user ? user.uid : null;
+  
+      if (!uid) {
+        throw new Error("Usuário não autenticado.");
+      }
+  
+      // Verificar se o serviço está associado à empresa
+      if (servicosDaEmpresa && servicosDaEmpresa[selectedServicoId]) {
+        const servicoId = servicosDaEmpresa[selectedServicoId].id;
+  
+        const updatedServico = {
+          nome: nomeRef.current.value,
+          descricao: descricaoRef.current.value,
+          valor: valorRef.current.value,
+          img: imgUrl,
+        };
+  
+        // Atualizar no Firebase
+        const servicoDocRef = doc(db, "servico", servicoId);
+        await setDoc(servicoDocRef, updatedServico, { merge: true });
+  
+        // Atualizar na API
+        const configServico = {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedServico),
+        };
+  
+        const response = await fetch(`http://localhost:3000/empresa/servico/${servicoId}`, configServico);
+  
+        if (!response.ok) {
+          throw new Error("Erro na solicitação da API");
+        }
+  
+        setSuccessMessage("Dados atualizados com sucesso!");
+        setErrorMessage("");
+        setEditMode(false);
+  
+        const services = await fetchServicosEmpresa();
+        setServicosDaEmpresa(services);
+      } else {
+        throw new Error("O serviço não está associado à empresa.");
+      }
+    } catch (error) {
+      console.error("Erro ao salvar informações", error);
+      setErrorMessage("Erro ao salvar informações: " + error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const handleImageSelect = async (e) => {
+    const imgFile = e.target.files[0];
+    if (imgFile) {
+      try {
+        const imgUrl = await uploadImage(imgFile);
+        setImgUrl(imgUrl); // Atualiza o estado imgUrl
+      } catch (error) {
+        console.error("Erro ao selecionar a imagem:", error);
+      }
+    }
+  };
+  
+  const uploadImage = async (imgFile) => {
+    const storageRef = ref(storage, 'imagens/' + imgFile.name);
+
+    try {
+      const snapshot = await uploadBytes(storageRef, imgFile);
+      const imgUrl = await getDownloadURL(snapshot.ref);
+      console.log('Imagem adicionada com sucesso:', imgUrl);
+      return imgUrl;
+    } catch (error) {
+      console.error('Erro ao carregar imagem:', error);
+      throw error;
+    }
   };
 
   return (
     <Container>
       {isLoading ? (
         <p>Carregando Informações...</p>
-      ) : servicosDaEmpresa.length === 0 ? (
+      ) : servicosDaEmpresa && servicosDaEmpresa.length === 0 ? (
         <p>A empresa não possui serviços cadastrados.</p>
       ) : editMode ? (
-        <Form style={{ width: "400px", margin: "0 auto", padding: "0px", marginTop: "40px" }}>
+        <Form className="formServ">
           {selectedServicoId !== null && (
             <div>
-              <Row style={{ margin: "5px 0", textAlign: "left" }}>
-                <Col md={3}>
-                  <Form.Group>
-                    <Form.Label style={{ color: "black" }}>Empresa:</Form.Label>
-                  </Form.Group>
-                </Col>
-                <Col md={9} className="text-secondary">
-                  <Form.Group>
-                    <Form.Control type="text" ref={empresaRef} value={empresaInfo.nome || ""} readOnly />
-                  </Form.Group>
+              <Row className="rowServ">
+                <Col>
+                <img className="img" src={imgUrl} alt={servicosDaEmpresa[selectedServicoId].nome} />
+
                 </Col>
               </Row>
-              <Row style={{ margin: "5px 0", textAlign: "left" }}>
+              <Row style={{ margin: "12px", marginBottom: "20px" }}>
+                <Col md={3}>
+                  <Form.Group>
+                    <Form.Label style={{ color: "black" }}>Escolha uma nova imagem:</Form.Label>
+                  </Form.Group>
+                </Col>
+                <Col md={9}>
+                <Form.Control
+                  type="file"
+                  accept="image/*"
+                  ref={imgRef}
+                  style={{ width: "400px", height: "30px", backgroundColor: " #333333", width: "100%" }}
+                  onChange={(e) => handleImageSelect(e)}
+                />
+                </Col>
+              </Row>
+
+              <Row style={{margin: "12px", marginBottom: "20px"}}>
                 <Col md={3}>
                   <Form.Group>
                     <Form.Label style={{ color: "black" }}>Nome do Serviço</Form.Label>
                   </Form.Group>
                 </Col>
                 <Col md={9} className="text-secondary">
-                  <Form.Group>
-                    <Form.Control type="text" ref={nomeRef} defaultValue={servicosDaEmpresa[selectedServicoId].nome || ""} />
+                  <Form.Group >
+                    <Form.Control type="text" ref={nomeRef} defaultValue={servicosDaEmpresa[selectedServicoId].nome || ""} 
+                    style={{width: "100%"}}/>
                   </Form.Group>
                 </Col>
               </Row>
-              <Row style={{ margin: "5px 0", textAlign: "left" }}>
+              <Row style={{margin: "12px", marginBottom: "20px"}}>
                 <Col md={3}>
                   <Form.Group>
-                    <Form.Label style={{ color: "black" }}>Descrição do Serviço</Form.Label>
+                    <Form.Label  style={{color: "black" }}>Descrição do Serviço</Form.Label>
                   </Form.Group>
                 </Col>
                 <Col md={9} className="text-secondary">
@@ -236,13 +339,13 @@ const EmpresaAtualizaServico = () => {
                       as="textarea"
                       rows={3}
                       ref={descricaoRef}
-                      style={{ backgroundColor: "white", width: "20vw" }}
+                      style={{  width: "100%" }}
                       defaultValue={servicosDaEmpresa[selectedServicoId].descricao || ""}
                     />
                   </Form.Group>
                 </Col>
               </Row>
-              <Row style={{ margin: "5px 0", textAlign: "left" }}>
+              <Row style={{margin: "12px", marginBottom: "20px"}}>
                 <Col md={3}>
                   <Form.Group>
                     <Form.Label style={{ color: "black" }}>Valor do Serviço</Form.Label>
@@ -250,15 +353,22 @@ const EmpresaAtualizaServico = () => {
                 </Col>
                 <Col md={9} className="text-secondary">
                   <Form.Group>
-                    <Form.Control type="text" ref={valorRef} defaultValue={servicosDaEmpresa[selectedServicoId].valor || ""} />
+                    <Form.Control type="text" ref={valorRef} defaultValue={servicosDaEmpresa[selectedServicoId].valor || ""}
+                    style={{width: "100%"}} />
                   </Form.Group>
                 </Col>
               </Row>
-              <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px" }}>
-                <Button variant="primary" onClick={handleSaveClick} style={{ margin: "10px" }}>
-                  Salvar
-                </Button>
-                <Button variant="primary" onClick={handleCancelClick} style={{ margin: "10px" }}>
+              <div style={{margin: "20px"}}>
+              <Button
+  variant="primary"
+  onClick={handleSaveClick}
+  className="buttonServ"
+>
+  Salvar
+</Button>
+
+
+                <Button variant="primary" onClick={handleCancelClick} className="buttonServ">
                   Cancelar
                 </Button>
               </div>
@@ -268,48 +378,35 @@ const EmpresaAtualizaServico = () => {
           {errorMessage && <div className="errorMessage">{errorMessage}</div>}
         </Form>
       ) : (
-        <div>
-        {servicosDaEmpresa.map((servico, index) => (
-          <div key={index}>
+        <div className="services-container">
+        {servicosDaEmpresa && servicosDaEmpresa.map((servico, index) => (
+          <div key={index} className="service-card">
             <Card>
-              <Card.Body>
-                <Row>
-                  <Col md={3}>
-                    <strong>Nome do Serviço:</strong>
+              <Card.Body className="cardServ">
+                <Row className="rowServ">
+                  <Col>
+                  <img className="img" src={servico.img} alt={servico.nome} />
                   </Col>
-                  <Col md={9} className="text-secondary">
+                </Row>
+                <Row className="rowServ">
+                  <Col md={3}>
+                    <strong>Nome do Serviço: </strong>
                     {servico.nome && <span>{servico.nome}</span>}
                   </Col>
                 </Row>
-                <hr />
-                <Row>
+                <Row className="rowServ">
                   <Col md={3}>
-                    <strong>Descrição:</strong>
-                  </Col>
-                  <Col md={9} className="text-secondary">
+                    <strong>Descrição: </strong>
                     {servico.descricao && <span>{servico.descricao}</span>}
                   </Col>
                 </Row>
-                <hr />
-                <Row>
+                <Row className="rowServ">
                   <Col md={3}>
-                    <strong>Valor:</strong>
-                  </Col>
-                  <Col md={9} className="text-secondary">
+                    <strong>Valor: </strong>
                     {servico.valor && <span>R$ {servico.valor}</span>}
                   </Col>
                 </Row>
-                <hr />
-                <Row>
-                  <Col md={3}>
-                    <strong>Empresa:</strong>
-                  </Col>
-                  <Col md={9} className="text-secondary">
-                    {empresaInfo.nome && <span>{empresaInfo.nome}</span>}
-                  </Col>
-                </Row>
-                <hr />
-                <Button onClick={() => handleServicoSelect(index)}>Editar</Button>
+                <Button className="buttonServ" onClick={() => handleServicoSelect(index)}>Editar</Button>
               </Card.Body>
             </Card>
           </div>

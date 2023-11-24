@@ -126,8 +126,47 @@
     background-color: #e0e0e0; 
 }
 
-
 .buttonHistoricoEmp{
     width: 100px;
     margin-bottom: auto;
+}
+
+.services-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .service-card {
+    margin-bottom: 20px;
+    height: 100%;
+  }
+  
+.cardServ{
+    background-color: #6E7EC2;
+    width: 200px;
+    height: 380px;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+}
+
+.rowServ{
+    margin: 8px;
+}
+
+.buttonServ{
+    width: 100px;
+    margin: 0 auto;
+    background-color: #C26E7E;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.formServ{
+    background-color: #6E7EC2;
+    border-radius: 5px;
+    width: 500px;
+    height: 500px;
 }

@@ -1,10 +1,12 @@
 import { initializeApp } from "firebase/app";
 import { EmailAuthProvider, getAuth } from "firebase/auth";
-import { collection, doc, getDocs, getFirestore, setDoc, query , where, getDoc} from "firebase/firestore";
+import { collection, doc, getDocs, getFirestore, setDoc, query , where, getDoc, deleteDoc} from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col, Card, Button } from  "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import './css/EmpresaPg.css';
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/firestore'
 
 const firebaseConfig = {
     apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
@@ -114,28 +116,34 @@ const EmpresaDashboard = () => {
         }
       };
 
-    const handleSaveClick = async () => {
-        try{
+      const handleSaveClick = async () => {
+        try {
             const empresaDocRef = doc(db, "empresa", id);
-
-            await setDoc(empresaDocRef, empresaInfo, {merge: true});
-
-            const response = await fetch(`http://localhost:3000/empresa/1/${id}`);
-
-            if(!response.ok){
+            await setDoc(empresaDocRef, empresaInfo, { merge: true });
+    
+            const configEmpresa = {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+    
+            const response = await fetch(`http://localhost:3000/empresa/${id}`, configEmpresa);
+    
+            if (!response.ok) {
                 throw new Error("Erro na solicitação da API");
             }
-            const data = await response.json();
-            setEmpresaInfo(data);
+    
             setSuccessMessage('Dados encontrados com sucesso!');
             setErrorMessage('');
             setEditMode(false);
-        }catch(error){
+        } catch (error) {
             console.error("Erro ao salvar informações", error);
             setErrorMessage('Erro ao salvar informações: ' + error.message);
         }
         setEditMode(false);
-    }
+    };
+    
 
     const handleCancelClick = () => {
         setEditMode(false);
@@ -169,6 +177,41 @@ const EmpresaDashboard = () => {
         fetchEmpresa();
     }, []);
 
+    const handleDelete = async () => {
+        try{
+
+            const confirmDelete = window.confirm("Tem certeza que deseja excluir conta?");
+            if(confirmDelete){
+                const empresaDocRef = doc(db, "empresa", id);
+
+                const deleteConfig = {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-type': 'application/json'
+                       },
+                  };
+        
+                  const response = await fetch(`http://localhost:3000/empresa/remove/1/${id}`, deleteConfig);
+
+                  if(!response.ok){
+                    throw new Error("Erro na solicitação da API");
+                  }
+
+                  const responseData = await response.json();
+                  console.log('Resposta da API:', responseData);
+                  setSuccessMessage('Conta excluída com sucesso!');
+                  setErrorMessage('');
+                 
+                  await deleteDoc(empresaDocRef);
+
+                  history("/login");
+
+            }
+        }catch (error) {
+            console.error("Erro ao excluir conta", error);
+            setErrorMessage('Erro ao excluir conta: ' + error.message);
+          }
+    }
 
 
     return(
@@ -341,6 +384,7 @@ const EmpresaDashboard = () => {
                             </Col>
                         </Row>
                         <Button className="infoButtonProfileEmp" onClick={handleEditClick}>Editar</Button>
+                        <Button className="infoButtonProfileEmp" onClick={handleDelete}>Excluir Conta</Button>
                     </Card.Body>
                 </Card>
             )}

@@ -63,6 +63,16 @@ app.get('/cliente/1/:id', async(req,res)=>{
     
 })
 
+app.put('/cliente/:id', async(req,res)=>{
+    const id = req.params.id;
+    const mensagem = await gs.atualizarUsuarioCliente(id, req.body);
+
+    if (mensagem === -1) {
+        res.status(404).send('Não encontrado');
+    } 
+        res.json(mensagem);
+})
+
 // Cadastro Cliente
 app.post('/cadastro/cliente', async (req, res) => {
     const generatedId = generateUniqueId();
@@ -88,7 +98,7 @@ app.post('/cadastro/cliente', async (req, res) => {
     console.log('Cadastro de cliente realizado com sucesso.');
 });
 
-app.delete('/cliente/remove/:id', async(req,res)=>{
+app.delete('/cliente/remove/1/:id', async(req,res)=>{
     const id = req.params.id;
     try{
         await gs.excluirConta(id);
@@ -181,6 +191,29 @@ app.get('/empresa/1/:id', async(req,res)=>{
     
 })
 
+app.put('/empresa/:id', async (req, res) => {
+    const id = req.params.id;
+    const mensagem = await gs.atualizarUsuarioEmpresa(id, req.body);
+
+    if (mensagem === -1) {
+        res.status(404).send('Não encontrado');
+    } 
+        res.json(mensagem);
+
+});
+
+app.put('/empresa/servico/:id', async(req,res)=>{
+    const id = req.params.id;
+    const mensagem = await gs.atualizarServico(id, req.body);
+    console.log("ID do Serviço a ser atualizado:", id);
+    console.log("Dados Recebidos pela API:", req.body);
+
+    if (mensagem === -1) {
+        res.status(404).send('Não encontrado');
+    } 
+        res.json(mensagem);
+});
+
 // Cadastro Empresa
 app.post('/cadastro/empresa', async (req, res) => {
     const generatedId = generateUniqueId();
@@ -272,6 +305,19 @@ app.post('/addHorario', async(req,res)=>{
     }
 })
 
+
+app.delete('/empresa/remove/1/:id', async(req, res)=>{
+    const id = req.params.id;
+
+    try{
+        await gs.excluirEmpresa(id);
+        res.status(200).send("Conta excluída com sucesso!");
+    }catch(error){
+        console.error("Erro ao excluir conta", error);
+        res.status(500).send("Erro ao excluir conta");
+    }
+})
+
 // Pessoa Portadora de Serviço
 app.get('/profissional/:email', async (req, res)=>{
     const email = req.params.email;
@@ -319,6 +365,28 @@ app.post('/cadastro/profissional', async (req, res) => {
     console.log('Cadastro de profissional realizado com sucesso.');
 });
 
+app.put('/profissional/:id', async(req,res)=>{
+    const id = req.params.id;
+    const mensagem = await gs.atualizarUsuarioProfissional(id, req.body);
+
+    if (mensagem === -1) {
+        res.status(404).send('Não encontrado');
+    } 
+        res.json(mensagem);
+})
+
+app.delete('/profissional/remove/1/:id', async(req,res)=>{
+    const id = req.params.id;
+    try{
+        await gs.excluirProfissional(id);
+        res.status(200).send("Conta excluída com sucesso!");
+    }catch(error){
+        console.error("Erro ao excluir conta", error);
+        res.status(500).send("Erro ao excluir conta.");
+    }
+})
+
+
 //Agendamento
 app.get('/agendamento/:id', async(req, res)=>{
     const id = req.params.id;
@@ -365,6 +433,34 @@ app.post('/addAgendamento', async (req, res)=>{
     }catch(error){
         console.error("Erro ao cadastrar agendamento", error );
         res.status(500).json({error: "Erro interno ao cadastrar agendamento"});
+    }
+})
+
+
+// Favoritos
+app.post('/addFavoritos', async(req,res)=>{
+    try{
+        const generatedId = generateUniqueId();
+
+        const favoritosData = {
+            clienteId: req.body.clienteId,
+            empresaId: req.body.empresaId,
+            servicoId: req.body.servicoId,
+            id: generatedId,
+        };
+
+        console.log("Dados dos favoritos do cliente", favoritosData);
+
+        favoritosData.clienteId,
+        favoritosData.empresaId,
+        favoritosData.servicoId,
+        favoritosData.id
+
+        console.log("Cadastro de favoritos realizado com sucesso!");
+        res.status(200).json({message: "Favoritos cadastrado com sucesso!"});
+    }catch(error){
+        console.error("Erro ao cadastrar favoritos", error );
+        res.status(500).json({error: "Erro interno ao cadastrar favoritos"});
     }
 })
 

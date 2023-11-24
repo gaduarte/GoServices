@@ -103,13 +103,13 @@ const Agendamento = () => {
       try {
         const profissionaisData = [];
   
-        // Consulte o serviço específico usando servicoId
+        // Consulta o serviço específico usando servicoId
         const servicoDoc = await getDoc(doc(db, 'servico', servicoId));
   
         if (servicoDoc.exists()) {
           const profissional = servicoDoc.data().profissional;
   
-          // Consulte o profissional com base no profissionalId
+          // Consulta o profissional com base no profissionalId
           const profissionalDoc = await getDoc(doc(db, 'profissional', profissional));
   
           if (profissionalDoc.exists()) {

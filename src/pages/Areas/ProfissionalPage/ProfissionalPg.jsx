@@ -86,16 +86,21 @@ const ProfissionalDashboard = () => {
     const handleSaveClick = async()=>{
         try{
             const profissionalDocRef = doc(db, "profissional", id);
-
             await setDoc(profissionalDocRef, profissionalInfo, {merge: true});
 
-            const response = await fetch(`http://localhost:3000/profissional/1/${id}`);
+            const configProfissional = {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+              },
+            }
+
+            const response = await fetch(`http://localhost:3000/profissional/${id}`, configProfissional);
 
             if(!response.ok){
                 throw new Error("Erro na solicitação da API");
             }
             const data = await response.json();
-            setEmpresaInfo(data);
             setSuccessMessage('Dados encontrados com sucesso!');
             setErrorMessage('');
             setEditMode(false);
@@ -139,6 +144,35 @@ const ProfissionalDashboard = () => {
        fetchProfissional();
     }, []);
 
+    const handleDeleteClick = async() =>{
+        try{
+            const confirmDelete = window.confirm("Tem certeza que deseja excluir conta?");
+            if(confirmDelete){
+                const profissionalDocRef = doc(db, "profissional", id);
+
+                const deleteConfig = {
+                    method: "DELETE",
+                    headers: {
+                    "Content-Type": "application/json; charset=UTF-8",
+                    },
+                }
+
+                const response = await fetch(`http://localhost:3000/profissional/remove/1/${id}`, deleteConfig);
+
+                if(!response.ok){
+                    throw new Error("Erro na solicitação da API");
+                  }
+            
+                  setSuccessMessage("Conta excluída com sucesso!");
+                  setErrorMessage('');
+                  await deleteDoc(profissionalDocRef);
+                  history("/cadastro");
+            }
+        }catch (error) {
+            console.error("Erro ao excluir conta", error);
+            setErrorMessage('Erro ao excluir conta: ' + error.message);
+          }
+    }
 
 return(
         <Container className="centeredFormProfilePro">
@@ -310,6 +344,7 @@ return(
                             </Col>
                         </Row>
                         <Button onClick={handleEditClick} className="infoButtonProfilePro">Editar</Button>
+                        <Button className="infoButtonProfilePro" onClick={handleDeleteClick}>Excluir Conta</Button>
                     </Card.Body>
                 </Card>
             )}

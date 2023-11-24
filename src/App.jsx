@@ -18,10 +18,12 @@ import { EmpresaAdicionaHorario } from "./pages/Areas/EmpresaPage/AddServiço/Ho
 import QuemSomos from "./pages/goservicesInfos/SobreNos";
 import Privacidade from "./pages/goservicesInfos/PoliticaPrivacidade";
 import { ClienteAgendamentoDados } from "./pages/Areas/ClientePage/AgendamentosCliente";
-import CartoesCliente from "./pages/Areas/ClientePage/AddCartao/cartoes/Cartoes";
 import { CartoesdoCliente } from "./pages/Areas/ClientePage/AddCartao/cartoes";
 import { EmpresaAgendamentoDados } from "./pages/Areas/EmpresaPage/AgendamentosEmpresa";
 import { ProfissionalAgendamentoDados } from "./pages/Areas/ProfissionalPage/AgendamentoProfissional";
+import Resultados from "./pages/Search";
+import { FavoritosDados } from "./pages/HomePage/Favoritos";
+import { ClienteFavoritosDados } from "./pages/Areas/ClientePage/FavoritosCliente";
 
 
 function App() {
@@ -56,7 +58,6 @@ function App() {
   useEffect(() => {
     const checkFirebase = async () => {
       try {
-        // Inicialize seu Firebase aqui
         setFirebaseReady(true);
       } catch (error) {
         console.error(error);
@@ -118,6 +119,11 @@ function App() {
                 ) : null}
               </li>
               <li>
+                {userRole === "cliente" ? (
+                  <NavLink to="/favoritosCliente">Favoritos</NavLink>
+                ) : null}
+              </li>
+              <li>
               </li>
               <li>
                 {userRole === "profissional" ? (
@@ -161,10 +167,13 @@ function App() {
           <Route path="/privacidade" element={<Privacidade />} />
           <Route path="/cadastro/*" element={<CadastrarUsuario />} />
           <Route path="/login" element={<LoginUsuario />} />
+          <Route path="/resultados:servicoId" element={< Resultados />} />
           {userRole === "cliente" && <Route path="/cliente/*" element={<ClienteDados />} />}
           {userRole === "cliente" && <Route path="/addCartao/*" element={<ClienteAdicionaCartao />} />}
           {userRole === "cliente" && <Route path="/cartoes/*" element={<CartoesdoCliente />} />}
           {userRole === "cliente" && <Route path="/agendamento/:servicoId" element={<AgendarDados />} />}
+          {userRole === "cliente" && <Route path="/favoritos/:servicoId" element={<FavoritosDados />} />}
+          {userRole === "cliente" && <Route path="/favoritosCliente/*" element={<ClienteFavoritosDados />} />}
           {userRole === "cliente" && <Route path="/agendamentosCliente/*" element={<ClienteAgendamentoDados />} />}
           {userRole === "profissional" && <Route path="/profissional/*" element={<ProfissionalDados />} />}
           {userRole === "profissional" && <Route path="/agendamentosProfissional" element={<ProfissionalAgendamentoDados />}/>}

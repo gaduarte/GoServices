@@ -87,17 +87,22 @@ const ClienteDashboard = () => {
     const handleSaveClick = async () =>{
         try {
             const clienteDocRef = doc(db, "cliente", id);
-    
             await setDoc(clienteDocRef, clientInfo, { merge: true });
+
+            const configCliente = {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+            }
     
-            const response = await fetch(`http://localhost:3000/cliente/1/${id}`);
+            const response = await fetch(`http://localhost:3000/cliente/${id}`, configCliente);
     
             if (!response.ok) {
                 throw new Error("Erro na solicitação da API");
             }
     
             const data = await response.json();
-            setClientInfo(data); 
             setSuccessMessage('Dados encontrados com sucesso!');
             setErrorMessage('');
             setEditMode(false);
@@ -114,29 +119,28 @@ const ClienteDashboard = () => {
 
     const handleDeleteClick = async () =>{
       try{
+
         const confirmDelete = window.confirm("Tem cereteza que deseja excluir conta?");
         if(confirmDelete){
           const clienteDocRef = doc(db, "cliente", id);
-          await deleteDoc(clienteDocRef);
 
           const deleteConfig = {
-            method: 'DELETE',
+            method: "DELETE",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json; charset=UTF-8",
             },
           };
 
-          const response = await fetch(`http://localhost:3000/cliente/remove/${id}`, deleteConfig);
+          const response = await fetch(`http://localhost:3000/cliente/remove/1/${id}`, deleteConfig);
 
           if(!response.ok){
             throw new Error("Erro na solicitação da API");
           }
-
-          const responseData = await response.json();
-          console.log('Resposta da API:', responseData);
-          setSuccessMessage('Conta excluída com sucesso!');
+    
+          setSuccessMessage("Conta excluída com sucesso!");
           setErrorMessage('');
-          history("/login");
+          await deleteDoc(clienteDocRef);
+          history("/cadastro");
         }
       }catch (error) {
         console.error("Erro ao excluir conta", error);

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { appF } from "../../backend/Firebase/firebase";
 import './css/Homepage.css';
 
@@ -24,7 +24,18 @@ const db = getFirestore(app);
 export function HomePage() {
   const [servicos, setServicos] = useState([]);
   const [usuario, setUsuario] = useState(null);
+  const { servicoId } = useParams();
+  const [servicoData, setServicoData] = useState(null);
+  const [clienteData, setClienteData] = useState(null);
+  const [empresaData, setEmpresaData] = useState(null);
+  const servicoRef = collection(db, "servico");
+  const clienteRef = collection(db, "cliente");
+  const empresaRef = collection(db, "empresa");
+  const profissionalRef = collection(db, "profissional");
   const history = useNavigate(); 
+
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     async function fetchServicos() {
@@ -75,11 +86,89 @@ export function HomePage() {
     }) 
   };
 
+  const navigateToFavoritos = async (servico) => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const uid = user ? user.uid : null;
+  
+      if (user) {
+        const favoritoSnapshot = await getDocs(
+          query(
+            collection(db, "favorito"),
+            where("clienteId", "==", uid),
+            where("servicoId", "==", servico.id)
+          )
+        );
+        
+        if (favoritoSnapshot.size > 0) {
+          console.log("O serviço já está nos favoritos");
+          setErrorMessage("O serviço já está favoritado");
+          return;
+        }
+
+        try {
+          const servicoSnapshot = await getDoc(doc(db, "servico", servico.id));
+          const servicoData = servicoSnapshot.data();
+          
+          if (!servicoData) {
+            throw new Error("Detalhes do serviço não encontrados");
+          }
+  
+          try {
+            const favoritoData = {
+              clienteId: uid,
+              empresaId: servicoData.empresaId,
+              servicoId: servico.id,
+            };
+  
+            const configFavorito = {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(favoritoData),
+            };
+  
+            const response = await fetch("http://localhost:3000/addFavoritos", configFavorito);
+  
+            if (!response.ok) {
+              throw new Error("Erro na solicitação da API");
+            }
+  
+            const responseData = await response.json();
+            console.log('Resposta da API:', responseData);
+  
+            const favoritoRef = collection(db, "favorito");
+            const docRef = await addDoc(favoritoRef, favoritoData);
+            console.log("Favorito adicionado com sucesso! Document ID: ", docRef.id);
+  
+          } catch (error) {
+            console.error("Erro ao adicionar favoritos: ", error);
+          }
+  
+          // Navegar para a página de favoritos
+          history(`/favoritos/${servico.id}`);
+        } catch (error) {
+          console.error("Erro ao obter detalhes do serviço: ", error);
+        }
+      } else {
+        alert("Você precisa estar logado para realizar esta ação.");
+        history('/login');
+      }
+    } catch (error) {
+      console.error("Erro ao navegar para favoritos: ", error);
+    }
+  };
+    
+
 
   return (
     <main className="main-home">
+      {successMessage && <div className="successMessageCli">{successMessage}</div>}
+      {errorMessage && <div className="errorMessageCli">{errorMessage}</div>}
       <h1 className="h1-home">Lista de Serviços:</h1>
-      <div className="container-home" style={{display: "flex", position: "relative", margin: 0, width: "30px"}}>
+      <div className="container-home">
       {servicos.map((servico) => (
         <div
           className="card-container-home"
@@ -114,7 +203,7 @@ export function HomePage() {
           </div>
           <div className="card-footer-home" >
           <button
-            onClick={() => favoritaServico('empresaId', servico.id)}
+            onClick={() => navigateToFavoritos(servico)}
             className="favoritoButton"
           >
             ❤️

@@ -1,5 +1,4 @@
 const admin = require('firebase-admin');
-
 const serviceAccount = require('../Firebase/key.json');
 const { doc, deleteDoc, collection, getDocs } = require('firebase/firestore');
 
@@ -65,6 +64,18 @@ let Goservice = class {
         return doc.data();
     }
 
+    async atualizarUsuarioCliente(id, newData){
+        const userRef = db.collection("cliente").doc(id);
+
+        try{
+            await userRef.set(newData, {merge: true});
+            return {mensagem: "Dados atualizados com sucesso!"};
+        }catch (error) {
+            console.error("Erro ao atualizar informações", error);
+            throw new Error('Erro ao atualizar informações: ' + error.message);
+        }
+    }
+
     // Empresa
     async add_usuario_empresa(email, username, cnpj, telefone, endereco, descricao, uid) {
     
@@ -115,6 +126,18 @@ let Goservice = class {
         }
         return doc.data();
     }
+
+    async atualizarUsuarioEmpresa(id, newData) {
+        const userRef = db.collection("empresa").doc(id);
+    
+        try {
+            await userRef.set(newData, { merge: true });
+            return { mensagem: 'Dados atualizados com sucesso!' };
+        } catch (error) {
+            console.error("Erro ao atualizar informações", error);
+            throw new Error('Erro ao atualizar informações: ' + error.message);
+        }
+    }    
     
     // Pessoa Prestadora de Serviço
     async add_usuario_profissional(email, username, cpf, empresa, tipoServico, telefone, endereco, uid) {
@@ -167,6 +190,19 @@ let Goservice = class {
         return doc.data();
     }
 
+    async atualizarUsuarioProfissional(id, newData){
+        const userRef = db.collection("profissional").doc(id);
+
+        try{
+            await userRef.set(newData, {merge: true});
+            return { mensagem: 'Dados atualizados com sucesso!' };
+        } catch (error) {
+            console.error("Erro ao atualizar informações", error);
+            throw new Error('Erro ao atualizar informações: ' + error.message);
+        }
+    }
+
+    //Serviços
     async retrieveServico(id_procurando){
         id_procurando = id_procurando.replace(/\s/g, '');
         const servicoRef = db.collection("servico").doc(id_procurando);
@@ -199,6 +235,19 @@ let Goservice = class {
         return doc.data();
     }
 
+    async atualizarServico(id, newData){
+        const userRef = db.collection("servico").doc(id);
+
+        try {
+            await userRef.set(newData, { merge: true });
+            return { mensagem: 'Dados atualizados com sucesso!' };
+        } catch (error) {
+            console.error("Erro ao atualizar informações", error);
+            throw new Error('Erro ao atualizar informações: ' + error.message);
+        }
+    }
+
+    //Cartão
     async retrieveCartao(clienteId) {
         try {
             const userRef = doc(db, "cliente", clienteId);
@@ -223,6 +272,7 @@ let Goservice = class {
         }
     }
     
+    //Agendamento
     async retrieveAgendamento(id){
         const userRef = db.collection("agendamento").doc(id);
         const doc = await userRef.get();
@@ -243,9 +293,22 @@ let Goservice = class {
         return agendamento;
     }
 
+    //Exclusões
     async excluirConta(id){
         const useRef = db.collection("cliente").doc(id);
         await useRef.delete();
+    }
+
+    async excluirEmpresa(id){
+        const userRef = db.collection("empresa").doc(id);
+
+       await userRef.delete();
+    }
+
+    async excluirProfissional(id){
+        const userRef = db.collection("profissional").doc(id);
+        
+        await userRef.delete();
     }
 
     async excluirCartao(id) {
