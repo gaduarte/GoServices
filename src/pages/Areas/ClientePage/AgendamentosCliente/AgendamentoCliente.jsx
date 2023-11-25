@@ -174,7 +174,7 @@ const ClienteAgendamentos = () => {
 
     return (
        <Container className="containerAgendamentoCliente">
-        <h1>Seus Agendamentos, {clienteInfo.username}</h1>
+        <h2>Seus Agendamentos, {clienteInfo.username}</h2>
         {isLoading ? (
             <p>Carregando...</p>
         ) : (
@@ -182,6 +182,11 @@ const ClienteAgendamentos = () => {
                 {agendamentoInfo.map((agendamento)=>(
                     <Card key={agendamento.id} className="mb-3">
                         <Card.Body className="cardColor">
+                        <Row>
+                                {agendamento.servico && (
+                                    <img src={agendamento.servico.img} alt={agendamento.servico.nome} className="img" />
+                                )}
+                            </Row>
                         <Row className="rowColor">
                                 {agendamento.horario && (
                                     <Col md={3} className="rowAgendCliente">

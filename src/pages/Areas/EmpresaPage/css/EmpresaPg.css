@@ -103,20 +103,30 @@
 }
 
 .historicoEmp{
-    background-color: #6E7EC2;
-    width: 350px;
-    height: 410px;
+    width: 270px;
+    height: 250px;
     display: flex;
     flex-direction: column;
-    flex: 1;
+    justify-content: space-between;
     border-radius: 7px;
 }
+
+.mb-3{
+    background-color: #6E7EC2;
+    border-radius: 5px;
+    margin: 1px;
+    display: flex;
+    flex-direction: column;
+  }
 
 .rowHistoricoEmp {
     border: 1px solid #ccc; 
     padding: 1px; 
-    margin-top: -4px;
+    width: 240px;
+    margin: 5px;
+    margin-left: -19px;
     margin-bottom: 1px; 
+    font-size: 17px;
     border-radius: 5px; 
     background-color: #f9f9f9; 
     color: black;

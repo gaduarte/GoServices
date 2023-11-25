@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { collection, doc, getDocs, getFirestore, setDoc, query , where, getDoc} from "firebase/firestore";
+import { collection, doc, getDocs, getFirestore, setDoc, query , where, getDoc, deleteDoc} from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col, Card, Button } from  "react-bootstrap";
 import { useNavigate } from "react-router-dom";

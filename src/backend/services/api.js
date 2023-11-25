@@ -283,7 +283,7 @@ app.post('/addHorario', async(req,res)=>{
         const horarioData = {
             diasSelecionados: req.body.horario,
             empresaID: req.body.empresaId,
-            servicoId: req.body.servico,
+            servico: req.body.servico,
             status: req.body.status,
             id: generatedId
         };
@@ -292,7 +292,7 @@ app.post('/addHorario', async(req,res)=>{
 
         horarioData.diasSelecionados,
         horarioData.empresaID,
-        horarioData.servicoId,
+        horarioData.servico,
         horarioData.status,
         horarioData.id
 
@@ -303,7 +303,7 @@ app.post('/addHorario', async(req,res)=>{
       console.error("Erro ao cadastrar serviço", error);
       res.status(500).json({ error: 'Erro interno ao cadastrar serviço' });
     }
-})
+});
 
 
 app.delete('/empresa/remove/1/:id', async(req, res)=>{

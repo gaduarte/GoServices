@@ -160,8 +160,8 @@ export function HomePage() {
       console.error("Erro ao navegar para favoritos: ", error);
     }
   };
-    
 
+  const itemsPerRow = 7;
 
   return (
     <main className="main-home">
@@ -169,58 +169,50 @@ export function HomePage() {
       {errorMessage && <div className="errorMessageCli">{errorMessage}</div>}
       <h1 className="h1-home">Lista de Serviços:</h1>
       <div className="container-home">
-      {servicos.map((servico) => (
-        <div
-          className="card-container-home"
-          key={servico.id}
-        >
-          
-          <img src={servico.data.img} alt={servico.data.nome}
-          className="img-home"
-          />
-
-          <div className="card-body-home">
-            <div style={{marginBottom: "-10px"}}>
-            <h5 className="card-title" >
-              {servico.data.nome}
-            </h5>
-
-            <p style={{fontSize: "15px", display: "flex", color: "#0F1111", textAlign: "left"}}>
-              {servico.data.empresa}
-            </p>
-            <p className="card-description-home" >
-              {servico.data.descricao}
-            </p>
-    
-            </div>
-            <div className="card-price-home" >
-            R$:{' '} 
-            <span style={{fontSize: "28px", color: "#0F1111"}}> {getDecimal(servico.data.valor).integerPart}
-            </span>
-            <span style={{fontSize:"13px", top:"-.75em", color: "#0F1111"}}>.{getDecimal(servico.data.valor).decimalPart}</span>
-          </div>
-          
-          </div>
-          <div className="card-footer-home" >
-          <button
-            onClick={() => navigateToFavoritos(servico)}
-            className="favoritoButton"
+        {servicos.map((servico, index) => (
+          <div
+            className="card-container-home"
+            key={servico.id}
           >
-            ❤️
-          </button>
-
-          <button
-              onClick={() => navigateToAgendamento(servico)}
-              className="agendarButton"
-            >
-              Agendar
-        </button>
-
+            <img src={servico.data.img} alt={servico.data.nome} className="img" />
+            <div className="card-body-home">
+              <div style={{ marginBottom: "-10px" }}>
+                <h5 className="card-title">
+                  {servico.data.nome}
+                </h5>
+                <p style={{ fontSize: "15px", display: "flex", color: "#0F1111", textAlign: "left" }}>
+                  {servico.data.empresa}
+                </p>
+                <p className="card-description-home">
+                  {servico.data.descricao}
+                </p>
+              </div>
+              <div className="card-price-home">
+                R$:{' '}
+                <span style={{ fontSize: "28px", color: "#0F1111" }}>{getDecimal(servico.data.valor).integerPart}</span>
+                <span style={{ fontSize: "13px", top: "-.75em", color: "#0F1111" }}>.{getDecimal(servico.data.valor).decimalPart}</span>
+              </div>
+            </div>
+            <div className="card-footer-home">
+              <button
+                onClick={() => navigateToFavoritos(servico)}
+                className="favoritoButton"
+              >
+                ❤️
+              </button>
+              <button
+                onClick={() => navigateToAgendamento(servico)}
+                className="agendarButton"
+              >
+                Agendar
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
     </main>
   );
+  
+
 }
 

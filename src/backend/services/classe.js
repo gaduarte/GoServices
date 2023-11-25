@@ -324,6 +324,7 @@ let Goservice = class {
         await userRef.delete();
     }
 
+
 }
 
 module.exports = Goservice

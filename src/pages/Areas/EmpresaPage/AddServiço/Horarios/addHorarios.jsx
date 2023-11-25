@@ -1,8 +1,8 @@
-import { addDoc, collection, doc, getFirestore, getDocs, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getFirestore, getDocs, getDoc, where, query } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 
 const firebaseConfig = {
@@ -20,6 +20,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export const AdicionarHorarioDisponivel = () => {
+  const { servicoId } = useParams();
   const [id, setId] = useState(null);
   const [horario, setHorario] = useState("");
   const [servico, setServico] = useState("");
@@ -114,9 +115,9 @@ export const AdicionarHorarioDisponivel = () => {
   }, []);
 
   const handleAdicionarHorario = async () => {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        const uid = user ? user.uid : null;
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const uid = user ? user.uid : null;
 
     if (!horario || !servico) {
       console.log("Preencha todos os campos necessários.");
@@ -156,8 +157,7 @@ export const AdicionarHorarioDisponivel = () => {
     } catch (error) {
       console.error("Erro ao adicionar horário:", error);
     }
-  };
-
+    };
 
   return (
     <div className="centerdFormHorarioEmp">

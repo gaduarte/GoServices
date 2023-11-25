@@ -107,8 +107,21 @@
   height: 250px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   border-radius: 7px;
+}
+
+.mb-3{
   background-color: #6E7EC2;
+  border-radius: 5px;
+  margin: 1px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logoutCliAg{
+  margin: 50px;
+  margin-left: 280px;
 }
 
 .rowAgendCliente{

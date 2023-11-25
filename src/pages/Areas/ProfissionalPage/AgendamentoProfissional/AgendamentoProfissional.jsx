@@ -175,6 +175,11 @@ const ProfissionalAgendamentos = () => {
                     agendamentoInfo.map((agendamento) => (
                         <Card key={agendamento.id}>
                             <Card.Body>
+                            <Row>
+                                {agendamento.servico && (
+                                    <img src={agendamento.servico.img} alt={agendamento.servico.nome} className="img" />
+                                )}
+                                </Row>
                                 <Row>
                                     {agendamento.empresa && (
                                         <Col md={3} className="rowAgendProfissional">

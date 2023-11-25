@@ -96,53 +96,37 @@ const EmpresaAgendamentos = () => {
                     const clienteDocRef = doc(db, "cliente", clienteId);
                     const clienteDocsSnapshot = await getDoc(clienteDocRef);
 
-                    if(clienteDocsSnapshot.exists()){
-                        const clienteData = clienteDocsSnapshot.data();
-                        agendamentoInfo.push({
-                            id: docSnapshot.id,
-                            ...agendamentoData,
-                            cliente: clienteData,
-                        });
-                    }
 
                     const horarioId = agendamentoData.dataAgendamento;
                     const horarioDocRef = doc(db, "horariosDisponiveis", horarioId);
                     const horarioDocsSnapshot = await getDoc(horarioDocRef);
 
-                    if(horarioDocsSnapshot.exists()){
-                        const horarioData = horarioDocsSnapshot.data();
-                        agendamentoInfo.push({
-                            id: docSnapshot.id,
-                            ...agendamentoData,
-                            horario: horarioData,
-                        });
-                    }
 
                     const profissionalId = agendamentoData.profissionalId;
                     const profissionalDocRef = doc(db, "profissional", profissionalId);
                     const profissionalDocsSnapshot = await getDoc(profissionalDocRef);
 
-                    if(profissionalDocsSnapshot.exists()){
-                        const profissionalData = profissionalDocsSnapshot.data();
-                        agendamentoInfo.push({
-                            id: docSnapshot.id,
-                            ...agendamentoData,
-                            profissional: profissionalData,
-                        });
-                    }
-
                     const servicoId = agendamentoData.servicoId;
                     const servicoDocRef = doc(db, "servico", servicoId);
                     const servicoDocsSnapshot = await getDoc(servicoDocRef);
 
-                    if(servicoDocsSnapshot.exists()){
-                        const servicoData = servicoDocsSnapshot.data();
+                    const [servicoData, clienteData, horarioData, profissionaisData] = await Promise.all([
+                        servicoDocsSnapshot.exists() ? 
+                        servicoDocsSnapshot.data() : null,
+                        clienteDocsSnapshot.exists() ? 
+                        clienteDocsSnapshot.data() : null,
+                        getDoc(horarioDocRef).then(snapshot => snapshot.exists() ? snapshot.data() : null),
+                        getDoc(profissionalDocRef).then(snapshot => snapshot.exists() ? snapshot.data() : null),
+                    ])
+
                         agendamentoInfo.push({
                             id: docSnapshot.id,
                             ...agendamentoData,
                             servico: servicoData,
+                            cliente: clienteData,
+                            horario: horarioData,
+                            profissional: profissionaisData,
                         });
-                    }
 
 
                 }
@@ -193,8 +177,13 @@ const EmpresaAgendamentos = () => {
                 <div className="historicoEmp">
                     {agendamentoInfo.length > 0 ? (
                         agendamentoInfo.map((agendamento) => (
-                            <Card key={agendamento.id}>
+                            <Card key={agendamento.id} className="mb-3">
                                 <Card.Body>
+                                <Row>
+                                {agendamento.servico && (
+                                    <img src={agendamento.servico.img} alt={agendamento.servico.nome} className="img" />
+                                )}
+                                </Row>
                                     <Row >
                                         {agendamento.cliente && (
                                             <Col md={3} className="rowHistoricoEmp">

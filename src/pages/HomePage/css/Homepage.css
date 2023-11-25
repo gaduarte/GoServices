@@ -1,19 +1,16 @@
-
 .main-home {
-  margin-right: 1000px;
+  margin-right: 20px; 
 }
 
-.main {
-  margin-right: 1000px;
-}
-
-.img{
+.img {
   width: 100%;
   height: 100px;
+  border-radius: 5px;
+  margin-bottom: -20px;
 }
 
-.containerFav{
-  background-color: #6E7EC2;
+.containerFav {
+  background-color: #6e7ec2;
   padding: 10px;
   flex-basis: calc(11.1% - 20px);
   margin: 10px;
@@ -26,145 +23,137 @@
   top: 50px;
 }
 
-.buttonFav{
+.buttonFav {
   width: 150px;
 }
+
 .container-home {
   display: flex;
   flex-wrap: wrap;
 }
 
 .card-container-home {
-  background-color: #6E7EC2;
-  padding: 10px;
-  flex-basis: calc(11.1% - 20px); /* 100% / 9 - 20px de margem entre os itens */
+  background-color: #6e7ec2;
+  padding: 2px;
   margin: 10px;
   height: 390px;
   border: 1px solid #ddd;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  top: 50px;
+  width: 150px; /* Largura padrão */
 }
 
-.card-container-home:nth-child(1n) {
-  margin-right: 0;
+.card-container-home {
+  margin-right: 10px;
 }
 
-.card-body{
+.card-body-home {
   padding: 2px;
   margin: 2px;
 }
-  .card-body-home{
-    padding: 2px;
-    margin: 2px;
-    
-  }
-  
-  .card-footer-home {
-    margin-top: auto;
-    display: flex;
-    flex-direction: column;
-  }
 
-  .card-description-fav{
-    font-size: 14px;
-    display: flex;
-    text-align: left;
-    line-break: anywhere;
-  }
-  
-  .card-description-home{
-    font-size: 14px;
-    display: flex;
-    text-align: left;
-    line-break: anywhere;
-  }
-.card-title-fav{
+.card-footer-home {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-description-home {
+  font-size: 14px;
+  display: flex;
+  text-align: left;
+  line-break: anywhere;
+}
+
+.card-title {
   font-size: 19px;
   font-weight: 400;
-  margin: -2px;
-  margin-bottom: -1px;
+  margin-bottom: 0px;
+  color: black;
 }
-  .card-title{
-    font-size: 19px;
-    font-weight: 400;
-    margin-bottom: 0px;
+
+.favoritoButton {
+  margin-left: 17px;
+  border: none;
+  width: 1px;
+  background-color: transparent;
+  position: relative;
+  left: 63px;
+  top: 13px;
+  font-size: 20px;
+  color: red;
+}
+
+.favoritoButton:hover{
+  background-color: transparent;
+}
+
+.agendarButton {
+  margin: 0 auto;
+  width: 100px;
+  background-color: #c26e7e;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+@media (max-width: 1200px) {
+  .card-container-home {
+    flex-basis: calc(50% - 20px); /* Alterei para 50% para mostrar de 2 em 2 */
   }
 
-  .favoritoButton{
-    margin-left: 17px;
-    border: none;
-    background-color: transparent;
-    position: relative;
-    left: 37px;
-    top: 13px;
-    font-size: 20px;
-    color: red;
+  .card-container-home:nth-child(2n) {
+    margin-right: 0;
   }
-  
-  .agendarButton{
-    margin: auto 1px;
-    margin-left: 10px;
-    width: 100px;
-    background-color: #C26E7E;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .card-container-home {
+    flex-basis: calc(20% - 20px); /* Alterei para 20% para mostrar de 5 em 5 */
   }
-    
-  @media (min-width: 769px) {
-    .card-container-home {
-      width: 150px; /* Largura diferente para telas maiores */
-    }
+
+  .card-container-home:nth-child(5n) {
+    margin-right: 0;
   }
-  
-  /* Estilos específicos para telas com largura entre 320px e 768px */
-  @media (min-width: 320px) and (max-width: 768px) {
-    .card-container-home {
-      flex-basis: calc(33.333% - 20px); 
-    }
-    .h1-home {
-      font-size: 13px;
-    }
+}
+
+@media (max-width: 300px) {
+  .card-container-home {
+    flex-basis: calc(100% - 20px); /* Ocupa 100% da largura com margens */
+    margin-right: 0;
+    width: 100%; /* Ajustei para ocupar 100% da largura */
   }
-  
-  /* Estilos específicos para telas com largura menor que 320px */
-  @media (max-width: 300px) {
-    .card-container-home {
-      width: 500px; /* Largura diferente para telas muito pequenas */
-    }
-  }
-    
-  
-    .card-container-agendamento {
+}
+
+  .card-container-agendamento {
       background-color: #6E7EC2;
       margin: 0 auto;
       border: 1px solid #ddd;
       border-radius: 7px;
       display: flex;
       flex-direction: column;
-      width: 36vw;
+      width: 40vw;
       height: 420px;
       margin-top: 100px;
     }
     
-    .imagem {
+  .imagem {
       width: 250px;
       height: 100px;
       border-radius: 5px;
     }
     /* Estilos para a seção de detalhes do serviço */
-    .service-details {
+  .service-details {
       display: flex;
       flex-direction: column;
     }
     
     /* Estilos para a seção de seleção do profissional */
-    .professional-section {
+   .professional-section {
       width: 280px;
-      margin: -350px 220px;
+      margin: -350px 200px;
       margin-bottom: 1px;
       padding: -1px;
       text-align: right;
@@ -172,7 +161,7 @@
       font-size: 10px;
   }
 
-    .select-dif {
+  .select-dif {
       text-align: center;
       margin: 10px;
       margin-left: 50px;
@@ -183,9 +172,9 @@
 
 
     /* Estilos para a seção de seleção de horário */
-    .schedule-section {
+  .schedule-section {
       width: 280px;
-       margin: 0 220px;
+       margin: 0 200px;
        text-align: right;
        margin-right: 10px;
        color: black;
@@ -195,9 +184,9 @@
 
     
     /* Estilos para a seção de seleção de cartão */
-    .card-section-agendamento {
+   .card-section-agendamento {
       width: 280px;
-      margin: 0 220px; 
+      margin: 0 200px; 
       text-align: right;
       margin-right: 10px;
       color: black;
@@ -206,7 +195,7 @@
     }
     
     /* Estilos para a seção inferior com informações do serviço e botão de agendamento */
-    .service-details-bottom {
+.service-details-bottom {
       display: flex;
       justify-content: space-between;
       margin: 1px;
@@ -215,7 +204,7 @@
     }
     
     /* Estilos para informações do serviço */
-    .service-info {
+  .service-info {
       border: 1px solid #ccc; 
       width: 250px;
       padding: 1px; 
@@ -225,11 +214,10 @@
       background-color: #f9f9f9; 
       color: black;
     }
-
     
     .buttonAgendar {
       margin-top: 170px;
-      margin-left: 150px;
+      margin-left: 300px;
       width: 110px;
       height: 40px;
       text-align: center;
@@ -239,7 +227,7 @@
 
     .buttonAgendar2 {
         margin-top: -40px;
-        margin-left: 270px;
+        margin-left: 450px;
         display: flex;
         flex-direction: column;
         width: 110px;
@@ -248,8 +236,7 @@
         padding: 10px 32px;
         font-weight: 400;
       }
-      
-    
+   
     .h1-home{
         color: whitesmoke;
         font-size: 26px;
