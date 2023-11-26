@@ -137,6 +137,7 @@ const ClienteDashboard = () => {
             throw new Error("Erro na solicitação da API");
           }
     
+          
           setSuccessMessage("Conta excluída com sucesso!");
           setErrorMessage('');
           await deleteDoc(clienteDocRef);
@@ -284,13 +285,13 @@ const ClienteDashboard = () => {
           </div>
         </Form>
       ) : (
-        <Card>
+        <Card className="cardProfile">
           <Card.Body>
           <Row>
         <Col md={12}>
           <Card>
-            <Card.Body className="infoProfileCli">
-              <Row>
+            <Card.Body >
+              <Row style={{color: "Black"}}>
                 <Col md={3}>
                   <strong>Nome de usuário:</strong>
                 </Col>
@@ -299,7 +300,7 @@ const ClienteDashboard = () => {
                 </Col>
               </Row>
               <hr />
-              <Row>
+              <Row style={{color: "Black"}}>
                 <Col md={3}>
                   <strong>Email:</strong>
                 </Col>
@@ -308,7 +309,7 @@ const ClienteDashboard = () => {
                 </Col>
               </Row>
               <hr />
-              <Row>
+              <Row style={{color: "Black"}}>
                 <Col md={3}>
                   <strong>Telefone:</strong>
                 </Col>
@@ -317,7 +318,7 @@ const ClienteDashboard = () => {
                 </Col>
               </Row>
               <hr />
-              <Row>
+              <Row style={{color: "Black"}}>
                 <Col md={3}>
                   <strong>CPF:</strong>
                 </Col>
@@ -326,7 +327,7 @@ const ClienteDashboard = () => {
                 </Col>
               </Row>
               <hr />
-              <Row>
+              <Row style={{color: "Black"}}>
                 <Col md={3}>
                     <strong>Endereço: </strong>
                 </Col>

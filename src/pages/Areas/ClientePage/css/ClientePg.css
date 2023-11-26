@@ -10,46 +10,33 @@
     background-color: #6E7EC2;
   }
 
-
-.rowProfileCli{
-  margin: 10px 0;
-  text-align: left;
-}
-  
-  /* Estilos do botão Salvar/Cancelar */
-  .buttonProfileCli {
-    padding: 2px;
-    margin: 10px;
-    margin-right: 3px;
-    width: 150px;
-    height: 40px;
-    color: #fff;
-    background-color: #C26E7E;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
+  .cardProfile{
+    padding: 0px;
+    width: 400px;
+  }
+  .centeredFormProfileCli {
+    text-align: center;
   }
   
- 
- .infoProfileCli{
-  height: 130px;
- }
-
- .infoButtonProfileCli{
-  margin-top: 120px;
-    padding: 2px;
-    margin-right: 10px;
-    width: 150px;
-    height: 40px;
+  .infoProfileCli {
+    background-color: #f8f8f8; 
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 20px 0;
+  }
+  
+  .infoButtonProfileCli {
+    background-color: #C26E7E; 
     color: #fff;
-    background-color: #C26E7E;
     border: none;
-    border-radius: 8px;
+    padding: 10px 20px;
     cursor: pointer;
-    font-weight: bold;
- }
+    border-radius: 5px;
+    margin-right: 10px;
+  }
 
+  
  .cartaoButton{
   width: 150px;
   height: 40px;
@@ -102,90 +89,137 @@
   font-weight: bold;
 }
 
-.agendamentoCliente{
-  width: 270px;
-  height: 250px;
+.containerAgendamentoCliente {
+  padding: 10px;
+}
+
+.agendamentoCliente {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   justify-content: space-between;
-  border-radius: 7px;
 }
 
-.mb-3{
+.cardColor {
   background-color: #6E7EC2;
+  border: 1px solid #ddd; 
   border-radius: 5px;
-  margin: 1px;
-  display: flex;
-  flex-direction: column;
+  padding: 10px;
+  margin: 10px;
+  width: 300px; 
 }
 
-.logoutCliAg{
-  margin: 50px;
-  margin-left: 280px;
-}
-
-.rowAgendCliente{
-    border: 1px solid #ccc; 
-    padding: 1px; 
-    width: 240px;
-    margin: 5px;
-    margin-left: -19px;
-    margin-bottom: 1px; 
-    font-size: 17px;
-    border-radius: 5px; 
-    background-color: #f9f9f9; 
-    color: black;
-}
-
-.rowAgendCliente:hover{
-  background-color: #e0e0e0;
-}
-
-.containerCartao{
-  width: 370px;
-  height: 350px;
-  margin: 25px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+.imgAg1 {
+  width: 100%;
+  height: 150px;
+  object-fit: cover; 
   border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.rowColor {
+  margin-bottom: 10px;
+}
+
+.rowAgendCliente {
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.buttonAg{
+  background-color: #C26E7E;
+  margin: 2px;
+}
+
+.containerCartao {
   background-color: #6E7EC2;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 7px;
 }
 
 .cartaoCli {
-  border: 1px solid #ccc; 
-  padding: 15px; 
-  margin: 5px;
-  margin-bottom: 1px; 
-  border-radius: 5px; 
-  background-color: #f9f9f9; 
+  margin-bottom: 10px;
+  text-align: left;
+  color: #333;
+}
+
+.buttonExcluirCartao {
+  background-color: #dc3545; 
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-right: 10px;
+  text-decoration: none;
+}
+
+.buttonVoltarCartao {
+  background-color: #C26E7E;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.buttonVoltarCartao a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.cardFav {
+  background-color: #6E7EC2; 
+  border: 1px solid #ddd; 
+  border-radius: 5px;
+  padding: 15px;
+  margin: 10px;
+  width: 250px; 
+}
+
+.imgAg {
+  width: 100%;
+  height: 150px;
+  object-fit: cover; 
+  border-radius: 5px;
+  margin-bottom: -10px;
+}
+
+.rowFavs {
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
   color: black;
 }
 
-.cartaoCli:hover {
-  background-color: #e0e0e0; 
+.card-description {
+  font-size: 14px;
+  color: #333;
 }
 
-.buttonExcluirCartao{
-  width: 45%;
-  margin: 2px auto;
-  padding: 10px;
-  font-weight: 400;
-  background-color: #C26E7E;
+.card-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #C26E7E; 
+  margin-top: 10px;
 }
 
-.containerFavs{
-  background-color: #6E7EC2;
-  width: 200px;
+.buttonFav1 {
+  margin: 10px;
+  background-color: #C26E7E; 
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
   border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  flex-basis: calc(11.1% - 20px); /* 100% / 9 - 20px de margem entre os itens */
+  text-decoration: none;
 }
 
-.containerFavs:nth-child(1n){
-  margin-right: 0;
-}
 
 
 

@@ -102,44 +102,46 @@
     padding: 10px; 
 }
 
-.historicoEmp{
-    width: 270px;
-    height: 250px;
+.historicoEmp {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     justify-content: space-between;
-    border-radius: 7px;
-}
-
-.mb-3{
-    background-color: #6E7EC2;
-    border-radius: 5px;
-    margin: 1px;
-    display: flex;
-    flex-direction: column;
   }
 
-.rowHistoricoEmp {
-    border: 1px solid #ccc; 
-    padding: 1px; 
-    width: 240px;
-    margin: 5px;
-    margin-left: -19px;
-    margin-bottom: 1px; 
-    font-size: 17px;
-    border-radius: 5px; 
-    background-color: #f9f9f9; 
-    color: black;
-}
-
-.rowHistoricoEmp:hover {
-    background-color: #e0e0e0; 
-}
-
-.buttonHistoricoEmp{
-    width: 100px;
-    margin-bottom: auto;
-}
+  
+  .card-body {
+    background-color: #6E7EC2;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+  
+  }
+  
+  .imgAg2 {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .rowHistoricoEmp {
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  
+  .buttonHistoricoEmp a {
+    background-color: #C26E7E;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+    margin: 10px;
+  }
+  
 
 .services-container {
     display: flex;

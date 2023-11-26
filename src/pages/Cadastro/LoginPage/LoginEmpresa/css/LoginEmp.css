@@ -43,26 +43,15 @@
 
 
 .inputContainerLoginEmp {
-  width: 100vw; /* Ocupa 80% da largura do contêiner */
-  max-width: 300px; 
-  height: 26px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 5px;
-  padding: 5px;
-  outline: none;
-  color: black;
+  margin-bottom: 15px;
 }
 
 .inputFieldLoginEmp {
-  width: 300px;
-  height: 38px;
-  border: none;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 2px;
-  background-color: #fff; 
-  outline: none;
-  color: black;
+
 }
 
 .buttonLoginEmp {

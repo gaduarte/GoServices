@@ -170,7 +170,7 @@ const EmpresaAgendamentos = () => {
 
       return (
         <Container>
-            <h2 style={{fontSize: "45px"}}>Relatório de Agendamentos, {empresaInfo.username}</h2>
+            <h2 style={{fontSize: "40px"}}>Relatório de Agendamentos, {empresaInfo.username}</h2>
             {isLoading ? (
                 <p>Carregando...</p>
             ) : (
@@ -181,10 +181,10 @@ const EmpresaAgendamentos = () => {
                                 <Card.Body>
                                 <Row>
                                 {agendamento.servico && (
-                                    <img src={agendamento.servico.img} alt={agendamento.servico.nome} className="img" />
+                                    <img src={agendamento.servico.img} alt={agendamento.servico.nome} className="imgAg2" />
                                 )}
                                 </Row>
-                                    <Row >
+                                    <Row style={{color: "Black"}}>
                                         {agendamento.cliente && (
                                             <Col md={3} className="rowHistoricoEmp">
                                                 <strong>Cliente que Agendou: </strong>
@@ -192,7 +192,7 @@ const EmpresaAgendamentos = () => {
                                             </Col>
                                         )}
                                     </Row>
-                                    <Row >
+                                    <Row style={{color: "Black"}}>
                                         {agendamento.horario && (
                                             <Col md={3} className="rowHistoricoEmp">
                                                 <strong>Horário de Agendamento: </strong>
@@ -200,7 +200,7 @@ const EmpresaAgendamentos = () => {
                                             </Col>
                                         )}
                                     </Row>
-                                    <Row >
+                                    <Row style={{color: "Black"}}>
                                         {agendamento.profissional && (
                                             <Col md={3} className="rowHistoricoEmp">
                                                 <strong>Pessoa Prestadora de Serviço:</strong>
@@ -208,7 +208,7 @@ const EmpresaAgendamentos = () => {
                                             </Col>
                                         )}
                                     </Row>
-                                    <Row>
+                                    <Row style={{color: "Black"}}>
                                         {agendamento.servico && (
                                             <Col md={3} className="rowHistoricoEmp">
                                                 <strong>Serviço Agendado: </strong>
@@ -216,7 +216,7 @@ const EmpresaAgendamentos = () => {
                                             </Col>
                                         )}
                                     </Row>
-                                    <Row >
+                                    <Row style={{color: "Black"}}>
                                         {agendamento.servico && (
                                             <Col md={3} className="rowHistoricoEmp">
                                                 <strong>Valor do Serviço: </strong>

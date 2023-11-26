@@ -167,7 +167,7 @@ export function HomePage() {
     <main className="main-home">
       {successMessage && <div className="successMessageCli">{successMessage}</div>}
       {errorMessage && <div className="errorMessageCli">{errorMessage}</div>}
-      <h1 className="h1-home">Lista de Serviços:</h1>
+      <h2 className="h1-home">Lista de Serviços:</h2>
       <div className="container-home">
         {servicos.map((servico, index) => (
           <div

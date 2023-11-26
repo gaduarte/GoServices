@@ -173,11 +173,11 @@ const ProfissionalAgendamentos = () => {
             <div className="agendamentoProfissional">
                 {agendamentoInfo.length > 0 ? (
                     agendamentoInfo.map((agendamento) => (
-                        <Card key={agendamento.id}>
+                        <Card key={agendamento.id} className="agendamentosPro">
                             <Card.Body>
                             <Row>
                                 {agendamento.servico && (
-                                    <img src={agendamento.servico.img} alt={agendamento.servico.nome} className="img" />
+                                    <img src={agendamento.servico.img} alt={agendamento.servico.nome} className="imgAg2" />
                                 )}
                                 </Row>
                                 <Row>

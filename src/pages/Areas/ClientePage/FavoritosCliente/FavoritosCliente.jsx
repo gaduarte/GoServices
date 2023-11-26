@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col, Card, Button } from  "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -26,7 +26,11 @@ const FavoritosCliente = () => {
   const [servicoData, setServicoData] = useState([]);
   const [favoritoData, setFavoritoData] = useState([]);
   const [favoritoInfo, setFavoritoInfo] = useState([]);
+  const [favoritoId, setFavoritoId] = useState(null);
   const history = useNavigate();
+
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const checkUserInClienteCollection = async (email) => {
     const db = getFirestore();
@@ -43,6 +47,21 @@ useEffect(() => {
       if (user) {
         const id = user.uid;
         setId(id); 
+
+        const clienteId = id; 
+      const favoritoDoc = query(collection(db, "favorito"), where("clienteId", "==", clienteId));
+      const querySnapshot = await getDocs(favoritoDoc);
+
+      // Verificar se há algum documento retornado
+      if (!querySnapshot.empty) {
+        const favoritoId = querySnapshot.docs[0].id;
+
+        console.log("ID do favorito:", favoritoId);
+
+        setFavoritoId(favoritoId);
+      } else {
+        console.log("O cliente não tem favoritos.");
+      }
       } else {
         history("/login");
       }
@@ -148,6 +167,45 @@ useEffect(()=>{
   fetchCliente();
 }, []);
 
+const handleDeleteClick = async () => {
+  try {
+    console.log("favoritoId:", favoritoId);
+
+    if (favoritoId) {
+      const favoritoDocRef = doc(db, "favorito", favoritoId);
+
+      const deleteConfig = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      };
+
+      // Realizando a solicitação de exclusão na API
+      const response = await fetch(`http://localhost:3000/favorito/remove/${favoritoId}`, deleteConfig);
+
+      if (!response.ok) {
+        throw new Error("Erro na solicitação da API");
+      }
+
+      setSuccessMessage("Favorito removido com sucesso!");
+      setErrorMessage('');
+
+      // Excluindo o documento favorito no Firestore
+      await deleteDoc(favoritoDocRef);
+
+      history("/");
+
+    } else {
+      console.error("ID do favorito é nulo ou indefinido");
+    }
+  } catch (error) {
+    console.error("Erro ao excluir favorito", error);
+    setErrorMessage('Erro ao excluir favorito: ' + error.message);
+  }
+}
+
+
 function getDecimal(value){
   const stringValue = value.toString();
   let [integerPart, decimalPart] = stringValue.split('.');
@@ -172,16 +230,21 @@ return (
     ) : (
       <div className="containerFavs">
         {favoritoInfo.map((favorito) => (
-          <Card key={favorito.id} className="card">
+          <Card key={favorito.id} className="cardFav">
             <Card.Body className="card-bodys">
+            <Row>
+               {favorito.servico && (
+               <img src={favorito.servico.img} alt={favorito.servico.nome} className="imgAg" />
+                )}
+               </Row>
               <Row className="rowFavs">
                 {favorito.servico && (
                   <Col>
-                    <h5 className="card-title-fav">{favorito.servico.nome}</h5>
+                    <h5 className="card-title">{favorito.servico.nome}</h5>
                     <p style={{ fontSize: "15px", display: "flex", color: "#0F1111", textAlign: "left" }}>
                       {favorito.servico.empresa}
                     </p>
-                    <p className="card-description-fav">{favorito.servico.descricao}</p>
+                    <p className="card-description">{favorito.servico.descricao}</p>
                     <div className="card-price">
                       R$:{' '}
                       <span style={{ fontSize: "28px", color: "#0F1111" }}>
@@ -191,7 +254,7 @@ return (
                         .{getDecimal(favorito.servico.valor).decimalPart}
                       </span>
                       <div>
-                        <button>Remover</button>
+                        <button onClick={handleDeleteClick}>Remover</button>
                       </div>
                     </div>
                   </Col>

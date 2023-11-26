@@ -182,21 +182,21 @@ const ClienteAgendamentos = () => {
                 {agendamentoInfo.map((agendamento)=>(
                     <Card key={agendamento.id} className="mb-3">
                         <Card.Body className="cardColor">
-                        <Row>
+                        <Row >
                                 {agendamento.servico && (
-                                    <img src={agendamento.servico.img} alt={agendamento.servico.nome} className="img" />
+                                    <img src={agendamento.servico.img} alt={agendamento.servico.nome} className="imgAg1" />
                                 )}
                             </Row>
-                        <Row className="rowColor">
+                        <Row style={{color: "Black"}}>
                                 {agendamento.horario && (
                                     <Col md={3} className="rowAgendCliente">
-                                    <strong>Data do Agendamento: </strong>
+                                    <strong>Data Agendamento: </strong>
                                     {agendamento.horario.horario}
                                    
                                     </Col>
                                 )}
                             </Row>
-                        <Row >
+                        <Row style={{color: "Black"}}>
                             {agendamento.servico && (
                                 <Col md={3} className="rowAgendCliente">
                                     <strong>Serviço: </strong>{agendamento.servico.nome}
@@ -204,7 +204,7 @@ const ClienteAgendamentos = () => {
                                 </Col>
                             )}
                             </Row>
-                            <Row >
+                            <Row style={{color: "Black"}}>
                                 {agendamento.empresa && (
                                     <Col md={3} className="rowAgendCliente">
                                         <strong>Empresa: </strong>
@@ -213,7 +213,7 @@ const ClienteAgendamentos = () => {
                                     </Col>
                                 )}
                             </Row>
-                            <Row >
+                            <Row style={{color: "Black"}}>
                                 {agendamento.profissional && (
                                     <Col md={3} className="rowAgendCliente">
                                        <strong>Profissional: </strong> {agendamento.profissional.username}
@@ -221,7 +221,7 @@ const ClienteAgendamentos = () => {
                                     </Col>
                                 )}
                             </Row>
-                            <Row >
+                            <Row style={{color: "Black"}} >
                                 {agendamento.servico && (
                                      <Col md={3} className="rowAgendCliente">
                                      <strong>Valor: </strong>{agendamento.servico && agendamento.servico.valor}
@@ -234,6 +234,7 @@ const ClienteAgendamentos = () => {
                 ))}
             </div>
         )}
+        <button className="buttonAg"><a href="/">Voltar</a></button>
        </Container>
     )
 }

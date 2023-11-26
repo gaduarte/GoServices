@@ -208,7 +208,7 @@ let Goservice = class {
         const servicoRef = db.collection("servico").doc(id_procurando);
         const doc = await servicoRef.get();
 
-        if(!doc.exists()){
+        if(!doc.exists){
             console.log("Serviço não existe.");
         }else{
             return doc.data();
@@ -229,7 +229,7 @@ let Goservice = class {
         const userRef = db.collection("servico").doc(id);
         const doc = await userRef.get();
 
-        if(!doc.exists()){
+        if(!doc.exists){
             return null;
         }
         return doc.data();
@@ -264,7 +264,7 @@ let Goservice = class {
             }
     
             const cartaoData = cartaoSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            console.log("Cartao data:", cartaoData); // Add this line for debugging
+            console.log("Cartao data:", cartaoData); 
             return cartaoData;
         } catch (error) {
             console.error("Error retrieving cartao:", error);
@@ -277,7 +277,7 @@ let Goservice = class {
         const userRef = db.collection("agendamento").doc(id);
         const doc = await userRef.get();
 
-        if(!doc.exists()){
+        if(!doc.exists){
             return null;
         }
         return doc.data();
@@ -292,6 +292,27 @@ let Goservice = class {
         });
         return agendamento;
     }
+
+    async retrieveFavorito(id){
+        const userRef = db.collection("favorito").doc(id);
+        const doc = await userRef.get();
+        
+        if(!doc.exists){
+            return null;
+        }
+        return doc.data();
+    }
+
+    async retrieveHorario(id) {
+        const userRef = db.collection("horariosDisponiveis").doc(id);
+        const doc = await userRef.get();
+
+        if(!doc.exists){
+            return null;
+        }
+        return doc.data();
+    }
+
 
     //Exclusões
     async excluirConta(id){
@@ -324,6 +345,10 @@ let Goservice = class {
         await userRef.delete();
     }
 
+    async excluirFavorito(id) {
+        const userRef = db.collection("favorito").doc(id);
+        await userRef.delete();
+    }
 
 }
 

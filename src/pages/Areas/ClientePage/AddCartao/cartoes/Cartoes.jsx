@@ -116,7 +116,6 @@ const CartoesCliente = () => {
                         },
                     };
     
-                    // Use cartaoId instead of id in the API endpoint
                     const response = await fetch(`http://localhost:3000/cartao/remove/1/${cartaoId}`, deleteConfig);
     
                     if (!response.ok) {
@@ -151,7 +150,7 @@ const CartoesCliente = () => {
               <p className="cartaoCli">Código do Cartão: {cartaoItem.codigo} </p>
               <p className="cartaoCli">Data de Validade: {cartaoItem.dataValidade} </p>
               <Button className="buttonExcluirCartao" onClick={() => handleDeleteCartao( cartaoItem.id)}>Excluir Cartão</Button>
-              <Button className="buttonExcluirCartao"><a href="/cliente">Voltar</a></Button>
+              <Button className="buttonVoltarCartao"><a href="/cliente">Voltar</a></Button>
             </div>
           ))}
         </>

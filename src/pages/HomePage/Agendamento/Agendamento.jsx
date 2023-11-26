@@ -262,6 +262,21 @@ const Agendamento = () => {
       const user = auth.currentUser;
       const uid = user ? user.uid : null;
 
+      if (!selectedProfissional) {
+        alert("Selecione um profissional.");
+        return;
+      }
+  
+      if (!selectedHorario) {
+        alert("Selecione um horário.");
+        return;
+      }
+  
+      if (!selectedCard) {
+        alert("Selecione um cartão.");
+        return;
+      }
+
       const agendamentoData = {
         clienteId: uid, 
         empresaId: servicoData.empresaId,

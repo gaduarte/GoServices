@@ -4,6 +4,10 @@ const res = require('express/lib/response');
 const cors = require('cors');
 const Goservice = require('./classe');
 const path = require('path');
+const {ApolloServer} = require('apollo-server-express');
+const {typeDefs, resolvers} = require('./graphql');
+const { buildSchema } = require('graphql');
+
 
 const app = express();
 
@@ -15,13 +19,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 const gs = new Goservice()
 
 
 app.listen(port, () => {
     console.log(`Rodando na porta: ${port}`);
 });
+
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../../', 'pages', 'HomePage', 'index.jsx'));
@@ -33,6 +38,18 @@ function generateUniqueId() {
     const randomPart = Math.floor(Math.random() * 10000); 
     return `${timestamp}-${randomPart}`;
 }
+
+async function startApolloServer() {
+    const server = new ApolloServer({
+        typeDefs,
+        resolvers,
+    });
+
+    await server.start();
+    server.applyMiddleware({ app, path: '/graphql' });
+}
+
+startApolloServer();
 
 //Serviço
 app.get('/servico/1/:id', async(req, res)=>{
@@ -155,7 +172,6 @@ app.get('/cartao/1/:id', async (req, res) => {
         res.status(500).send('Error retrieving cartao.');
     }
 });
-
 
 
 app.delete('/cartao/remove/1/:id/', async (req, res) => {
@@ -461,6 +477,17 @@ app.post('/addFavoritos', async(req,res)=>{
     }catch(error){
         console.error("Erro ao cadastrar favoritos", error );
         res.status(500).json({error: "Erro interno ao cadastrar favoritos"});
+    }
+});
+
+app.delete('/favorito/remove/:id', async(req, res) => {
+    const id = req.params.id;
+    try{
+        await gs.excluirFavorito(id);
+        res.status(200).send("Favorito removido com sucesso!");
+    }catch (error) {
+        console.error("Erro ao excluir conta", error);
+        res.status(500).send('Erro ao excluir favorito');
     }
 })
 
