@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Form, Button, Container, Col, Row, Card } from "react-bootstrap";
-import { getDoc, collection, doc, getFirestore, query, where, getDocs, setDoc } from "firebase/firestore";
+import { getDoc, collection, doc, getFirestore, query, where, getDocs, setDoc, deleteDoc } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -281,6 +281,80 @@ const EmpresaAtualizaServico = () => {
     }
   };
 
+// ... (código anterior)
+
+const handleDeleteClick = () => {
+  if (selectedServicoId !== null) {
+    handleDelete(selectedServicoId); // Passa o selectedServicoId diretamente para handleDelete
+  } else {
+    console.error("Selecione um serviço antes de excluir.");
+  }
+};
+
+const handleDelete = async (servicoId) => { 
+  try {
+    setIsLoading(true);
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const uid = user ? user.uid : null;
+
+    if (!uid) {
+      throw new Error("Usuário não autenticado.");
+    }
+
+    console.log("Serviços da Empresa:", servicosDaEmpresa);
+    console.log("Serviço Selecionado:", servicoId);
+
+    // Verifica se o índice é válido e se o serviço está presente na lista
+    if (Number.isInteger(servicoId) && servicoId >= 0 && servicoId < servicosDaEmpresa.length) {
+      const servicoToDelete = servicosDaEmpresa[servicoId]?.id;
+
+      if (!servicoToDelete) {
+        throw new Error("O serviço selecionado não tem um ID válido.");
+      }
+
+      // Verificar se há agendamentos associados a este serviço
+      const agendamentoRef = collection(db, "agendamento");
+      const q = query(agendamentoRef, where("servicoId", "==", servicoToDelete));
+      const agendamentoQuerySnapshot = await getDocs(q);
+      const agendamentosAssociados = agendamentoQuerySnapshot.docs.length > 0;
+
+      if (agendamentosAssociados) {
+        throw new Error("Existem agendamentos associados a este serviço. Não é possível excluí-lo.");
+      }
+
+      // Continuar com a exclusão do serviço se não houver agendamentos associados
+      const deleteConfig = {
+        method: 'DELETE',
+        headers: {
+          'Content-type': 'application/json'
+        },
+      };
+
+      const response = await fetch(`http://localhost:3000/servico/remove/${servicoToDelete}`, deleteConfig);
+
+      if (!response.ok) {
+        throw new Error("Erro na solicitação da API");
+      }
+
+      const updatedServicosDaEmpresa = servicosDaEmpresa.filter((servico, index) => index !== servicoId);
+      setServicosDaEmpresa(updatedServicosDaEmpresa);
+
+      setSuccessMessage('Serviço excluído com sucesso!');
+      setErrorMessage('');
+    } else {
+      throw new Error("O índice do serviço não é válido ou o serviço não está presente na lista.");
+    }
+  } catch (error) {
+    console.error("Erro ao excluir serviço", error);
+    setErrorMessage('Erro ao excluir serviço: ' + error.message);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
   return (
     <Container>
       {isLoading ? (
@@ -360,14 +434,12 @@ const EmpresaAtualizaServico = () => {
               </Row>
               <div style={{margin: "20px"}}>
               <Button
-  variant="primary"
-  onClick={handleSaveClick}
-  className="buttonServ"
->
-  Salvar
-</Button>
-
-
+                    variant="primary"
+                    onClick={handleSaveClick}
+                    className="buttonServ"
+                  >
+                    Salvar
+                  </Button>
                 <Button variant="primary" onClick={handleCancelClick} className="buttonServ">
                   Cancelar
                 </Button>
@@ -407,6 +479,7 @@ const EmpresaAtualizaServico = () => {
                   </Col>
                 </Row>
                 <Button className="buttonServ" onClick={() => handleServicoSelect(index)}>Editar</Button>
+                <Button className="buttonServ1" onClick={() => handleDelete(index)}>Excluir</Button>
               </Card.Body>
             </Card>
           </div>

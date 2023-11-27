@@ -283,7 +283,8 @@ const Agendamento = () => {
         profissionalId: selectedProfissional,
         servicoId: servicoId,
         cartao: cartao[0].id,
-        dataAgendamento: selectedHorario
+        dataAgendamento: selectedHorario,
+        status: true,
       };
 
       const configAgendamento = {

@@ -402,7 +402,6 @@ app.delete('/profissional/remove/1/:id', async(req,res)=>{
     }
 })
 
-
 //Agendamento
 app.get('/agendamento/:id', async(req, res)=>{
     const id = req.params.id;
@@ -412,11 +411,11 @@ app.get('/agendamento/:id', async(req, res)=>{
     res.json(mensagem);
 })
 
-//Retorna todos os agendamentos
-app.get('/agendamentos', async (req,res)=>{
-    const mensagem = await gs.retrieveAllAgendamentos()
-    res.json(mensagem);
-})
+//Retorna  agendamentos
+app.get('/agendamentos', async (req, res) => {
+    const agendamentos = await gs.retrieveAllAgendamentos();
+    res.json(agendamentos);
+});
 
 // Adiciona um agendamento.
 app.post('/addAgendamento', async (req, res)=>{
@@ -430,6 +429,7 @@ app.post('/addAgendamento', async (req, res)=>{
             servicoId: req.body.servicoId,
             cartao: req.body.cartao,
             dataAgendamento: req.body.dataAgendamento,
+            status: req.body.status,
             id: generatedId,
         };
 
@@ -441,6 +441,7 @@ app.post('/addAgendamento', async (req, res)=>{
         agendamentoData.servicoId,
         agendamentoData.cartao,
         agendamentoData.dataAgendamento,
+        agendamentoData.status,
         agendamentoData.id
 
         console.log("Cadastro de agendamento realizado com sucesso! ");
@@ -489,7 +490,17 @@ app.delete('/favorito/remove/:id', async(req, res) => {
         console.error("Erro ao excluir conta", error);
         res.status(500).send('Erro ao excluir favorito');
     }
-})
+});
 
+app.delete('/servico/remove/:id', async(req, res) => {
+    const id = req.params.id;
+    try{
+        await gs.excluirServico(id);
+        res.status(200).send("Serviço removido com sucesso!");
+    }catch (error) {
+        console.error("Erro ao excluir serviço", error);
+        res.status(500).send('Erro ao excluir serviço');
+    }
+});
 
 

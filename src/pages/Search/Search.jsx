@@ -46,6 +46,7 @@ export function SearchT() {
     console.log("servicos:", servicos);
   }, []);
 
+
   const handleSearch = () => {
     const searchTerm = searchQuery.toLowerCase().trim();
     const results =
@@ -54,7 +55,8 @@ export function SearchT() {
         : servicos.filter((servico) => {
             const nomeIncludesTerm = servico.data.nome.toLowerCase().includes(searchTerm);
             const descricaoIncludesTerm = servico.data.descricao.toLowerCase().includes(searchTerm);
-            return nomeIncludesTerm || descricaoIncludesTerm;
+            const empresaIncludesTerm = servico.data.empresa.toLowerCase().includes(searchTerm);
+            return nomeIncludesTerm || descricaoIncludesTerm || empresaIncludesTerm;
           });
 
     setSearchResults(results);
@@ -86,58 +88,38 @@ export function SearchT() {
   };
 
   return (
-    <>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <input
-          type="text"
-          placeholder="Pesquisar..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onKeyPress={(e) => {
-            if (e.key === "Enter") {
-              handleSearch();
-            }
-          }}
-          style={{ height: "20px", width: "100%", padding: "3px", margin: "1px", marginTop: "14px" }}
-        />
-        <button
-          onClick={handleSearch}
-          style={{
-            padding: "5px 10px",
-            height: "24px",
-            cursor: "pointer",
-            width: "30px",
-            color: "white",
-            marginTop: "2px",
-            marginLeft: "10px",
-            marginBottom: "-10px",
-          }}
-        >
-          <FaSearch size={12} />
-        </button>
-      </div>
-      {
-        searchResults.map((result) => (
-          <div key={result.id} className="container-search">
-            <img src={result.data.img} alt={result.data.nome} className="img-search"/>
-            <div className="card-search-nome">
-              <h2>{result.data.nome}</h2>
-            </div>
-            <div className="card-search">
-              <p>{result.data.descricao}</p>
-            </div>
-            <div className="valor-search">
+    <div className="search-container">
+      <input
+        type="text"
+        placeholder="Pesquisar..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
+            handleSearch();
+          }
+        }}
+        className="search-input"
+      />
+      <button onClick={handleSearch} className="search-button">
+        <FaSearch size={12} />
+      </button>
+      {searchResults.map((result) => (
+        <div key={result.id} className="search-result-container">
+          <img src={result.data.img} alt={result.data.nome} className="search-result-img" />
+          <div className="search-result-card">
+            <h2>{result.data.nome}</h2>
+            <p>{result.data.descricao}</p>
+            <div className="search-result-valor">
               <p>Valor: {result.data.valor}</p>
             </div>
-            <button
-              onClick={() => navigateToAgendamento(result)}
-              className="agendarSearch"
-            >
+            <button onClick={() => navigateToAgendamento(result)} className="search-result-agendar">
               Agendar
-        </button>
+            </button>
           </div>
-        ))}
-    </>
+        </div>
+      ))}
+    </div>
   );
   }
   

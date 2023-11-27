@@ -202,7 +202,7 @@ let Goservice = class {
         }
     }
 
-    //Serviços
+    //Retornar Dados
     async retrieveServico(id_procurando){
         id_procurando = id_procurando.replace(/\s/g, '');
         const servicoRef = db.collection("servico").doc(id_procurando);
@@ -215,13 +215,16 @@ let Goservice = class {
         }
     }
 
-    async retrieveAllServicos(uid){
-        const servicoRef = db.collection("servico").doc(uid);
+    async retrieveAllServicos(){
+        const servicoRef = db.collection("servico");
         const snapshot = await servicoRef.get();
+    
         const servicos = [];
-        snapshot.forEach(doc=>{
+    
+        snapshot.forEach((doc) => {
             servicos.push(doc.data());
         });
+    
         return servicos;
     }
 
@@ -247,7 +250,6 @@ let Goservice = class {
         }
     }
 
-    //Cartão
     async retrieveCartao(clienteId) {
         try {
             const userRef = doc(db, "cliente", clienteId);
@@ -272,7 +274,6 @@ let Goservice = class {
         }
     }
     
-    //Agendamento
     async retrieveAgendamento(id){
         const userRef = db.collection("agendamento").doc(id);
         const doc = await userRef.get();
@@ -283,15 +284,18 @@ let Goservice = class {
         return doc.data();
     }
 
-    async retrieveAllAgendamentos(id){
-        const userRef = db.collection("agendamento").doc(id);
-        const doc = await userRef.get();
-        const agendamento = [];
-        doc.forEach(doc => {
-            agendamento.push(doc.data());
+    async retrieveAllAgendamentos() {
+        const agendamentoRef = db.collection("agendamento");
+        const snapshot = await agendamentoRef.get();
+    
+        const agendamentos = [];
+    
+        snapshot.forEach((doc) => {
+            agendamentos.push(doc.data());
         });
-        return agendamento;
-    }
+    
+        return agendamentos;
+    }    
 
     async retrieveFavorito(id){
         const userRef = db.collection("favorito").doc(id);

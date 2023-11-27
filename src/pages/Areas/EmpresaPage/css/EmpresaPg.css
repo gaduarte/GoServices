@@ -176,6 +176,15 @@
     cursor: pointer;
 }
 
+.buttonServ1{
+  margin: 2px auto;
+  width: 100px;
+  background-color: #C26E7E;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
 .formServ{
     background-color: #6E7EC2;
     border-radius: 5px;

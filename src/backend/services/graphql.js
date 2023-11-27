@@ -15,11 +15,9 @@ const typeDefs = gql`
         favorito(id: ID!): Favorito
         horario(id: ID!): Horario
         cartao(id: ID!): Cartao
-    }
-
-    type Mutation {
-        deleteCliente(id: ID!): String
-      }      
+        agendamentos: [Agendamentos]!
+        servicos: [Servicos]!
+    }      
 
     type Servico {
         id: ID!
@@ -92,7 +90,22 @@ const typeDefs = gql`
         dataValidade: String!
     }
 
-   
+    type Agendamentos {
+        id: ID!
+        clienteId: String!
+        empresaId: String!
+        profissionalId: String!
+        servicoId: String!
+        dataAgendamento: String!
+    }
+
+   type Servicos {
+        id: ID!
+        nome: String!
+        descricao: String!
+        empresa: String!
+        valor: String!
+   }
 `;
 
 const resolvers = {
@@ -145,21 +158,15 @@ const resolvers = {
             console.log("Resultado da Consulta: ", result);
             return result;
         },
-       
-    },
-    Mutation: {
-        deleteCliente: async (parent, { id }) => {
-          try {
-            (gs.excluirConta)
-            await gs.excluirConta(id);
-    
-            return 'Cliente excluído com sucesso!';
-          } catch (error) {
-            console.error("Erro ao excluir cliente", error);
-            throw new Error('Erro ao excluir cliente');
-          }
+        agendamentos: async (parent) => {
+            const result = await gs.retrieveAllAgendamentos();
+            return result; 
         },
-      },
+        servicos: async (parent) => {
+            const result = await gs.retrieveAllServicos();
+            return result;
+        }
+    },
 };
 
 module.exports = {
