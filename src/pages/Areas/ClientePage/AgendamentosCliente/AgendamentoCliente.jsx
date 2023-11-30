@@ -248,6 +248,9 @@ const ClienteAgendamentos = () => {
       
               // Atualiza o status no Firestore para horarioAgendado: false
               await updateDoc(horarioDocRef, { status: false });
+
+               // Atualiza o estado local para refletir a exclusão
+              setAgendamentoInfo((prevAgendamentoInfo) => prevAgendamentoInfo.filter(item => item.id !== agendamentoId));
       
               console.log("Agendamento cancelado com sucesso!");
             } else {
