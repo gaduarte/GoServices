@@ -5,6 +5,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { ref, getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
+import { Link } from "react-router-dom";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
@@ -169,7 +170,7 @@ const EmpresaAtualizaServico = () => {
     };
   
     fetchData();
-  }, []); // Remova a chamada direta aqui  
+  }, []); 
 
 
   const handleCancelClick = () => {
@@ -280,8 +281,6 @@ const EmpresaAtualizaServico = () => {
       throw error;
     }
   };
-
-// ... (código anterior)
 
 const handleDeleteClick = () => {
   if (selectedServicoId !== null) {
@@ -480,12 +479,15 @@ const handleDelete = async (servicoId) => {
                 </Row>
                 <Button className="buttonServ" onClick={() => handleServicoSelect(index)}>Editar</Button>
                 <Button className="buttonServ1" onClick={() => handleDelete(index)}>Excluir</Button>
+                <Button className="buttonServ2"> <Link to={`/horarios/${servico.id}`}>Adicionar Horário</Link>
+                  </Button>
               </Card.Body>
             </Card>
           </div>
         ))}
       </div>
       )}
+      <button><a href="/addServico">Voltar</a></button>
     </Container>
   );
   

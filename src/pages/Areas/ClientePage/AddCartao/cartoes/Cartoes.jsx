@@ -137,8 +137,6 @@ const CartoesCliente = () => {
             setErrorMessage('Erro ao excluir cartão: ' + error.message);
         }
     };
-    
-    
 
       return (
         <>
@@ -149,14 +147,13 @@ const CartoesCliente = () => {
               <p className="cartaoCli">Nome do titular: {cartaoItem.nome} </p>
               <p className="cartaoCli">Código do Cartão: {cartaoItem.codigo} </p>
               <p className="cartaoCli">Data de Validade: {cartaoItem.dataValidade} </p>
-              <Button className="buttonExcluirCartao" onClick={() => handleDeleteCartao( cartaoItem.id)}>Excluir Cartão</Button>
+              <Button className="buttonExcluirCartao" onClick={() => handleDeleteCartao( cartaoItem.id)}>Excluir</Button>
               <Button className="buttonVoltarCartao"><a href="/cliente">Voltar</a></Button>
             </div>
           ))}
         </>
       );
-      
-      
+   
 }
 
 export default CartoesCliente;

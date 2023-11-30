@@ -3,6 +3,10 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 
 const firebaseConfig = {
@@ -21,12 +25,14 @@ const db = getFirestore(app);
 
 export const AdicionarHorarioDisponivel = () => {
   const { servicoId } = useParams();
+  const [servicoData, setServicoData] = useState(null);
   const [id, setId] = useState(null);
-  const [horario, setHorario] = useState("");
-  const [servico, setServico] = useState("");
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [isLoading, setIsLoading] = useState(true);
   const [empresaInfo, setEmpresaInfo] = useState([]);
-  //const { servicoId } = useParams();
+  const [currentServicoId, setCurrentServicoId] = useState(servicoId);
+  
+  const servicoRef = collection(db, "servico");
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -114,71 +120,125 @@ export const AdicionarHorarioDisponivel = () => {
     fetchEmpresa();
   }, []);
 
-  const handleAdicionarHorario = async () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    const uid = user ? user.uid : null;
-
-    if (!horario || !servico) {
-      console.log("Preencha todos os campos necessários.");
-      return;
-    }
-
-    const horariosDisponiveisRef = collection(db, "horariosDisponiveis");
-    const novoHorario = {
-      horario: horario,
-      servico: servico,
-      empresaId: uid,
-      status: false,
-    };
-
-    const configHorario = {
-      method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(novoHorario),
-    }
-
-    const response = await fetch("http://localhost:3000/addHorario", configHorario);
-
-    if (!response.ok) {
-      throw new Error("Erro na solicitação da API");
-    }
-
-    const responseData = await response.json();
-    console.log('Resposta da API:', responseData);
-    setSuccessMessage('Serviço cadastrado com sucesso!');
-    setErrorMessage('');
-
+  const fetchServico = async () => {
     try {
-      await addDoc(horariosDisponiveisRef, novoHorario);
-      console.log("Horário adicionado com sucesso.");
+      const querySnapshot = await getDocs(servicoRef);
+      querySnapshot.forEach((doc) => {
+        if (doc.id === currentServicoId) {
+          setServicoData(doc.data());
+        }
+      });
+      setIsLoading(false);
     } catch (error) {
-      console.error("Erro ao adicionar horário:", error);
+      console.error("Erro ao buscar Serviço", error);
+      setIsLoading(false);
     }
-    };
+  };
 
+  useEffect(() => {
+    if (currentServicoId) {
+      fetchServico();
+    }
+  }, [currentServicoId]);
+  
+  const handleAdicionarHorario = async () => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const uid = user ? user.uid : null;
+  
+      if (!selectedDate) {
+        setErrorMessage('Selecione uma data e hora válidas.');
+        return;
+      }
+  
+      const formattedDate = format(selectedDate, "dd 'de' MMMM 'de' yyyy 'às' HH:mm:ss 'UTC'XXX", {
+        locale: ptBR,
+        timeZone: 'America/Sao_Paulo',
+      });
+  
+      const horariosDisponiveisRef = collection(db, 'horariosDisponiveis');
+  
+      const novoHorario = {
+        horario: selectedDate,
+        servico: currentServicoId,
+        empresaId: uid,
+        status: false,
+      };
+  
+      try {
+        const docRef = await addDoc(horariosDisponiveisRef, novoHorario);
+        console.log("Horário adicionado ao Firestore com sucesso. Documento ID:", docRef.id);
+      } catch (error) {
+        console.error("Erro ao adicionar horário ao Firestore:", error);
+        setErrorMessage('Erro ao cadastrar horário. Tente novamente mais tarde.');
+        return;
+      }
+  
+      const configHorario = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...novoHorario,
+          horario: formattedDate,
+        }),
+      };
+  
+      const response = await fetch('http://localhost:3000/addHorario', configHorario);
+  
+      if (!response.ok) {
+        throw new Error('Erro na solicitação da API');
+      }
+  
+      const responseData = await response.json();
+      console.log('Resposta da API:', responseData);
+  
+      setSuccessMessage('Serviço cadastrado com sucesso!');
+      setErrorMessage('');
+    } catch (error) {
+      console.error('Erro ao adicionar horário:', error);
+      setErrorMessage('Erro ao cadastrar horário. Tente novamente mais tarde.');
+    }
+  };
+  
   return (
-    <div className="centerdFormHorarioEmp">
-      <label>Informe Horário: </label>
-      <input
-        type="text"
-        placeholder="Horário (por exemplo, 08:00 AM)"
-        value={horario}
-        onChange={(e) => setHorario(e.target.value)}
+    <div className="centeredFormHorarioEmp">
+      <label className="h3H">Data e Hora:</label>
+      <DatePicker
+        selected={selectedDate}
+        onChange={(date) => setSelectedDate(date)}
+        showTimeSelect
+        timeFormat="HH:mm"
+        timeIntervals={15}
+        timeCaption="Hora"
+        dateFormat="dd/MM/yyyy HH:mm aa"
+        placeholderText="Selecione a data e hora"
         className="inputEmpHorario"
       />
-      <label> Nome do Serviço: </label>
-      <input
-        type="text"
-        placeholder="Serviço"
-        value={servico}
-        onChange={(e) => setServico(e.target.value)}
-        className="inputEmpHorario"
-      />
-      <button className="infoButtonEmp" onClick={handleAdicionarHorario}>Adicionar Horário</button>
-      <button className="infoButtonEmp"><a href="/addServico">Voltar</a></button>
+      <p>
+        {servicoData && (
+          <h3 className="h3H">
+             Serviço: {servicoData.nome}, ID: {currentServicoId}
+          </h3>
+        )}
+      </p>
+  
+      <div className="buttonContainer">
+      <button className="infoButtonEmp" onClick={handleAdicionarHorario}>
+        Adicionar
+      </button>
+      <div className="messageContainer">
+        {successMessage && <div className="successMessage">{successMessage}</div>}
+        {errorMessage && <div className="errorMessage">{errorMessage}</div>}
+      </div>
+      <button className="infoButtonEmp">
+        <a href="/addServico">Voltar</a>
+      </button>
+    </div>
+
     </div>
   );
+  
 };

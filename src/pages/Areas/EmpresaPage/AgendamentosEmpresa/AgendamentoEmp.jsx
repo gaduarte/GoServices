@@ -195,8 +195,8 @@ const EmpresaAgendamentos = () => {
                                     <Row style={{color: "Black"}}>
                                         {agendamento.horario && (
                                             <Col md={3} className="rowHistoricoEmp">
-                                                <strong>Horário de Agendamento: </strong>
-                                                {agendamento.horario.horario}
+                                               <strong>Data Agendamento: </strong>
+                                                {new Date(agendamento.horario.horario.seconds * 1000).toLocaleString()}
                                             </Col>
                                         )}
                                     </Row>
@@ -232,7 +232,7 @@ const EmpresaAgendamentos = () => {
                     )}
                 </div>
             )}
-            <Button className="buttonHistoricoEmp"><a href="/empresa">Voltar</a></Button>
+            <Button className="buttonHistoricoEmp"><a href="/empresa/dados">Voltar</a></Button>
         </Container>
     );
 

@@ -40,7 +40,7 @@ export function EmpresaDados() {
             <>
             <EmpresaDashboard />
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-            <button className="logoutEmp" onClick={logOut}>Sign Out</button>
+            <button className="logoutEmp"><a href="/empresa/dados">Voltar</a></button>
             </>}
         </div>
     )

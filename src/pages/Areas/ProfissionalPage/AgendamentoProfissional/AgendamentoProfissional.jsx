@@ -228,7 +228,7 @@ const ProfissionalAgendamentos = () => {
                 )}
             </div>
         )}
-        <Button><a href="/" className="buttonAgendPro">Voltar</a></Button>
+        <Button><a href="/profissional/dados" className="buttonAgendPro">Voltar</a></Button>
     </Container>
 );
 

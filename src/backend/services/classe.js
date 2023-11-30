@@ -13,7 +13,7 @@ let Goservice = class {
         this.servicos = []
     }
 
-    // Cliente
+    // Função para adicionar um Cliente
     async add_usuario(email, username, cpf, telefone, endereco, uid) {
         const userRef = db.collection("cliente").doc(uid);
 
@@ -29,6 +29,7 @@ let Goservice = class {
         console.log('Dados do usuário armazenados com sucesso');
     }
 
+    // Função para retornar um usuário cliente por ID.
     async retrieveUsuarioId(id) {
         const userRef = db.collection('cliente').doc(id);
         const doc = await userRef.get();
@@ -40,6 +41,7 @@ let Goservice = class {
         return doc.data();
     }
 
+    // Função para retornar um usuario cliente por email.
     async retrieveUsuario(email) {
         const userRef = db.collection("cliente");
         const snapshot = await userRef.where('email', '==', email).get();
@@ -64,6 +66,7 @@ let Goservice = class {
         return doc.data();
     }
 
+    //Função para atualizar um usuario cliente por ID.
     async atualizarUsuarioCliente(id, newData){
         const userRef = db.collection("cliente").doc(id);
 
@@ -76,7 +79,7 @@ let Goservice = class {
         }
     }
 
-    // Empresa
+    // Função para adicionar uma empresa.
     async add_usuario_empresa(email, username, cnpj, telefone, endereco, descricao, uid) {
     
         const empresaDocRef = db.collection("empresa").doc(uid);
@@ -94,6 +97,7 @@ let Goservice = class {
         console.log('Documento "empresa" adicionado com sucesso.');
     }
 
+    // Função para retornar um usuario empresa por ID.
     async retrieveUsuarioEmpresaId(id){
         const userRef = db.collection('empresa').doc(id);
         const doc = await userRef.get();
@@ -104,6 +108,7 @@ let Goservice = class {
         return doc.data();
     }
 
+    // Função para retornar um usuario empresa por email.
     async retrieveUsuarioEmpresa(email){
         const userRef = db.collection("empresa");
         const snapshot = await userRef.where('email', '==', email).get();
@@ -127,6 +132,7 @@ let Goservice = class {
         return doc.data();
     }
 
+    // Função para retornar um usuario empresa por email.
     async atualizarUsuarioEmpresa(id, newData) {
         const userRef = db.collection("empresa").doc(id);
     
@@ -139,7 +145,7 @@ let Goservice = class {
         }
     }    
     
-    // Pessoa Prestadora de Serviço
+    // Função para cadastrar Pessoa Prestadora de Serviço.
     async add_usuario_profissional(email, username, cpf, empresa, tipoServico, telefone, endereco, uid) {
     
         const profissionalDocRef = db.collection("profissional").doc(uid);
@@ -158,6 +164,7 @@ let Goservice = class {
         console.log('Documento "profissional" adicionado com sucesso.');
     }  
     
+    // Função para recuperar informações de um usuario profissional por ID.
     async retrieveProfissionalId(id){
         const userRef = db.collection("profissional").doc(id);
         const doc = await userRef.get();
@@ -168,6 +175,7 @@ let Goservice = class {
         return doc.data();
     }
 
+    // Função para recuperar informações de um profissional por email.
     async retrieveProfissional(email){
         const userRef = db.collection("profissional");
         const snapshot = await userRef.where('email', '==', email).get();
@@ -190,6 +198,7 @@ let Goservice = class {
         return doc.data();
     }
 
+    // Função para atualizar informações de um profissional por ID.
     async atualizarUsuarioProfissional(id, newData){
         const userRef = db.collection("profissional").doc(id);
 
@@ -202,7 +211,7 @@ let Goservice = class {
         }
     }
 
-    //Retornar Dados
+    
     async retrieveServico(id_procurando){
         id_procurando = id_procurando.replace(/\s/g, '');
         const servicoRef = db.collection("servico").doc(id_procurando);
@@ -215,6 +224,7 @@ let Goservice = class {
         }
     }
 
+    // Retornar dados de todos os serviços.
     async retrieveAllServicos(){
         const servicoRef = db.collection("servico");
         const snapshot = await servicoRef.get();
@@ -228,6 +238,7 @@ let Goservice = class {
         return servicos;
     }
 
+    //Retornar Dados do serviço por ID.
     async retrieveServicoId(id){
         const userRef = db.collection("servico").doc(id);
         const doc = await userRef.get();
@@ -238,6 +249,7 @@ let Goservice = class {
         return doc.data();
     }
 
+    // Função para atualizar informações do serviço por ID.
     async atualizarServico(id, newData){
         const userRef = db.collection("servico").doc(id);
 
@@ -250,6 +262,7 @@ let Goservice = class {
         }
     }
 
+    // Retorna dados do cartão por ID.
     async retrieveCartao(clienteId) {
         try {
             const userRef = doc(db, "cliente", clienteId);
@@ -274,6 +287,7 @@ let Goservice = class {
         }
     }
     
+    // Retorna dados do agendamento por ID.
     async retrieveAgendamento(id){
         const userRef = db.collection("agendamento").doc(id);
         const doc = await userRef.get();
@@ -284,6 +298,7 @@ let Goservice = class {
         return doc.data();
     }
 
+    // Retorna dados de todos os agendamentos.
     async retrieveAllAgendamentos() {
         const agendamentoRef = db.collection("agendamento");
         const snapshot = await agendamentoRef.get();
@@ -297,6 +312,7 @@ let Goservice = class {
         return agendamentos;
     }    
 
+    // Retorna dados do favorito por ID.
     async retrieveFavorito(id){
         const userRef = db.collection("favorito").doc(id);
         const doc = await userRef.get();
@@ -307,6 +323,7 @@ let Goservice = class {
         return doc.data();
     }
 
+    // Retorna dados do horário por ID.
     async retrieveHorario(id) {
         const userRef = db.collection("horariosDisponiveis").doc(id);
         const doc = await userRef.get();
@@ -343,7 +360,6 @@ let Goservice = class {
         await deleteDoc(cartaoRef);
     }    
     
-
     async excluirServico(id){
         const userRef = db.collection("servico").doc(id);
         await userRef.delete();
@@ -351,6 +367,12 @@ let Goservice = class {
 
     async excluirFavorito(id) {
         const userRef = db.collection("favorito").doc(id);
+        await userRef.delete();
+    }
+
+    async excluirAgendamento(id){
+        const userRef = db.collection("agendamento").doc(id);
+        
         await userRef.delete();
     }
 

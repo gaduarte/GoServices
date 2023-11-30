@@ -1,4 +1,4 @@
-.centerdFormProfileEmp {
+.centeredFormProfileEmp{
     font-family: Arial, sans-serif;
     max-width: 500px;
     height: 500px;
@@ -12,13 +12,10 @@
 
 .rowProfileEmp {
     margin: 10px 0;
-    text-align: left;
 }
 
 .infoButtonEmp{
-    padding: 2px;
-    margin: 14px;
-    margin-right: 1px;
+    margin: 1px auto;
     width: 150px;
     height: 40px;
     color: #fff;
@@ -27,10 +24,6 @@
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
-}
-
-.infoProfileEmp{
-    height: 120px;
 }
 
 .infoButtonProfileEmp{
@@ -47,15 +40,19 @@
     font-weight: bold;
 }
 
+.rowEmpInfo{
+  color: black;
+}
+
 .logoutEmp{
   width: 150px;
   height: 40px;
-  margin-top: 15px;
-  margin-left: 270px;
+  margin: 5px auto;
   font-size: 15px;
   font-weight: 700;
   background-color: #C26E7E;
 }
+
 
 .select-profissional{
   width: 400px;
@@ -81,7 +78,11 @@
   background-color: #C26E7E;
 }
 
-.centerdFormHorarioEmp {
+.buttonEmp{
+  color: black;
+}
+
+.centeredFormHorarioEmp {
     font-family: Arial, sans-serif;
     max-width: 500px;
     height: 250px;
@@ -108,10 +109,16 @@
     justify-content: space-between;
   }
 
+  .h3H{
+    color: black;
+  }
   
+  .infoProfileEmp{
+    border: 1px solid #ddd;
+  }
+
   .card-body {
     background-color: #6E7EC2;
-    border: 1px solid #ddd;
     border-radius: 5px;
     padding: 10px;
     margin: 10px;
@@ -165,24 +172,32 @@
 
 .rowServ{
     margin: 8px;
+    color: black;
+    text-align: left;
 }
 
-.buttonServ{
-    width: 100px;
-    margin: 0 auto;
-    background-color: #C26E7E;
-    border: none;
-    color: white;
-    cursor: pointer;
-}
-
-.buttonServ1{
-  margin: 2px auto;
+.buttonServ,
+.buttonServ1,
+.buttonServ2 {
   width: 100px;
+  margin: 0 auto;
   background-color: #C26E7E;
   border: none;
   color: white;
   cursor: pointer;
+  text-align: center;
+  margin-bottom: 2px; /* Espaço na parte inferior do botão */
+  transition: background-color 0.3s ease; /* Transição suave de hover */
+}
+
+.buttonServ:hover,
+.buttonServ1:hover,
+.buttonServ2:hover {
+  background-color: #A05263; /* Cor diferente ao passar o mouse */
+}
+
+.buttonServ2{
+  font-size: 13px;
 }
 
 .formServ{
@@ -190,4 +205,10 @@
     border-radius: 5px;
     width: 500px;
     height: 500px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
 }

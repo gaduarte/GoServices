@@ -40,7 +40,6 @@ export function ClienteFavoritosDados() {
             <>
             < FavoritosCliente />
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-            <button className="logoutCli" onClick={logOut}>Sign Out</button>
             </>}
         </div>
     )

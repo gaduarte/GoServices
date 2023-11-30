@@ -188,7 +188,7 @@ const CadastroEmpresa = () => {
         <div className="inputContainerEmp">
           <input type="password" ref={passwordRef} className="inputFieldEmp" name="password" placeholder="Senha" />
         </div>
-        <button type="submit" className="buttonEmp">
+        <button type="submit" className="buttonEmp" style={{color: "white"}}>
           Cadastrar
         </button>
         <button className="buttonEmp"><a href="/">Cancelar</a></button>

@@ -205,7 +205,7 @@ const ClienteAddCartao = () => {
 
     return(
         <Container className="centeredFormCartaoCli">
-            <h2>Informações do Cartão:</h2>
+            <h2 style={{color: "black"}}>Informações do Cartão:</h2>
            {successMessage && <div className="successMessage">{successMessage}</div>}
           {errorMessage && <div className="errorMessage">{errorMessage}</div>}
 
@@ -216,7 +216,7 @@ const ClienteAddCartao = () => {
                         <Form.Label>Código do Cartão:</Form.Label>
                     </Form.Group>
                 </Col>
-                <Col md={9}>
+                <Col md={9} className="cartaoColCli">
                     <Form.Group>
                         <Form.Control
                         type="number"
@@ -233,7 +233,7 @@ const ClienteAddCartao = () => {
                         <Form.Label>Nome Titular:</Form.Label>
                     </Form.Group>
                 </Col>
-                <Col md={9}>
+                <Col md={9} className="cartaoColCli">
                     <Form.Group>
                         <Form.Control
                         type="text"
@@ -250,7 +250,7 @@ const ClienteAddCartao = () => {
                         <Form.Label>Data de Validade:</Form.Label>
                     </Form.Group>
                 </Col>
-                <Col md={9}>
+                <Col md={9} className="cartaoColCli">
                     <Form.Group>
                         <Form.Control
                         type="date"
@@ -270,7 +270,7 @@ const ClienteAddCartao = () => {
                         <Form.Label>Número do Cartão:</Form.Label>
                     </Form.Group>
                 </Col>
-                <Col md={9}>
+                <Col md={9} className="cartaoColCli">
                     <Form.Group>
                         <Form.Control
                         type="number"
@@ -287,7 +287,7 @@ const ClienteAddCartao = () => {
                         <Form.Label>Endereço:</Form.Label>
                     </Form.Group>
                 </Col>
-                <Col md={9}>
+                <Col md={9} className="cartaoColCli">
                     <Form.Group>
                         <Form.Control
                         type="text"

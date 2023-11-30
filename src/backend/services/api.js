@@ -6,8 +6,7 @@ const Goservice = require('./classe');
 const path = require('path');
 const {ApolloServer} = require('apollo-server-express');
 const {typeDefs, resolvers} = require('./graphql');
-const { buildSchema } = require('graphql');
-
+const { format, isValid, parse } = require('date-fns');
 
 const app = express();
 
@@ -22,11 +21,25 @@ app.use(express.urlencoded({ extended: true }));
 const port = process.env.PORT || 3000;
 const gs = new Goservice()
 
+const eventosWebhook = [];
 
 app.listen(port, () => {
     console.log(`Rodando na porta: ${port}`);
 });
 
+//Webhooks
+app.post('/webhook', (req, res) => {
+    const eventData = req.body; 
+    console.log('Recebido evento do webhook:', eventData);
+
+    eventosWebhook.push(eventData);
+    res.status(200).send('Recebido com sucesso');
+});
+
+// Rota para acessar dados salvos no webhook.
+app.get('/eventos-webhook', async (req,res) => {
+    res.json(eventosWebhook);
+});
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../../', 'pages', 'HomePage', 'index.jsx'));
@@ -39,6 +52,7 @@ function generateUniqueId() {
     return `${timestamp}-${randomPart}`;
 }
 
+// Função assíncrona para iniciar um servidor GraphQL usando Apollo Server
 async function startApolloServer() {
     const server = new ApolloServer({
         typeDefs,
@@ -51,7 +65,7 @@ async function startApolloServer() {
 
 startApolloServer();
 
-//Serviço
+//Rota para recuperar informções do serviço por ID.
 app.get('/servico/1/:id', async(req, res)=>{
     const id = req.params.id;
     const mensagem = await gs.retrieveServicoId(id);
@@ -60,37 +74,55 @@ app.get('/servico/1/:id', async(req, res)=>{
     res.json(mensagem);
 })
 
-// Cliente
+// Rota para recuperar informações do cliente por email
 app.get('/cliente/:email', async (req, res) => {
     const email = req.params.email;
-    const mensagem = await gs.retrieveUsuario(email);
+    try{
+        const mensagem = await gs.retrieveUsuario(email);
   
-    if (mensagem == -1) {
-      res.status(404).send('Não encontrado');
+        if (mensagem == -1) {
+            res.status(404).send('Não encontrado');
+        }
+        res.json(mensagem);
+    }catch (error) {
+        console.error('Erro ao processar a requisição:', error);
+        res.status(500).send('Erro interno ao processar a requisição');
     }
-    res.json(mensagem);
-  });
-  
-app.get('/cliente/1/:id', async(req,res)=>{
-    const id = req.params.id;
-    const mensagem = await gs.retrieveUsuarioId(id);
-
-    if(mensagem == -1){res.status(404).send('Não encontrado')}
-    res.json(mensagem)
     
-})
+  });
 
+// Rota para recuperar informações do cliente por ID
+app.get('/cliente/1/:id', async (req, res) => {
+    const id = req.params.id;
+    try {
+        const mensagem = await gs.retrieveUsuarioId(id);
+        if (mensagem == -1) {
+            res.status(404).send('Não encontrado');
+        }
+        res.json(mensagem);
+    } catch (error) {
+        console.error('Erro ao processar a requisição:', error);
+        res.status(500).send('Erro interno ao processar a requisição');
+    }
+});
+
+// Rota para atualizar informações do cliente por ID
 app.put('/cliente/:id', async(req,res)=>{
     const id = req.params.id;
-    const mensagem = await gs.atualizarUsuarioCliente(id, req.body);
-
-    if (mensagem === -1) {
-        res.status(404).send('Não encontrado');
-    } 
-        res.json(mensagem);
+    try {
+        const mensagem = await gs.atualizarUsuarioCliente(id, req.body);
+        if (mensagem === -1) {
+            res.status(404).send('Não encontrado');
+        } else {
+            res.json(mensagem);
+        }
+    } catch (error) {
+        console.error('Erro ao processar a requisição:', error);
+        res.status(500).send('Erro interno ao processar a requisição');
+    }
 })
 
-// Cadastro Cliente
+// Rota para cadastrar um novo cliente
 app.post('/cadastro/cliente', async (req, res) => {
     const generatedId = generateUniqueId();
 
@@ -105,16 +137,37 @@ app.post('/cadastro/cliente', async (req, res) => {
 
     console.log('Dados de cadastro de cliente:', user);
 
-    user.email,
-    user.username,
-    user.cpf,
-    user.telefone,
-    user.endereco,
-    user.id
+    const webhookURL = 'http://localhost:3000/webhook';
+    const webhookData = {
+        eventType: 'NovoClienteCadastrado',
+        cliente: {
+            tipo: 'Cliente',
+            data: user
+        }
+    };
+
+    try {
+        const response = await fetch(webhookURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(webhookData),
+        });
+    
+        if (!response.ok) {
+            throw new Error('Erro na solicitação do webhook');
+        }
+    
+        console.log('Dados enviados para o webhook com sucesso.');
+    } catch (error) {
+        console.error('Erro ao enviar dados para o webhook:', error);
+    }
 
     console.log('Cadastro de cliente realizado com sucesso.');
 });
 
+// Rota para excluir conta do cliente por ID
 app.delete('/cliente/remove/1/:id', async(req,res)=>{
     const id = req.params.id;
     try{
@@ -125,9 +178,20 @@ app.delete('/cliente/remove/1/:id', async(req,res)=>{
         res.status(500).send('Erro ao excluir conta');
     }
     
+});
+
+app.delete('/agendamento/remove/1/:id', async(req, res) => {
+    const id = req.params.id;
+    try{
+        await gs.excluirAgendamento(id);
+        res.status(200).send('Agendamento cancelado com sucesso!');
+    } catch(error){
+        console.error("Erro ao cancelar agendamentoi", error);
+        res.status(500).send('Erro ao cancelar agendamento');
+    }
 })
 
-// Cartão
+// Rota para adicionar um novo Cartão.
 app.post('/addCartao', async(req,res)=>{
     try{
         const generatedId = generateUniqueId();
@@ -142,11 +206,32 @@ app.post('/addCartao', async(req,res)=>{
         };
         console.log("Cartão adicionando", cartaoData);
 
-        cartaoData.numero,
-        cartaoData.nome,
-        cartaoData.endereco,
-        cartaoData.dataValidade,
-        cartaoData.id
+        const webhookURL = 'http://localhost:3000/webhook';
+        const webhookData = {
+            eventType: 'NovoCartaoCadastrado',
+            cliente: {
+                tipo: 'Cartao',
+                data: cartaoData
+            }
+        };
+    
+        try {
+            const response = await fetch(webhookURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(webhookData),
+            });
+        
+            if (!response.ok) {
+                throw new Error('Erro na solicitação do webhook');
+            }
+        
+            console.log('Dados enviados para o webhook com sucesso.');
+        } catch (error) {
+            console.error('Erro ao enviar dados para o webhook:', error);
+        }
 
         console.log('Simulação: Cadastro de cartão realizado com sucesso.');
         res.status(200).json({ message: 'Cartão cadastrado com sucesso!' });
@@ -154,8 +239,9 @@ app.post('/addCartao', async(req,res)=>{
         console.error("Erro ao cadastrar serviço", error);
         res.status(500).json({ error: 'Erro interno ao cadastrar serviço' });
       }
-})
+});
 
+//Rota para recuperar informações do cartao por ID.
 app.get('/cartao/1/:id', async (req, res) => {
     const clienteId = req.params.id;
 
@@ -173,7 +259,7 @@ app.get('/cartao/1/:id', async (req, res) => {
     }
 });
 
-
+// Rota para excluir cartão por ID.
 app.delete('/cartao/remove/1/:id/', async (req, res) => {
     const id = req.params.id;
 
@@ -187,50 +273,72 @@ app.delete('/cartao/remove/1/:id/', async (req, res) => {
 });
 
 
-// Empresa 
+// Rota para recuperar informações da empresa por email
 app.get('/empresa/:email', async (req, res) => {
     const email = req.params.email;
-    const mensagem = await gs.retrieveUsuarioEmpresa(email);
+    try{
+        const mensagem = await gs.retrieveUsuarioEmpresa(email);
   
-    if (mensagem == -1) {
-      res.status(404).send('Não encontrado');
+        if (mensagem == -1) {
+        res.status(404).send('Não encontrado');
+        }
+        res.json(mensagem);
+    }catch (error) {
+        console.error('Erro ao processar a requisição:', error);
+        res.status(500).send('Erro interno ao processar a requisição');
     }
-    res.json(mensagem);
+    
   });
-  
+
+// Rota para recuperar informações da empresa por ID.
 app.get('/empresa/1/:id', async(req,res)=>{
     const id = req.params.id;
-    const mensagem = await gs.retrieveUsuarioEmpresaId(id);
+    try{
+        const mensagem = await gs.retrieveUsuarioEmpresaId(id);
 
-    if(mensagem == -1){res.status(404).send('Não encontrado')}
-    res.json(mensagem)
-    
-})
+        if(mensagem == -1){res.status(404).send('Não encontrado')}
+        res.json(mensagem)
+    }catch (error) {
+        console.error('Erro ao processar a requisição:', error);
+        res.status(500).send('Erro interno ao processar a requisição');
+    }
+});
 
+// Rota para atualizar informações da empresa por ID.
 app.put('/empresa/:id', async (req, res) => {
     const id = req.params.id;
-    const mensagem = await gs.atualizarUsuarioEmpresa(id, req.body);
+    try{
+        const mensagem = await gs.atualizarUsuarioEmpresa(id, req.body);
 
-    if (mensagem === -1) {
-        res.status(404).send('Não encontrado');
-    } 
-        res.json(mensagem);
-
+        if (mensagem === -1) {
+            res.status(404).send('Não encontrado');
+        } 
+            res.json(mensagem);
+    }catch (error) {
+        console.error('Erro ao processar a requisição:', error);
+        res.status(500).send('Erro interno ao processar a requisição');
+    }
 });
 
+// Rota para atualizar serviço por ID.
 app.put('/empresa/servico/:id', async(req,res)=>{
     const id = req.params.id;
-    const mensagem = await gs.atualizarServico(id, req.body);
-    console.log("ID do Serviço a ser atualizado:", id);
-    console.log("Dados Recebidos pela API:", req.body);
-
-    if (mensagem === -1) {
-        res.status(404).send('Não encontrado');
-    } 
-        res.json(mensagem);
+    try{
+        const mensagem = await gs.atualizarServico(id, req.body);
+        console.log("ID do Serviço a ser atualizado:", id);
+        console.log("Dados Recebidos pela API:", req.body);
+    
+        if (mensagem === -1) {
+            res.status(404).send('Não encontrado');
+        } 
+            res.json(mensagem);
+    }catch (error) {
+        console.error('Erro ao processar a requisição:', error);
+        res.status(500).send('Erro interno ao processar a requisição');
+    }
 });
 
-// Cadastro Empresa
+// Rota para cadastro de nova empresa.
 app.post('/cadastro/empresa', async (req, res) => {
     const generatedId = generateUniqueId();
     
@@ -246,18 +354,37 @@ app.post('/cadastro/empresa', async (req, res) => {
 
     console.log('Dados de cadastro de empresa:', userDataEmpresa);
 
-    userDataEmpresa.email,
-    userDataEmpresa.username,
-    userDataEmpresa.cnpj,
-    userDataEmpresa.descricao,
-    userDataEmpresa.endereco,
-    userDataEmpresa.telefone,
-    userDataEmpresa.id
+    const webhookURL = 'http://localhost:3000/webhook';
+    const webhookData = {
+        eventType: 'NovaEmpresaCadastrado',
+        cliente: {
+            tipo: 'Empresa',
+            data: userDataEmpresa
+        }
+    };
+
+    try {
+        const response = await fetch(webhookURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(webhookData),
+        });
+    
+        if (!response.ok) {
+            throw new Error('Erro na solicitação do webhook');
+        }
+    
+        console.log('Dados enviados para o webhook com sucesso.');
+    } catch (error) {
+        console.error('Erro ao enviar dados para o webhook:', error);
+    }
 
     console.log('Cadastro de empresa realizado com sucesso.');
 });
 
-// Empresa Cadastra Serviço
+// Rota para empresa cadastrar novo serviço
 app.post('/addServico', async (req, res) => {
     try {
       const generatedId = generateUniqueId();
@@ -274,13 +401,32 @@ app.post('/addServico', async (req, res) => {
   
       console.log('Dados de serviço de empresa:', servicoData);
   
-      servicoData.descricao,
-      servicoData.nome,
-      servicoData.valor,
-      servicoData.empresa,
-      servicoData.empresaId,
-      servicoData.profissional,
-      servicoData.id
+      const webhookURL = 'http://localhost:3000/webhook';
+      const webhookData = {
+          eventType: 'NovoServicoCadastrado',
+          cliente: {
+              tipo: 'Servico',
+              data: servicoData
+          }
+      };
+  
+      try {
+          const response = await fetch(webhookURL, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(webhookData),
+          });
+      
+          if (!response.ok) {
+              throw new Error('Erro na solicitação do webhook');
+          }
+      
+          console.log('Dados enviados para o webhook com sucesso.');
+      } catch (error) {
+          console.error('Erro ao enviar dados para o webhook:', error);
+      }
 
       console.log('Simulação: Cadastro de serviço realizado com sucesso.');
   
@@ -291,7 +437,7 @@ app.post('/addServico', async (req, res) => {
     }
   });
 
-//Adicionar Horário
+// Rota para empresa adicionar horário.
 app.post('/addHorario', async(req,res)=>{
     try{
         const generatedId = generateUniqueId();
@@ -304,13 +450,49 @@ app.post('/addHorario', async(req,res)=>{
             id: generatedId
         };
 
+        
+        console.log('Dados recebidos no servidor:', horarioData);
+
+        const formattedDate = horario.toLocaleString('pt-BR', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            timeZone: 'America/Sao_Paulo',
+          });
+          
+          console.log('Data formatada:', formattedDate);      
+        
         console.log('Dados de serviço de empresa:', horarioData);
 
-        horarioData.diasSelecionados,
-        horarioData.empresaID,
-        horarioData.servico,
-        horarioData.status,
-        horarioData.id
+        const webhookURL = 'http://localhost:3000/webhook';
+        const webhookData = {
+            eventType: 'NovoHorarioCadastrado',
+            cliente: {
+                tipo: 'Horario',
+                data: { ...horarioData, diasSelecionados: formattedDate }
+            }
+        };
+    
+        try {
+            const response = await fetch(webhookURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(webhookData),
+            });
+        
+            if (!response.ok) {
+                throw new Error('Erro na solicitação do webhook');
+            }
+        
+            console.log('Dados enviados para o webhook com sucesso.');
+        } catch (error) {
+            console.error('Erro ao enviar dados para o webhook:', error);
+        }
 
       console.log('Simulação: Cadastro de serviço realizado com sucesso.');
   
@@ -321,10 +503,9 @@ app.post('/addHorario', async(req,res)=>{
     }
 });
 
-
+// Rota para excluir empresa por ID.
 app.delete('/empresa/remove/1/:id', async(req, res)=>{
     const id = req.params.id;
-
     try{
         await gs.excluirEmpresa(id);
         res.status(200).send("Conta excluída com sucesso!");
@@ -332,28 +513,41 @@ app.delete('/empresa/remove/1/:id', async(req, res)=>{
         console.error("Erro ao excluir conta", error);
         res.status(500).send("Erro ao excluir conta");
     }
-})
+});
 
-// Pessoa Portadora de Serviço
+// Rota para recuperar informações do profissional por email.
 app.get('/profissional/:email', async (req, res)=>{
     const email = req.params.email;
-    const mensagem = await gs.retrieveProfissional(email);
+    try{
+        const mensagem = await gs.retrieveProfissional(email);
 
-    if(mensagem == -1){
-        res.status(404).send('Não encontrado');
+        if(mensagem == -1){
+            res.status(404).send('Não encontrado');
+        }
+        res.json(mensagem);
+    } catch (error) {
+        console.error('Erro ao processar a requisição:', error);
+        res.status(500).send('Erro interno ao processar a requisição');
     }
-    res.json(mensagem);
+
 })
 
+// Rota para recuperar informações do profissional por ID.
 app.get('/profissional/1/:id', async(req,res)=>{
     const id = req.params.id;
-    const mensagem = await gs.retrieveProfissionalId(id);
+    try{
+        const mensagem = await gs.retrieveProfissionalId(id);
 
-    if(mensagem == -1){res.status(404).send('Não encontrado')}
-    res.json(mensagem);
-})
+        if(mensagem == -1){res.status(404).send('Não encontrado')}
+        res.json(mensagem);
+    }catch (error) {
+        console.error('Erro ao processar a requisição:', error);
+        res.status(500).send('Erro interno ao processar a requisição');
+    }
 
-// Cadastro Pessoa Prestadora de Serviço
+});
+
+// Rota para o Cadastro de nova Pessoa Prestadora de Serviço
 app.post('/cadastro/profissional', async (req, res) => {
     const generatedId = generateUniqueId();
 
@@ -370,27 +564,53 @@ app.post('/cadastro/profissional', async (req, res) => {
 
     console.log('Dados de cadastro de profissional:', userDataProfissional);
 
-    userDataProfissional.email,
-    userDataProfissional.username,
-    userDataProfissional.cpf,
-    userDataProfissional.empresa,
-    userDataProfissional.tipoServico,
-    userDataProfissional.endereco,
-    userDataProfissional.id
+    const webhookURL = 'http://localhost:3000/webhook';
+    const webhookData = {
+        eventType: 'NovoProfissionalCadastrado',
+        cliente: {
+            tipo: 'Profissional',
+            data: userDataProfissional
+        }
+    };
+
+    try {
+        const response = await fetch(webhookURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(webhookData),
+        });
+    
+        if (!response.ok) {
+            throw new Error('Erro na solicitação do webhook');
+        }
+    
+        console.log('Dados enviados para o webhook com sucesso.');
+    } catch (error) {
+        console.error('Erro ao enviar dados para o webhook:', error);
+    }
 
     console.log('Cadastro de profissional realizado com sucesso.');
 });
 
+// Rota para atualizar informações da pessoa prestadora de serviço por ID.
 app.put('/profissional/:id', async(req,res)=>{
     const id = req.params.id;
-    const mensagem = await gs.atualizarUsuarioProfissional(id, req.body);
+    try{
+        const mensagem = await gs.atualizarUsuarioProfissional(id, req.body);
 
-    if (mensagem === -1) {
-        res.status(404).send('Não encontrado');
-    } 
+        if (mensagem === -1) {
+            res.status(404).send('Não encontrado');
+        } 
         res.json(mensagem);
-})
+    }catch (error) {
+        console.error('Erro ao processar a requisição:', error);
+        res.status(500).send('Erro interno ao processar a requisição');
+    }
+});
 
+// Rota para excluir conta da pessoa prestadora de serviço por ID.
 app.delete('/profissional/remove/1/:id', async(req,res)=>{
     const id = req.params.id;
     try{
@@ -400,24 +620,24 @@ app.delete('/profissional/remove/1/:id', async(req,res)=>{
         console.error("Erro ao excluir conta", error);
         res.status(500).send("Erro ao excluir conta.");
     }
-})
+});
 
-//Agendamento
+//Rota para recuperar informações do agendamento por ID.
 app.get('/agendamento/:id', async(req, res)=>{
     const id = req.params.id;
     const mensagem = await gs.retrieveAgendamento(id)
     
     if(mensagem == -1){res.status(404).send('Não encontrado')}
     res.json(mensagem);
-})
+});
 
-//Retorna  agendamentos
+//Rota para retornar todos os  agendamentos
 app.get('/agendamentos', async (req, res) => {
     const agendamentos = await gs.retrieveAllAgendamentos();
     res.json(agendamentos);
 });
 
-// Adiciona um agendamento.
+// Rota para cadastrar um novo agendamento.
 app.post('/addAgendamento', async (req, res)=>{
     try{
         const generatedId = generateUniqueId();
@@ -453,8 +673,7 @@ app.post('/addAgendamento', async (req, res)=>{
     }
 })
 
-
-// Favoritos
+// Rota para adicionar um novo Favorito.
 app.post('/addFavoritos', async(req,res)=>{
     try{
         const generatedId = generateUniqueId();
@@ -468,10 +687,33 @@ app.post('/addFavoritos', async(req,res)=>{
 
         console.log("Dados dos favoritos do cliente", favoritosData);
 
-        favoritosData.clienteId,
-        favoritosData.empresaId,
-        favoritosData.servicoId,
-        favoritosData.id
+        const webhookURL = 'http://localhost:3000/webhook';
+        const webhookData = {
+            eventType: 'NovoFavoritoCadastrado',
+            cliente: {
+                tipo: 'Favorito',
+                data: favoritosData
+            }
+        };
+
+        try {
+            const response = await fetch(webhookURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(webhookData),
+            });
+        
+            if (!response.ok) {
+                throw new Error('Erro na solicitação do webhook');
+            }
+        
+            console.log('Dados enviados para o webhook com sucesso.');
+        } catch (error) {
+            console.error('Erro ao enviar dados para o webhook:', error);
+        }
+
 
         console.log("Cadastro de favoritos realizado com sucesso!");
         res.status(200).json({message: "Favoritos cadastrado com sucesso!"});
@@ -481,6 +723,7 @@ app.post('/addFavoritos', async(req,res)=>{
     }
 });
 
+// Rota para excluir um favorito por ID.
 app.delete('/favorito/remove/:id', async(req, res) => {
     const id = req.params.id;
     try{
@@ -492,6 +735,7 @@ app.delete('/favorito/remove/:id', async(req, res) => {
     }
 });
 
+// Rota para excluir um serviço por ID.
 app.delete('/servico/remove/:id', async(req, res) => {
     const id = req.params.id;
     try{

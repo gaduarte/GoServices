@@ -5,6 +5,14 @@ import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col, Card, Button } from  "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import './css/ProfissionalPg.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUserCircle,
+  faCreditCard,
+  faIdCard,
+  faPhone,
+  faMapMarker,
+} from "@fortawesome/free-solid-svg-icons";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
@@ -146,9 +154,30 @@ const ProfissionalDashboard = () => {
 
     const handleDeleteClick = async() =>{
         try{
+            setIsLoading(true);
+
+            const auth = getAuth();
+            const user = auth.currentUser;
+            const uid = user ? user.uid : null;
+
+            if (!uid) {
+            throw new Error("Usuário não autenticado.");
+            }
+
             const confirmDelete = window.confirm("Tem certeza que deseja excluir conta?");
             if(confirmDelete){
                 const profissionalDocRef = doc(db, "profissional", id);
+
+                const agendamentoRef = collection(db, "agendamento");
+                const q = query(agendamentoRef, where("profissionalId", "==", uid));
+                const agendamentoQuerySnapshot = await getDocs(q);
+                const agendamentosAssociados = agendamentoQuerySnapshot.docs.length > 0;
+
+                if (agendamentosAssociados) {
+                    const errorMessage = 'Não é possível excluir profissional que está relacionada a um agendamento';
+                    setErrorMessage(errorMessage);
+                    throw new Error("Existem agendamentos associados a este profissional. Não é possível excluí-lo.");
+                }
 
                 const deleteConfig = {
                     method: "DELETE",
@@ -174,182 +203,218 @@ const ProfissionalDashboard = () => {
           }
     }
 
-return(
+    return (
         <Container className="centeredFormProfilePro">
-            {isLoading ? (
-                <p>Carregando Informações...</p>
-            ) : editMode ? (
-                <Form >
-                    <Row className="rowProfilePro">
-                        <Col md={3}>
-                            <Form.Group>
-                                <Form.Label style={{color: "black" }}>Nome da Pessoa Prestadora de Serviço:</Form.Label>
-                            </Form.Group>
-                        </Col>
-                        <Col md={9} className="text-secundary">
-                            <Form.Group>
-                                <Form.Control
-                                type="text"
-                                value={profissionalInfo.username}
-                                onChange={(e)=> setProfissionalInfo({...profissionalInfo, username: e.target.value})}
-                                style={{width: "400px", height: "30px"}}
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row className="rowProfilePro">
-                        <Col md={3} >
-                            <Form.Group>
-                                <Form.Label style={{ color: "black"}}>Email: </Form.Label>
-                            </Form.Group>
-                        </Col>
-                        <Col md={9} className="text-secundary">
-                            <Form.Group>
-                                <Form.Control
-                                type="text"
-                                value={profissionalInfo.email}
-                                onChange={(e)=> setProfissionalInfo({...profissionalInfo, email: e.target.value})}
-                                style={{width: "400px", height: "30px"}}
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row className="rowProfilePro">
-                        <Col md={3}>
-                            <Form.Group>
-                                <Form.Label style={{color: "black"}}>CPF:</Form.Label>
-                            </Form.Group>
-                        </Col>
-                        <Col md={9} className="text-secundary">
-                            <Form.Group>
-                                <Form.Control
-                                type="text"
-                                value={profissionalInfo.cpf}
-                                onChange={(e)=> setProfissionalInfo({...profissionalInfo, cpf: e.target.value})}
-                                style={{width: "400px", height: "30px"}}
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row className="rowProfilePro">
-                        <Col md={3}>
-                            <Form.Group>
-                                <Form.Label style={{color: "black"}}>Tipo de Serviço:</Form.Label>
-                            </Form.Group>
-                        </Col>
-                        <Col md={9} className="text-secundary">
-                            <Form.Group>
-                                <Form.Control
-                                type="text"
-                                value={profissionalInfo.tipoServico}
-                                onChange={(e)=> setProfissionalInfo({...profissionalInfo, tipoServico: e.target.value})}
-                                style={{width: "400px", height: "30px"}}
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row className="rowProfilePro">
-                        <Col md={3}>
-                            <Form.Group>
-                                <Form.Label  style={{color: "black"}}>Telefone:</Form.Label>
-                            </Form.Group>
-                        </Col>
-                        <Col md={9} className="text-secundary">
-                            <Form.Group>
-                                <Form.Control
-                                type="text"
-                                value={profissionalInfo.telefone}
-                                onChange={(e)=> setProfissionalInfo({...profissionalInfo, telefone: e.target.value})}
-                                style={{width: "400px", height: "30px"}}
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row className="rowProfilePro">
-                        <Col md={3}>
-                            <Form.Group>
-                                <Form.Label  style={{color: "black"}}>Endereço:</Form.Label>
-                            </Form.Group>
-                        </Col>
-                        <Col md={9}>
-                            <Form.Group>
-                                <Form.Control
-                                type="text"
-                                value={profissionalInfo.endereco}
-                                onChange={(e)=> setProfissionalInfo({...profissionalInfo, endereco: e.target.value})}
-                                style={{width: "400px", height: "30px"}}
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px"}}>
-                    <Button onClick={handleSaveClick} className="infoButtonPro">Salvar</Button>
-                    <Button onClick={handleCancelClick} className="infoButtonPro">Cancelar</Button>
-                    </div>
-                </Form>
-            ) : (
-                <Card>
-                    <Card.Body>
-                        <Row>
-                            <Col md={12}>
-                                <Card>
-                                    <Card.Body className="infoProfilePro">
-                                        <Row>
-                                            <Col md={3}>
-                                                <strong>Nome do Profissional:</strong>
-                                            </Col>
-                                            <Col md={9} className="text-secundary">{profissionalInfo.username}</Col>
-                                        </Row>
-                                        <hr />
-                                        <Row>
-                                            <Col md={3}>
-                                                <strong>Email:</strong>
-                                            </Col>
-                                            <Col md={9} className="text-secundary">{profissionalInfo.email}</Col>
-                                        </Row>
-                                        <hr />
-                                        <Row>
-                                            <Col md={3}>
-                                            <strong>CPF:</strong>
-                                            </Col>
-                                            <Col md={9} className="text-secondary">
-                                            {profissionalInfo.cpf}
-                                            </Col>
-                                        </Row>
-                                        <hr />
-                                        <Row>
-                                            <Col md={3}>
-                                            <strong>Tipo de Serviço</strong>
-                                            </Col>
-                                            <Col md={9} className="text-secondary">
-                                            {profissionalInfo.tipoServico}
-                                            </Col>
-                                        </Row>
-                                        <hr />
-                                        <Row>
-                                            <Col md={3}>
-                                                <strong>Telefone:</strong>
-                                            </Col>
-                                            <Col md={9} className="text-secundary">{profissionalInfo.telefone}</Col>
-                                        </Row>
-                                        <hr />
-                                        <Row>
-                                            <Col md={3}>
-                                                <strong>Endreço:</strong>
-                                            </Col>
-                                            <Col md={9} className="text-secundary">{profissionalInfo.endereco}</Col>
-                                        </Row>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
+          {successMessage && <div className="successMessageCli">{successMessage}</div>}
+          {errorMessage && <div className="errorMessageCli">{errorMessage}</div>}
+          {editMode ? (
+            <Form>
+              <Row className="rowProfilePro">
+                <Col md={3}>
+                  <Form.Group>
+                    <Form.Label style={{ color: "black" }}>Nome da Pessoa Prestadora de Serviço:</Form.Label>
+                  </Form.Group>
+                </Col>
+                <Col md={9} className="text-secundary">
+                  <Form.Group>
+                    <Form.Control
+                      type="text"
+                      value={profissionalInfo.username}
+                      onChange={(e) => setProfissionalInfo({ ...profissionalInfo, username: e.target.value })}
+                      style={{ width: "400px", height: "30px" }}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row className="rowProfilePro">
+                <Col md={3}>
+                  <Form.Group>
+                    <Form.Label style={{ color: "black" }}>Email: </Form.Label>
+                  </Form.Group>
+                </Col>
+                <Col md={9} className="text-secundary">
+                  <Form.Group>
+                    <Form.Control
+                      type="text"
+                      value={profissionalInfo.email}
+                      onChange={(e) => setProfissionalInfo({ ...profissionalInfo, email: e.target.value })}
+                      style={{ width: "400px", height: "30px" }}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row className="rowProfilePro">
+                <Col md={3}>
+                  <Form.Group>
+                    <Form.Label style={{ color: "black" }}>CPF:</Form.Label>
+                  </Form.Group>
+                </Col>
+                <Col md={9} className="text-secundary">
+                  <Form.Group>
+                    <Form.Control
+                      type="text"
+                      value={profissionalInfo.cpf}
+                      onChange={(e) => setProfissionalInfo({ ...profissionalInfo, cpf: e.target.value })}
+                      style={{ width: "400px", height: "30px" }}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row className="rowProfilePro">
+                <Col md={3}>
+                  <Form.Group>
+                    <Form.Label style={{ color: "black" }}>Tipo de Serviço:</Form.Label>
+                  </Form.Group>
+                </Col>
+                <Col md={9} className="text-secundary">
+                  <Form.Group>
+                    <Form.Control
+                      type="text"
+                      value={profissionalInfo.tipoServico}
+                      onChange={(e) => setProfissionalInfo({ ...profissionalInfo, tipoServico: e.target.value })}
+                      style={{ width: "400px", height: "30px" }}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row className="rowProfilePro">
+                <Col md={3}>
+                  <Form.Group>
+                    <Form.Label style={{ color: "black" }}>Telefone:</Form.Label>
+                  </Form.Group>
+                </Col>
+                <Col md={9} className="text-secundary">
+                  <Form.Group>
+                    <Form.Control
+                      type="text"
+                      value={profissionalInfo.telefone}
+                      onChange={(e) => setProfissionalInfo({ ...profissionalInfo, telefone: e.target.value })}
+                      style={{ width: "400px", height: "30px" }}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row className="rowProfilePro">
+                <Col md={3}>
+                  <Form.Group>
+                    <Form.Label style={{ color: "black" }}>Endereço:</Form.Label>
+                  </Form.Group>
+                </Col>
+                <Col md={9}>
+                  <Form.Group>
+                    <Form.Control
+                      type="text"
+                      value={profissionalInfo.endereco}
+                      onChange={(e) => setProfissionalInfo({ ...profissionalInfo, endereco: e.target.value })}
+                      style={{ width: "400px", height: "30px" }}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px" }}>
+                <Button onClick={handleSaveClick} className="infoButtonPro">
+                  Salvar
+                </Button>
+                <Button onClick={handleCancelClick} className="infoButtonPro">
+                  Cancelar
+                </Button>
+              </div>
+            </Form>
+          ) : (
+            <Card>
+              <Card.Body>
+                <Row>
+                  <Col md={12}>
+                    <Card>
+                      <Card.Body className="infoProfilePro">
+                        <Row className="rowProInfo">
+                          <Col md={3}>
+                            <div className="iconDiv">
+                              <FontAwesomeIcon icon={faUserCircle} />
+                            </div>
+                            <strong>Nome do Profissional:</strong>
+                          </Col>
+                          <Col md={9} className="text-secundary">
+                            {profissionalInfo.username}
+                          </Col>
                         </Row>
-                        <Button onClick={handleEditClick} className="infoButtonProfilePro">Editar</Button>
-                        <Button className="infoButtonProfilePro" onClick={handleDeleteClick}>Excluir Conta</Button>
-                    </Card.Body>
-                </Card>
-            )}
+                        <hr />
+                        <Row className="rowProInfo">
+                          <Col md={3}>
+                            <div className="iconDiv">
+                              <FontAwesomeIcon icon={faCreditCard} />
+                            </div>
+                            <strong>Email:</strong>
+                          </Col>
+                          <Col md={9} className="text-secundary">
+                            {profissionalInfo.email}
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row className="rowProInfo">
+                          <Col md={3}>
+                            <div className="iconDiv">
+                              <FontAwesomeIcon icon={faIdCard} />
+                            </div>
+                            <strong>CPF:</strong>
+                          </Col>
+                          <Col md={9} className="text-secondary">
+                            {profissionalInfo.cpf}
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row className="rowProInfo">
+                          <Col md={3}>
+                            <div className="iconDiv">
+                              <FontAwesomeIcon icon={faCreditCard} />
+                            </div>
+                            <strong>Tipo de Serviço</strong>
+                          </Col>
+                          <Col md={9} className="text-secondary">
+                            {profissionalInfo.tipoServico}
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row className="rowProInfo">
+                          <Col md={3}>
+                            <div className="iconDiv">
+                              <FontAwesomeIcon icon={faPhone} />
+                            </div>
+                            <strong>Telefone:</strong>
+                          </Col>
+                          <Col md={9} className="text-secundary">
+                            {profissionalInfo.telefone}
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row className="rowProInfo">
+                          <Col md={3}>
+                            <div className="iconDiv">
+                              <FontAwesomeIcon icon={faMapMarker} />
+                            </div>
+                            <strong>Endereço:</strong>
+                          </Col>
+                          <Col md={9} className="text-secundary">
+                            {profissionalInfo.endereco}
+                          </Col>
+                        </Row>
+                      </Card.Body>
+                      <div className="buttonContainer">
+                          <Button onClick={handleEditClick} className="infoButtonProfilePro">
+                            Editar
+                          </Button>
+                          <Button className="infoButtonProfilePro" onClick={handleDeleteClick}>
+                            Excluir Conta
+                          </Button>
+                        </div>
+                    </Card>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          )}
         </Container>
-    );
+      );
     
 }
 

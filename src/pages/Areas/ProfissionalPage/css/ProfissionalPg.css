@@ -10,6 +10,14 @@
     background-color: #6E7EC2;
 }
 
+.rowProInfo{
+    color: black;
+}
+
+.infoProfilePro{
+    border: 1px solid #ddd;
+}
+
 .rowProfilePro{
     margin: 10px;
     margin-left: -20px;
@@ -47,8 +55,7 @@
 .logoutPro{
   width: 150px;
   height: 40px;
-  margin-top: 15px;
-  margin-left: 270px;
+ margin: 10px auto;
   font-size: 15px;
   font-weight: 700;
   background-color: #C26E7E;

@@ -7,6 +7,14 @@ import { useNavigate } from "react-router-dom";
 import './css/EmpresaPg.css';
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUserCircle,
+  faCreditCard,
+  faPhone,
+  faIdCard,
+  faMapMarker,
+} from "@fortawesome/free-solid-svg-icons";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
@@ -179,10 +187,30 @@ const EmpresaDashboard = () => {
 
     const handleDelete = async () => {
         try{
+            setIsLoading(true);
+
+            const auth = getAuth();
+            const user = auth.currentUser;
+            const uid = user ? user.uid : null;
+
+            if (!uid) {
+            throw new Error("Usuário não autenticado.");
+            }
 
             const confirmDelete = window.confirm("Tem certeza que deseja excluir conta?");
             if(confirmDelete){
                 const empresaDocRef = doc(db, "empresa", id);
+
+                const agendamentoRef = collection(db, "agendamento");
+                const q = query(agendamentoRef, where("empresaId", "==", uid));
+                const agendamentoQuerySnapshot = await getDocs(q);
+                const agendamentosAssociados = agendamentoQuerySnapshot.docs.length > 0;
+
+                if (agendamentosAssociados) {
+                    const errorMessage = 'Não é possível excluir empresa que está relacionada a um agendamento';
+                    setErrorMessage(errorMessage);
+                    throw new Error("Existem agendamentos associados a esta empresa. Não é possível excluí-lo.");
+                }
 
                 const deleteConfig = {
                     method: 'DELETE',
@@ -197,14 +225,13 @@ const EmpresaDashboard = () => {
                     throw new Error("Erro na solicitação da API");
                   }
 
-                  const responseData = await response.json();
-                  console.log('Resposta da API:', responseData);
+                  
                   setSuccessMessage('Conta excluída com sucesso!');
                   setErrorMessage('');
                  
                   await deleteDoc(empresaDocRef);
 
-                  history("/login");
+                  history("/cadastro");
 
             }
         }catch (error) {
@@ -212,184 +239,219 @@ const EmpresaDashboard = () => {
             setErrorMessage('Erro ao excluir conta: ' + error.message);
           }
     }
-
-
-    return(
-        <Container className="centerdFormProfileEmp">
-            {isLoading ? (
-                <p>Carregando Informações...</p>
-            ) : editMode ? (
-                <Form>
-                    <h2>Minhas Informações:</h2>
-                    <Row className="rowProfileEmp">
-                        <Col md={3}>
-                            <Form.Group>
-                                <Form.Label style={{color: "black"}}>Nome da Empresa: </Form.Label>
-                            </Form.Group>
-                        </Col>
-                        <Col md={9} className="text-secundary">
-                            <Form.Group>
-                                <Form.Control
-                                type="text"
-                                value={empresaInfo.username}
-                                onChange={(e) =>
-                                    setEmpresaInfo({ ...empresaInfo, username: e.target.value })
-                                }
-                                style={{width: "400px", height: "30px"}}
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row className="rowProfileEmp">
-                        <Col md={3}>
-                            <Form.Group>
-                                <Form.Label style={{color: "black"}}>Email: </Form.Label>
-                            </Form.Group>
-                        </Col>
-                        <Col md={9} className="text-secundary">
-                            <Form.Group>
-                                <Form.Control
-                                type="text"
-                                value={empresaInfo.email}
-                                onChange={(e) => setNewEmail(e.target.value)}
-                                style={{width: "400px", height: "30px"}}
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row className="rowProfileEmp">
-                        <Col md={3}>
-                            <Form.Group>
-                                <Form.Label style={{color: "black"}}>CNPJ:</Form.Label>
-                            </Form.Group>
-                        </Col>
-                        <Col md={9} className="text-secundary">
-                            <Form.Group>
-                                <Form.Control
-                                type="text"
-                                value={empresaInfo.cnpj}
-                                onChange={(e)=> setEmpresaInfo({...empresaInfo, cnpj: e.target.value})}
-                                style={{width: "400px", height: "30px"}}
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row className="rowProfileEmp">
-                        <Col md={3}>
-                            <Form.Group>
-                                <Form.Label style={{color: "black"}}>Descrição:
-                                </Form.Label>
-                            </Form.Group>
-                        </Col>
-                        <Col md={9} className="text-secundary">
-                            <Form.Group>
-                                <Form.Control
-                                type="text"
-                                value={empresaInfo.descricao}
-                                onChange={(e)=> setEmpresaInfo({...empresaInfo, descricao: e.target.value})}
-                                style={{width: "400px", height: "30px"}}
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row className="rowProfileEmp">
-                        <Col md={3}>
-                            <Form.Group>
-                                <Form.Label style={{color: "black"}}>Telefone:</Form.Label>
-                            </Form.Group>
-                        </Col>
-                        <Col md={9} className="text-secundary">
-                            <Form.Group>
-                                <Form.Control
-                                type="text"
-                                value={empresaInfo.telefone}
-                                onChange={(e)=> setEmpresaInfo({...empresaInfo, telefone: e.target.value})}
-                                style={{width: "400px", height: "30px"}}
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row className="rowProfileEmp">
-                        <Col md={3}>
-                            <Form.Group>
-                                <Form.Label style={{color: "black"}}>Endereço:</Form.Label>
-                            </Form.Group>
-                        </Col>
-                        <Col md={9}>
-                            <Form.Group>
-                                <Form.Control
-                                type="text"
-                                value={empresaInfo.endereco}
-                                onChange={(e)=> setEmpresaInfo({...empresaInfo, endereco: e.target.value})}
-                                style={{width: "400px", height: "30px"}}
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px"}}>
-                    <Button onClick={handleSaveClick} className="infoButtonEmp">Salvar</Button>
-                    <Button onClick={handleCancelClick} className="infoButtonEmp">Cancelar</Button>
-                    </div>
-                </Form>
-            ) : (
-                <Card>
-                    <Card.Body className="infoProfileEmp">
-                        <Row>
-                            <Col md={12}>
-                                <Card>
-                                    <Card.Body>
-                                        <Row >
-                                            <Col md={3}>
-                                                <strong>Nome da Empresa:</strong>
-                                            </Col>
-                                            <Col md={9} className="text-secundary">{empresaInfo.username}</Col>
-                                        </Row>
-                                        <hr />
-                                        <Row>
-                                            <Col md={3}>
-                                                <strong>Email:</strong>
-                                            </Col>
-                                            <Col md={9} className="text-secundary">{empresaInfo.email}</Col>
-                                        </Row>
-                                        <hr />
-                                        <Row>
-                                            <Col md={3}>
-                                                <strong>CNPJ:</strong>
-                                            </Col>
-                                            <Col md={9} className="text-secundary">{empresaInfo.cnpj}</Col>
-                                        </Row>
-                                        <hr />
-                                        <Row>
-                                            <Col md={3}>
-                                                <strong>Descrição:</strong>
-                                            </Col>
-                                            <Col md={9} className="text-secundary">{empresaInfo.descricao}</Col>
-                                        </Row>
-                                        <hr />
-                                        <Row>
-                                            <Col md={3}>
-                                                <strong>Telefone:</strong>
-                                            </Col>
-                                            <Col md={9} className="text-secundary">{empresaInfo.telefone}</Col>
-                                        </Row>
-                                        <hr />
-                                        <Row>
-                                            <Col md={3}>
-                                                <strong>Endreço:</strong>
-                                            </Col>
-                                            <Col md={9} className="text-secundary">{empresaInfo.endereco}</Col>
-                                        </Row>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
+    return (
+        <Container className="centeredFormProfileEmp">
+          {successMessage && <div className="successMessageCli">{successMessage}</div>}
+          {errorMessage && <div className="errorMessageCli">{errorMessage}</div>}
+          {editMode ? (
+            <Form>
+              <h2>Minhas Informações:</h2>
+              <Row className="rowProfileEmp">
+                <Col md={3}>
+                  <Form.Group>
+                    <Form.Label style={{ color: "black" }}>Nome da Empresa: </Form.Label>
+                  </Form.Group>
+                </Col>
+                <Col md={9} className="text-secundary">
+                  <Form.Group>
+                    <Form.Control
+                      type="text"
+                      value={empresaInfo.username}
+                      onChange={(e) => setEmpresaInfo({ ...empresaInfo, username: e.target.value })}
+                      style={{ width: "400px", height: "30px" }}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row className="rowProfileEmp">
+                <Col md={3}>
+                  <Form.Group>
+                    <Form.Label style={{ color: "black" }}>Email: </Form.Label>
+                  </Form.Group>
+                </Col>
+                <Col md={9} className="text-secundary">
+                  <Form.Group>
+                    <Form.Control
+                      type="text"
+                      value={empresaInfo.email}
+                      onChange={(e) => setNewEmail(e.target.value)}
+                      style={{ width: "400px", height: "30px" }}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row className="rowProfileEmp">
+                <Col md={3}>
+                  <Form.Group>
+                    <Form.Label style={{ color: "black" }}>CNPJ:</Form.Label>
+                  </Form.Group>
+                </Col>
+                <Col md={9} className="text-secundary">
+                  <Form.Group>
+                    <Form.Control
+                      type="text"
+                      value={empresaInfo.cnpj}
+                      onChange={(e) => setEmpresaInfo({ ...empresaInfo, cnpj: e.target.value })}
+                      style={{ width: "400px", height: "30px" }}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row className="rowProfileEmp">
+                <Col md={3}>
+                  <Form.Group>
+                    <Form.Label style={{ color: "black" }}>Descrição:</Form.Label>
+                  </Form.Group>
+                </Col>
+                <Col md={9} className="text-secundary">
+                  <Form.Group>
+                    <Form.Control
+                      type="text"
+                      value={empresaInfo.descricao}
+                      onChange={(e) => setEmpresaInfo({ ...empresaInfo, descricao: e.target.value })}
+                      style={{ width: "400px", height: "30px" }}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row className="rowProfileEmp">
+                <Col md={3}>
+                  <Form.Group>
+                    <Form.Label style={{ color: "black" }}>Telefone:</Form.Label>
+                  </Form.Group>
+                </Col>
+                <Col md={9} className="text-secundary">
+                  <Form.Group>
+                    <Form.Control
+                      type="text"
+                      value={empresaInfo.telefone}
+                      onChange={(e) => setEmpresaInfo({ ...empresaInfo, telefone: e.target.value })}
+                      style={{ width: "400px", height: "30px" }}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row className="rowProfileEmp">
+                <Col md={3}>
+                  <Form.Group>
+                    <Form.Label style={{ color: "black" }}>Endereço:</Form.Label>
+                  </Form.Group>
+                </Col>
+                <Col md={9}>
+                  <Form.Group>
+                    <Form.Control
+                      type="text"
+                      value={empresaInfo.endereco}
+                      onChange={(e) => setEmpresaInfo({ ...empresaInfo, endereco: e.target.value })}
+                      style={{ width: "400px", height: "30px" }}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <div className="buttonContainer">
+                <Button onClick={handleSaveClick} className="infoButtonEmp">
+                  Salvar
+                </Button>
+                <Button onClick={handleCancelClick} className="infoButtonEmp">
+                  Cancelar
+                </Button>
+              </div>
+            </Form>
+          ) : (
+            <Card>
+              <Card.Body className="infoProfileEmp">
+                <Row>
+                  <Col md={12}>
+                    <Card>
+                      <Card.Body>
+                        <Row className="rowEmpInfo">
+                          <Col md={3}>
+                            <div className="iconDiv">
+                              <FontAwesomeIcon icon={faUserCircle} />
+                            </div>
+                            <strong> Nome da Empresa:</strong>
+                          </Col>
+                          <Col md={9} className="text-secondary">
+                            {empresaInfo.username}
+                          </Col>
                         </Row>
-                        <Button className="infoButtonProfileEmp" onClick={handleEditClick}>Editar</Button>
-                        <Button className="infoButtonProfileEmp" onClick={handleDelete}>Excluir Conta</Button>
-                    </Card.Body>
-                </Card>
-            )}
+                        <hr />
+                        <Row className="rowEmpInfo">
+                          <Col md={3}>
+                            <div className="iconDiv">
+                              <FontAwesomeIcon icon={faCreditCard} />
+                            </div>
+                            <strong> Email:</strong>
+                          </Col>
+                          <Col md={9} className="text-secondary">
+                            {empresaInfo.email}
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row className="rowEmpInfo">
+                          <Col md={3}>
+                            <div className="iconDiv">
+                              <FontAwesomeIcon icon={faCreditCard} />
+                            </div>
+                            <strong> CNPJ:</strong>
+                          </Col>
+                          <Col md={9} className="text-secondary">
+                            {empresaInfo.cnpj}
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row className="rowEmpInfo">
+                          <Col md={3}>
+                            <div className="iconDiv">
+                              <FontAwesomeIcon icon={faCreditCard} />
+                            </div>
+                            <strong> Descrição:</strong>
+                          </Col>
+                          <Col md={9} className="text-secondary">
+                            {empresaInfo.descricao}
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row className="rowEmpInfo">
+                          <Col md={3}>
+                            <div className="iconDiv">
+                              <FontAwesomeIcon icon={faPhone} />
+                            </div>
+                            <strong> Telefone:</strong>
+                          </Col>
+                          <Col md={9} className="text-secondary">
+                            {empresaInfo.telefone}
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row className="rowEmpInfo">
+                          <Col md={3}>
+                            <div className="iconDiv">
+                              <FontAwesomeIcon icon={faMapMarker} />
+                            </div>
+                            <strong> Endereço:</strong>
+                          </Col>
+                          <Col md={9} className="text-secondary">
+                            {empresaInfo.endereco}
+                          </Col>
+                        </Row>
+                      </Card.Body>
+                      <div className="buttonContainer">
+                          <Button className="infoButtonProfileEmp" onClick={handleEditClick}>
+                            Editar
+                          </Button>
+                          <Button className="infoButtonProfileEmp" onClick={handleDelete}>
+                            Excluir Conta
+                          </Button>
+                        </div>
+                    </Card>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          )}
         </Container>
-    );
+      );
 }
 
 export default EmpresaDashboard;

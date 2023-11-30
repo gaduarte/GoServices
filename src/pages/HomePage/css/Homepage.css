@@ -1,30 +1,27 @@
 .main-home {
-  margin-right: 20px; 
+  padding: 20px;
 }
 
 .img {
   width: 100%;
-  height: 100px;
+  height: 130px;
+  object-fit: cover;
   border-radius: 5px;
   margin-bottom: -20px;
 }
 
-.containerFav {
-  background-color: #6e7ec2;
-  padding: 10px;
-  flex-basis: calc(11.1% - 20px);
-  margin: 10px;
-  width: 200px;
-  height: 300px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  top: 50px;
+.h1-home{
+  color: whitesmoke;
+  font-size: 26px;
+  margin: 50px;
+  text-align: left;
 }
 
-.buttonFav {
-  width: 150px;
+.img-home{
+  width: 120px;
+  height: 100px;
+  margin-bottom: -20px;
+  object-fit: cover;
 }
 
 .container-home {
@@ -41,12 +38,15 @@
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  width: 155px; /* Largura padrão */
+  width: 180px; /* Largura padrão */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
 }
 
-.card-container-home {
-  margin-right: 10px;
+.card-container-home:hover {
+  background-color: #5A679E; /* Cor de fundo ao passar o mouse */
 }
+
 
 .card-body-home {
   padding: 2px;
@@ -74,10 +74,16 @@
   color: black;
 }
 
+.card-price-home{
+  text-align: center;
+  font-size: 13px;
+  margin-bottom: -28px;
+}
+
 .favoritoButton {
-  margin-left: 17px;
+  margin-left: 35px;
   border: none;
-  width: 1px;
+  width: 0px;
   background-color: transparent;
   position: relative;
   left: 63px;
@@ -136,7 +142,7 @@
   display: flex;
   flex-direction: column;
   width: 40vw;
-  max-width: 600px;
+  max-width: 500px;
   height: auto;
   margin-top: 50px;
   padding: 20px;
@@ -147,11 +153,15 @@
   width: 100%;
   height: 200px;
   border-radius: 7px;
+  object-fit: cover;
+  margin: 0 auto;
 }
 
 .service-details {
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
+  width: 450px;
 }
 
 .service-info {
@@ -196,22 +206,21 @@
 }
 
 
-    .h1-home{
-        color: whitesmoke;
-        font-size: 26px;
-        margin: 50px;
-        text-align: left;
-    }
 
-    .img-home{
-        width: 120px;
-        height: 100px;
-        margin-bottom: -20px;
-        object-fit: cover;
-    }
 
-    .card-price-home{
-        text-align: center;
-        font-size: 13px;
-        margin-bottom: -28px;
+    .containerFav {
+      background-color: #6e7ec2;
+      padding: 10px;
+      flex-basis: calc(11.1% - 20px);
+      margin: 10px;
+      width: 200px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      top: 50px;
+    }
+    
+    .buttonFav {
+      width: 150px;
     }

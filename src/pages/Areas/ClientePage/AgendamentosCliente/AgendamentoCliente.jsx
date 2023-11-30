@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col, Card, Button } from  "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -171,7 +171,73 @@ const ClienteAgendamentos = () => {
         }
         fetchCliente();
     }, []);
-
+   
+    const handleDeleteClick = async (event, agendamentoId) => {
+        try {
+          event.preventDefault(); // Evita o comportamento padrão do botão dentro de um formulário
+      
+          const confirmCancel = window.confirm("Tem certeza de que deseja cancelar este agendamento?");
+          if (!confirmCancel) {
+            return; // Se o usuário cancelar a confirmação, sai da função
+          }
+      
+          setIsLoading(true);
+      
+          const auth = getAuth();
+          const user = auth.currentUser;
+          const uid = user ? user.uid : null;
+      
+          if (!uid) {
+            throw new Error("Usuário não autenticado.");
+          }
+      
+          const agendamentoRef = collection(db, "agendamento");
+          const q = query(agendamentoRef, where("clienteId", "==", uid), where("id", "==", agendamentoId));
+          const agendamentoQuerySnapshot = await getDocs(q);
+      
+          agendamentoQuerySnapshot.forEach(async (doc) => {
+            try {
+              const dataAgendamento = doc.data().dataAgendamento;
+      
+              if (dataAgendamento instanceof Date) {
+                // Verifica se dataAgendamento é um objeto de data válido
+                const currentDate = new Date();
+      
+                // Verifica se dataAgendamento é estritamente maior que a data atual
+                if (dataAgendamento > currentDate) {
+                  const deleteConfig = {
+                    method: "DELETE",
+                    headers: {
+                      "Content-Type": "application/json; charset=UTF-8",
+                    },
+                  };
+      
+                  const response = await fetch(`http://localhost:3000/agendamento/remove/1/${agendamentoId}`, deleteConfig);
+      
+                  if (!response.ok) {
+                    throw new Error("Erro na solicitação da API");
+                  }
+      
+                  await deleteDoc(doc.ref);
+      
+                } else {
+                  console.log("Não é possível cancelar agendamento com data passada.");
+                }
+              } else {
+                console.log(`A data do agendamento não é válida.`);
+              }
+            } catch (error) {
+              console.error("Erro ao processar documento:", error);
+            }
+          });
+        } catch (error) {
+          console.error("Erro ao excluir conta", error);
+          setErrorMessage('Erro ao excluir conta: ' + error.message);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      
     return (
        <Container className="containerAgendamentoCliente">
         <h2>Seus Agendamentos, {clienteInfo.username}</h2>
@@ -187,15 +253,15 @@ const ClienteAgendamentos = () => {
                                     <img src={agendamento.servico.img} alt={agendamento.servico.nome} className="imgAg1" />
                                 )}
                             </Row>
-                        <Row style={{color: "Black"}}>
+                            <Row style={{color: "Black"}}>
                                 {agendamento.horario && (
                                     <Col md={3} className="rowAgendCliente">
-                                    <strong>Data Agendamento: </strong>
-                                    {agendamento.horario.horario}
-                                   
+                                        <strong>Data Agendamento: </strong>
+                                        {new Date(agendamento.horario.horario.seconds * 1000).toLocaleString()}
                                     </Col>
                                 )}
                             </Row>
+
                         <Row style={{color: "Black"}}>
                             {agendamento.servico && (
                                 <Col md={3} className="rowAgendCliente">
@@ -229,12 +295,13 @@ const ClienteAgendamentos = () => {
                                     </Col>
                                 )}
                             </Row>
+                            <Button onClick={(e) => handleDeleteClick(e, agendamento.id)}>Cancelar</Button>
                         </Card.Body>
                     </Card>
                 ))}
             </div>
         )}
-        <button className="buttonAg"><a href="/">Voltar</a></button>
+        <button className="buttonAg"><a href="/cliente/dados">Voltar</a></button>
        </Container>
     )
 }

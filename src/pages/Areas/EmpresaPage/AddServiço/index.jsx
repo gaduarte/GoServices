@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EmpresaAddServico from "./EmpresaAddServiço";
 import { NavLink } from "react-router-dom";
+import { Nav } from "react-bootstrap";
 
 
 export function EmpresaAdicionaServ() {
@@ -42,13 +43,10 @@ export function EmpresaAdicionaServ() {
             <>
             <EmpresaAddServico />
             <button className="buttonpadEmp">
-                <NavLink to="/atualizaServico" style={{color: "white"}}>Atualizar Serviço</NavLink>
-            </button>
-            <button className="buttonpadEmp">
-                <NavLink to="/horarios" style={{color: "white"}}>Adicionar Horário</NavLink>
+                <NavLink to="/atualizaServico" style={{color: "white"}}> <i className="fas fa-sync-alt"></i> Atualizar Serviço</NavLink>
             </button>
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-            <button onClick={logOut} className="logoutEmp">Sign Out</button>
+            <button className="logoutEmp"><a href="/empresa/dados">Voltar</a></button>
             </>}
         </div>
     )

@@ -40,7 +40,6 @@ export function EmpresaAgendamentoDados() {
             <>
             < EmpresaAgendamentos />
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-            <button className="logoutEmp" onClick={logOut}>Sign Out</button>
             </>}
         </div>
     )

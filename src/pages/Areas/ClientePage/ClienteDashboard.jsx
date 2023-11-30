@@ -5,6 +5,16 @@ import React, { useState, useEffect } from "react";
 import { Form, Container, Row, Col, Card, Button } from  "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import './css/ClientePg.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUserCircle,
+  faCreditCard,
+  faCalendar,
+  faHeart,
+  faIdCard,
+  faMapMarker,
+  faPhone,
+} from "@fortawesome/free-solid-svg-icons";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
@@ -84,45 +94,74 @@ const ClienteDashboard = () => {
         setEditMode(true);
     }
 
-    const handleSaveClick = async () =>{
-        try {
-            const clienteDocRef = doc(db, "cliente", id);
-            await setDoc(clienteDocRef, clientInfo, { merge: true });
-
-            const configCliente = {
+    const handleSaveClick = async () => {
+      try {
+          console.log('Salvando informações no Firestore...');
+          const clienteDocRef = doc(db, "cliente", id);
+          await setDoc(clienteDocRef, clientInfo, { merge: true });
+          console.log('Informações salvas no Firestore com sucesso!');
+  
+          console.log('Salvando informações na API local...');
+          const configCliente = {
               method: 'PUT',
               headers: {
                   'Content-Type': 'application/json',
               },
-            }
-    
-            const response = await fetch(`http://localhost:3000/cliente/${id}`, configCliente);
-    
-            if (!response.ok) {
-                throw new Error("Erro na solicitação da API");
-            }
-    
-            const data = await response.json();
-            setSuccessMessage('Dados encontrados com sucesso!');
-            setErrorMessage('');
-            setEditMode(false);
-        } catch (error) {
-            console.error("Erro ao salvar informações", error);
-            setErrorMessage('Erro ao salvar informações: ' + error.message);
-        }
-        setEditMode(false);
-    }
+              body: JSON.stringify(clientInfo),
+          };
+          const response = await fetch(`http://localhost:3000/cliente/${id}`, configCliente);
 
+  
+          if (!response.ok) {
+              await setDoc(clienteDocRef, oldData, { merge: true });
+              throw new Error("Erro na solicitação da API");
+          }
+  
+          const data = await response.json();
+          console.log('Dados enviados para o Firestore:', clientInfo);
+          console.log('Dados enviados para a API local:', JSON.stringify(clientInfo));
+
+          console.log('Informações salvas na API local com sucesso!');
+          setSuccessMessage('Dados encontrados com sucesso!');
+          setErrorMessage('');
+          setEditMode(false);
+      } catch (error) {
+          console.error("Erro ao salvar informações", error);
+          setErrorMessage('Erro ao salvar informações: ' + error.message);
+      }
+      setEditMode(false);
+  };
+  
     const handleCancelClick = () => {
         setEditMode(false);
     }
 
     const handleDeleteClick = async () =>{
       try{
+        setIsLoading(true);
+
+        const auth = getAuth();
+        const user = auth.currentUser;
+        const uid = user ? user.uid : null;
+
+        if (!uid) {
+            throw new Error("Usuário não autenticado.");
+        }
 
         const confirmDelete = window.confirm("Tem cereteza que deseja excluir conta?");
         if(confirmDelete){
           const clienteDocRef = doc(db, "cliente", id);
+
+          const agendamentoRef = collection(db, "agendamento");
+          const q = query(agendamentoRef, where("clienteId", "==", uid));
+          const agendamentoQuerySnapshot = await getDocs(q);
+          const agendamentosAssociados = agendamentoQuerySnapshot.docs.length > 0;
+
+          if (agendamentosAssociados) {
+            const errorMessage = 'Não é possível excluir cliente que está relacionada a um agendamento';
+            setErrorMessage(errorMessage);
+            throw new Error("Existem agendamentos associados a este cliente. Não é possível excluí-lo.");
+          }
 
           const deleteConfig = {
             method: "DELETE",
@@ -178,177 +217,198 @@ const ClienteDashboard = () => {
     }, []);
 
     return (
-        <Container className="centeredFormProfileCli">
-          <h2>Suas Informações:</h2>
-      {isLoading ? (
-        <p>Carregando informações...</p>
-      ) : editMode ? (
-        <Form className="formProfileCli">
-          <Row className="rowProfileCli">
-            <Col md={3}>
-              <Form.Group>
-                <Form.Label style={{color: "black"}}>Nome de usuário:</Form.Label>
-              </Form.Group>
-            </Col>
-            <Col md={9} className="text-secondary" >
-              <Form.Group>
-                <Form.Control
-                  type="text"
-                  value={clientInfo.username}
-                  onChange={(e) =>
-                    setClientInfo({ ...clientInfo, username: e.target.value })
-                  }
-                  style={{width: "380px",  height: "30px"}}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row className="rowProfileCli">
-            <Col md={3}>
-              <Form.Group>
-                <Form.Label  style={{color: "black"}}>Email:</Form.Label>
-              </Form.Group>
-            </Col>
-            <Col md={9} className="text-secondary">
-              <Form.Group>
-                <Form.Control
-                  type="text"
-                  value={clientInfo.email}
-                  onChange={(e) =>
-                    setClientInfo({ ...clientInfo, email: e.target.value })
-                  }
-                  style={{width: "380px",  height: "30px"}}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row className="rowProfileCli">
-            <Col md={3}>
-              <Form.Group>
-                <Form.Label  style={{color: "black"}}>Telefone:</Form.Label>
-              </Form.Group>
-            </Col>
-            <Col md={9} className="text-secondary">
-              <Form.Group>
-                <Form.Control
-                  type="text"
-                  value={clientInfo.telefone}
-                  onChange={(e) =>
-                    setClientInfo({ ...clientInfo, telefone: e.target.value })
-                  }
-                  style={{width: "380px",  height: "30px"}}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row className="rowProfileCli">
-            <Col md={3}>
-              <Form.Group>
-                <Form.Label  style={{color: "black"}}>CPF:</Form.Label>
-              </Form.Group>
-            </Col>
-            <Col md={9} className="text-secondary">
-              <Form.Group>
-                <Form.Control
-                  type="text"
-                  value={clientInfo.cpf}
-                  onChange={(e) =>
-                    setClientInfo({ ...clientInfo, cpf: e.target.value })
-                  }
-                  style={{width: "380px", height: "30px"}}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row className="rowProfileCli">
-            <Col md={3}>
-              <Form.Group>
-                <Form.Label style={{color: "black"}}>Endereço:</Form.Label>
-              </Form.Group>
-            </Col>
-            <Col md={9} className="text-secondary">
-              <Form.Group>
-                <Form.Control
-                  type="text"
-                  value={clientInfo.endereco}
-                  onChange={(e) =>
-                    setClientInfo({ ...clientInfo, endereco: e.target.value })
-                  }
-                  style={{width: "380px", height: "30px"}}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px"}}>
-            <Button onClick={handleSaveClick}className="buttonProfileCli">Salvar</Button>
-            <Button onClick={handleCancelClick} className="buttonProfileCli">Cancelar</Button>
-          </div>
-        </Form>
-      ) : (
-        <Card className="cardProfile">
-          <Card.Body>
-          <Row>
-        <Col md={12}>
-          <Card>
-            <Card.Body >
-              <Row style={{color: "Black"}}>
-                <Col md={3}>
-                  <strong>Nome de usuário:</strong>
-                </Col>
-                <Col md={9} className="text-secondary">
-                  {clientInfo.username}
+      <Container className="centeredFormProfileCli">
+        <h2 style={{color: "black"}}>Suas Informações:</h2>
+        {isLoading ? (
+          <p>Carregando informações...</p>
+        ) : editMode ? (
+          <Form className="formProfileCli">
+            <Row className="rowProfileCli">
+              <Col md={3}>
+                <Form.Group>
+                  <Form.Label style={{ color: "black" }}>Nome de usuário:</Form.Label>
+                </Form.Group>
+              </Col>
+              <Col md={9} className="text-secondary">
+                <Form.Group>
+                  <Form.Control
+                    type="text"
+                    value={clientInfo.username}
+                    onChange={(e) =>
+                      setClientInfo({ ...clientInfo, username: e.target.value })
+                    }
+                    style={{ width: "380px", height: "30px", }}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="rowProfileCli">
+              <Col md={3}>
+                <Form.Group>
+                  <Form.Label style={{ color: "black" }}>Email:</Form.Label>
+                </Form.Group>
+              </Col>
+              <Col md={9} className="text-secondary">
+                <Form.Group>
+                  <Form.Control
+                    type="text"
+                    value={clientInfo.email}
+                    onChange={(e) =>
+                      setClientInfo({ ...clientInfo, email: e.target.value })
+                    }
+                    style={{ width: "380px", height: "30px" }}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="rowProfileCli">
+              <Col md={3}>
+                <Form.Group>
+                  <Form.Label style={{ color: "black" }}>Telefone:</Form.Label>
+                </Form.Group>
+              </Col>
+              <Col md={9} className="text-secondary">
+                <Form.Group>
+                  <Form.Control
+                    type="text"
+                    value={clientInfo.telefone}
+                    onChange={(e) =>
+                      setClientInfo({ ...clientInfo, telefone: e.target.value })
+                    }
+                    style={{ width: "380px", height: "30px" }}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="rowProfileCli">
+              <Col md={3}>
+                <Form.Group>
+                  <Form.Label style={{ color: "black" }}>CPF:</Form.Label>
+                </Form.Group>
+              </Col>
+              <Col md={9} className="text-secondary">
+                <Form.Group>
+                  <Form.Control
+                    type="text"
+                    value={clientInfo.cpf}
+                    onChange={(e) =>
+                      setClientInfo({ ...clientInfo, cpf: e.target.value })
+                    }
+                    style={{ width: "380px", height: "30px" }}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row className="rowProfileCli">
+              <Col md={3}>
+                <Form.Group>
+                  <Form.Label style={{ color: "black" }}>Endereço:</Form.Label>
+                </Form.Group>
+              </Col>
+              <Col md={9} className="text-secondary">
+                <Form.Group>
+                  <Form.Control
+                    type="text"
+                    value={clientInfo.endereco}
+                    onChange={(e) =>
+                      setClientInfo({ ...clientInfo, endereco: e.target.value })
+                    }
+                    style={{ width: "380px", height: "30px" }}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+            <div style={{ display: "grid", gridTemplateColumns: "auto auto", gap: "10px" }}>
+              <Button onClick={handleSaveClick} className="buttonProfileCli">
+                Salvar
+              </Button>
+              <Button onClick={handleCancelClick} className="buttonProfileCli">
+                Cancelar
+              </Button>
+            </div>
+          </Form>
+        ) : (
+          <Card className="cardProfile">
+            <Card.Body>
+              <Row>
+                <Col md={12}>
+                  <Card>
+                    <Card.Body>
+                      <Row style={{ color: "black" }}>
+                        <Col md={3}>
+                          <div className="iconDiv">
+                            <FontAwesomeIcon icon={faUserCircle} />
+                          </div>
+                          <strong> Nome de usuário:</strong>
+                        </Col>
+                        <Col md={9} className="text-secondary">
+                          {clientInfo.username}
+                        </Col>
+                      </Row>
+                      <hr />
+                      <Row style={{ color: "black" }}>
+                        <Col md={3}>
+                          <div className="iconDiv">
+                            <FontAwesomeIcon icon={faCreditCard} />
+                          </div>
+                          <strong> Email:</strong>
+                        </Col>
+                        <Col md={9} className="text-secondary">
+                          {clientInfo.email}
+                        </Col>
+                      </Row>
+                      <hr />
+                      <Row style={{ color: "black" }}>
+                        <Col md={3}>
+                          <div className="iconDiv">
+                            <FontAwesomeIcon icon={faPhone} />
+                          </div>
+                          <strong> Telefone:</strong>
+                        </Col>
+                        <Col md={9} className="text-secondary">
+                          {clientInfo.telefone}
+                        </Col>
+                      </Row>
+                      <hr />
+                      <Row style={{ color: "black" }}>
+                        <Col md={3}>
+                          <div className="iconDiv">
+                            <FontAwesomeIcon icon={faIdCard} />
+                          </div>
+                          <strong> CPF:</strong>
+                        </Col>
+                        <Col md={9} className="text-secondary">
+                          {clientInfo.cpf}
+                        </Col>
+                      </Row>
+                      <hr />
+                      <Row style={{ color: "black" }}>
+                        <Col md={3}>
+                          <div className="iconDiv">
+                            <FontAwesomeIcon icon={faMapMarker} />
+                          </div>
+                          <strong> Endereço: </strong>
+                        </Col>
+                        <Col md={9} className="text-secondary">
+                          {clientInfo.endereco}
+                        </Col>
+                      </Row>
+                    </Card.Body>
+                  </Card>
                 </Col>
               </Row>
-              <hr />
-              <Row style={{color: "Black"}}>
-                <Col md={3}>
-                  <strong>Email:</strong>
-                </Col>
-                <Col md={9} className="text-secondary">
-                  {clientInfo.email}
-                </Col>
-              </Row>
-              <hr />
-              <Row style={{color: "Black"}}>
-                <Col md={3}>
-                  <strong>Telefone:</strong>
-                </Col>
-                <Col md={9} className="text-secondary">
-                  {clientInfo.telefone}
-                </Col>
-              </Row>
-              <hr />
-              <Row style={{color: "Black"}}>
-                <Col md={3}>
-                  <strong>CPF:</strong>
-                </Col>
-                <Col md={9} className="text-secondary">
-                  {clientInfo.cpf}
-                </Col>
-              </Row>
-              <hr />
-              <Row style={{color: "Black"}}>
-                <Col md={3}>
-                    <strong>Endereço: </strong>
-                </Col>
-                <Col md={9}
-                className="text-secondary">
-                    {clientInfo.endereco}
-                </Col>
-              </Row>
+             
             </Card.Body>
-          </Card>
-        </Col>
-      </Row>
             <Button className="infoButtonProfileCli" onClick={handleEditClick}>
-              Editar
-            </Button>
-            <Button className="infoButtonProfileCli" onClick={handleDeleteClick}>Excluir Conta</Button>
-          </Card.Body>
-        </Card>
-      )}
-    </Container>
-      );
+                Editar
+              </Button>
+              <Button className="infoButtonProfileCli" onClick={handleDeleteClick}>
+                Excluir Conta
+              </Button>
+          </Card>
+        )}
+      </Container>
+    );
 }
 
 export default ClienteDashboard;

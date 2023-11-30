@@ -40,7 +40,6 @@ export function EmpresaAtualiza() {
             <>
             <EmpresaAtualizaServico />
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-            <button onClick={logOut}>Sign Out</button>
             </>}
         </div>
     )

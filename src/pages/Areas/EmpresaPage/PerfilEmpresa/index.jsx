@@ -1,11 +1,10 @@
 import { getAuth, signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ClienteDashboard from "./ClienteDashboard";
 import { NavLink } from "react-router-dom";
-import './css/ClientePg.css';
+import EmpresaPerfil from "./PerfilEmpresa";
 
-export function ClienteDados() {
+export function EmpresaDadosPerfil() {
   const history = useNavigate();
   const [id, setId] = useState(null);
 
@@ -24,25 +23,12 @@ export function ClienteDados() {
     });
   }, [history]);
 
-  const logOut = () => {
-    const auth = getAuth();
-    signOut(auth)
-      .then(() => {
-        setAlertMessage("Signed Out");
-        history("/login");
-      })
-      .catch((error) => {
-        console.error("Sign out Error", error);
-      });
-  };
-
   return (
     <div>
       {id && 
         <>
-          <ClienteDashboard /> 
+          <EmpresaPerfil /> 
           {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-          <button className="logoutCli"> <a href="/cliente/dados">Voltar</a></button>
         </>
     }
     </div>

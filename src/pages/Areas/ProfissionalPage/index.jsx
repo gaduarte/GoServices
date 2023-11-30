@@ -37,7 +37,7 @@ export function ProfissionalDados(){
         {id && 
         <>
         <ProfissionalDashboard/>
-        <button className="logoutPro" onClick={logOut}>Sign Out</button>
+        <button className="logoutPro" ><a href="/profissional/dados">Voltar</a></button>
         </>}
     </div>
     )

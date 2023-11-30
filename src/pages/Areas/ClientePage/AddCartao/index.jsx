@@ -43,7 +43,7 @@ export function ClienteAdicionaCartao() {
                 <NavLink to="/cartoes" state={{color: "white"}}>Meus Cartões</NavLink>
             </button>
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-            <button className="logoutCli" onClick={logOut}>Sign Out</button>
+            <button className="logoutCli"><a href="/cliente/dados">Voltar</a></button>
             </>}
         </div>
     )

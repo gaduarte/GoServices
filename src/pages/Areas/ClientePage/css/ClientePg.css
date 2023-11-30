@@ -1,3 +1,4 @@
+@import '@fortawesome/fontawesome-free/css/all.css';
 /* Estilo geral da seção de perfil */
 .centeredFormProfileCli {
     font-family: Arial, sans-serif;
@@ -7,23 +8,34 @@
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    background-color: #6E7EC2;
+    background-color: #f5f5f5;
   }
 
   .cardProfile{
     padding: 0px;
     width: 400px;
+    border: 1px solid #ddd;
   }
   .centeredFormProfileCli {
     text-align: center;
   }
   
+.iconDiv {
+  display: inline-block;
+  margin-right: 10px;
+}
+
   .infoProfileCli {
     background-color: #f8f8f8; 
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 15px;
     margin: 20px 0;
+  }
+
+  .rowProfileCli{
+    margin: 15px auto;
+    border-radius: 7px;
   }
   
   .infoButtonProfileCli {
@@ -32,11 +44,12 @@
     border: none;
     padding: 10px 20px;
     cursor: pointer;
-    border-radius: 5px;
-    margin-right: 10px;
+    border-radius: 7px;
+    margin: 5px;
+    margin-right: 1px;
+    width: 150px;
   }
 
-  
  .cartaoButton{
   width: 150px;
   height: 40px;
@@ -56,22 +69,26 @@
  }
 
  .cartaoRowCli{
-  margin: 2px;
+  margin: 2px auto;
   text-align: center;
   padding: 2px;
-  margin-right: 10px;
+  color: black;
+ }
+
+ .cartaoColCli{
+  margin: 2px -10px;
  }
 
  .centeredFormCartaoCli {
   font-family: Arial, sans-serif;
   max-width: 500px;
-  height: 500px;
+  height: 450px;
   margin: 0 auto;
   margin-top: 120px;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  background-color: #6E7EC2;
+  background-color: #eae5dc;
 }
 
 .buttonCartaoCli{
@@ -132,59 +149,59 @@
 
 .containerCartao {
   background-color: #6E7EC2;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 7px;
+  border: 1px solid #ddd; /* Borda */
+  border-radius: 8px; /* Borda arredondada */
+  padding: 15px; /* Espaçamento interno */
+  margin-bottom: 20px; /* Espaçamento inferior */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra */
 }
 
 .cartaoCli {
-  margin-bottom: 10px;
   text-align: left;
-  color: #333;
+  color: #333; /* Cor do texto */
+  font-size: 16px; /* Tamanho da fonte */
+  margin-bottom: 10px; /* Espaçamento inferior */
 }
 
-.buttonExcluirCartao {
-  background-color: #dc3545; 
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-  margin-right: 10px;
-  text-decoration: none;
-}
-
+.buttonExcluirCartao,
 .buttonVoltarCartao {
-  background-color: #C26E7E;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-  text-decoration: none;
+  background-color: #dc3545; /* Cor de fundo */
+  color: #fff; /* Cor do texto */
+  border: none; /* Remover borda */
+  border-radius: 5px; /* Borda arredondada */
+  padding: 10px 15px; /* Espaçamento interno */
+  margin-right: 10px; /* Espaçamento à direita */
+  cursor: pointer; /* Cursor do mouse */
+  text-decoration: none; /* Remover sublinhado de links */
 }
 
-.buttonVoltarCartao a {
-  color: #fff;
-  text-decoration: none;
+.buttonExcluirCartao:hover,
+.buttonVoltarCartao:hover {
+  background-color: #B82C3A; /* Cor de fundo ao passar o mouse */
+}
+
+.containerFavs{
+  display: flex; /* Use flex para alinhar os itens verticalmente */
+  flex-direction: column; /* Alinhe os itens em uma coluna */
+  justify-content: space-around;
 }
 
 .cardFav {
-  background-color: #6E7EC2; 
-  border: 1px solid #ddd; 
+  background-color: #6E7EC2;
+  border: 1px solid #ddd;
   border-radius: 5px;
   padding: 15px;
-  margin: 10px;
-  width: 250px; 
+  margin: 2px;
+  width: 200px;
+
 }
 
 .imgAg {
   width: 100%;
   height: 150px;
-  object-fit: cover; 
+  object-fit: cover;
   border-radius: 5px;
-  margin-bottom: -10px;
+  margin-bottom: 10px; /* Ajuste o espaçamento inferior */
 }
 
 .rowFavs {
@@ -195,29 +212,99 @@
   font-size: 18px;
   font-weight: bold;
   color: black;
+  margin-bottom: 5px; /* Ajuste o espaçamento inferior */
 }
 
 .card-description {
   font-size: 14px;
   color: #333;
+  margin-bottom: 10px; /* Ajuste o espaçamento inferior */
 }
 
 .card-price {
   font-size: 16px;
   font-weight: bold;
-  color: #C26E7E; 
+  color: #C26E7E;
   margin-top: 10px;
 }
 
 .buttonFav1 {
   margin: 10px;
-  background-color: #C26E7E; 
+  background-color: #C26E7E;
   color: #fff;
   border: none;
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 5px;
   text-decoration: none;
+}
+
+
+.centeredFormPerfilCli {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+.profileContainer {
+  display: flex;
+}
+
+.profileSidebar {
+  width: 200px;
+  padding-right: 20px;
+  border-right: 1px solid #ccc;
+}
+
+.profileContent {
+  flex: 1;
+  padding-left: 20px;
+}
+
+.logoutButton {
+  width: 100%;
+  margin-top: 20px;
+}
+
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  color: #000;
+  text-decoration: none;
+  padding: 10px;
+  margin-bottom: 5px;
+  transition: background-color 0.3s;
+}
+
+.nav-link:hover {
+  background-color: #eee;
+}
+
+
+.nav-link i {
+  margin-right: 10px;
+}
+
+
+.nav-link.toPerfil {
+  background-color: #ff9800; 
+  color: #fff;
+}
+
+.nav-link.toAddCartao {
+  background-color: #03a9f4; 
+  color: #fff;
+}
+
+.nav-link.toAgendamentos {
+  background-color: #4caf50; 
+  color: #fff;
+}
+
+.nav-link.toFavoritos {
+  background-color: #e91e63;
+  color: #fff;
 }
 
 

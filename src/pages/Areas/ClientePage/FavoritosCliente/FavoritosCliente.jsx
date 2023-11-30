@@ -232,7 +232,7 @@ return (
         {favoritoInfo.map((favorito) => (
           <Card key={favorito.id} className="cardFav">
             <Card.Body className="card-bodys">
-            <Row>
+            <Row className="rowFavs">
                {favorito.servico && (
                <img src={favorito.servico.img} alt={favorito.servico.nome} className="imgAg" />
                 )}
@@ -263,7 +263,7 @@ return (
             </Card.Body>
           </Card>
         ))}
-        <button className="buttonFav1"><a href="/">Voltar</a></button>
+        <button className="buttonFav1"><a href="/cliente/dados">Voltar</a></button>
       </div>
     )}
   </Container>

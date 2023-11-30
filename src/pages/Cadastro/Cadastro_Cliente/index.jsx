@@ -148,7 +148,7 @@ const CadastroCliente = () => {
     <div className="centeredFormCli">
       {successMessage && <div className="successMessageCli">{successMessage}</div>}
       {errorMessage && <div className="errorMessageCli">{errorMessage}</div>}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="cadastroFormCli">
         <div className="inputContainerCli">
           <input type="text" ref={nomeRef} className="inputFieldCli" name="nome" placeholder="Nome" />
         </div>
@@ -167,14 +167,16 @@ const CadastroCliente = () => {
         <div className="inputContainerCli">
           <input type="password" ref={passwordRef} className="inputFieldCli" placeholder="Senha" />
         </div>
-        
+
         <button type="submit" className="buttonCli">
           Cadastrar
         </button>
-        <button className="buttonCli"><a href="/">Cancelar</a></button>
+        <button className="buttonCli" onClick={() => navigate("/")}>
+          Cancelar
+        </button>
       </form>
     </div>
-  );  
+  );
 };
 
 export default CadastroCliente;

@@ -24,6 +24,9 @@ import { ProfissionalAgendamentoDados } from "./pages/Areas/ProfissionalPage/Age
 import Resultados from "./pages/Search";
 import { FavoritosDados } from "./pages/HomePage/Favoritos";
 import { ClienteFavoritosDados } from "./pages/Areas/ClientePage/FavoritosCliente";
+import { ClienteDadosPerfil } from "./pages/Areas/ClientePage/Perfil.jsx";
+import { EmpresaDadosPerfil } from "./pages/Areas/EmpresaPage/PerfilEmpresa/index.jsx";
+import { ProfissionalDadosPerfil } from "./pages/Areas/ProfissionalPage/Perfil/index.jsx";
 
 
 function App() {
@@ -110,44 +113,19 @@ function App() {
               </li>
               <li>
                 {userRole === "cliente" ? (
-                  <NavLink to="/cliente">Meu Perfil</NavLink>
-                ) : null}
-              </li>
-              <li>
-                {userRole === "cliente" ? (
-                  <NavLink to="/agendamentosCliente">Meus Agendamentos</NavLink>
-                ) : null}
-              </li>
-              <li>
-                {userRole === "cliente" ? (
-                  <NavLink to="/favoritosCliente">Favoritos</NavLink>
+                  <NavLink to="/cliente/dados">Meu Perfil</NavLink>
                 ) : null}
               </li>
               <li>
               </li>
               <li>
                 {userRole === "profissional" ? (
-                  <NavLink to="/profissional">Perfil do Profissional</NavLink>
-                ) : null}
-              </li>
-              <li>
-                {userRole === "profissional" ? (
-                  <NavLink to="/agendamentosProfissional">Relatório de Agendamentos</NavLink>
-                ) : null}
-              </li>
-              <li>
-              {userRole === "empresa" ? (
-                  <NavLink to="/addServico">Adicionar Serviço</NavLink>
+                  <NavLink to="/profissional/dados">Minha Área</NavLink>
                 ) : null}
               </li>
               <li>
                 {userRole === "empresa" ? (
-                  <NavLink to="/agendamentosEmpresa">Relatório de Agendamentos</NavLink>
-                ) : null}
-              </li>
-              <li>
-                {userRole === "empresa" ? (
-                  <NavLink to="/empresa">Minha Área</NavLink>
+                  <NavLink to="/empresa/dados">Minha Área</NavLink>
                 ) : null}
                 {user ? null : <NavLink to="/cadastro">Cadastrar-se</NavLink>}
               </li>
@@ -169,18 +147,21 @@ function App() {
           <Route path="/login" element={<LoginUsuario />} />
           <Route path="/resultados:servicoId" element={< Resultados />} />
           {userRole === "cliente" && <Route path="/cliente/*" element={<ClienteDados />} />}
+          {userRole === "cliente" && <Route path="/cliente/dados" element={<ClienteDadosPerfil />} />}
           {userRole === "cliente" && <Route path="/addCartao/*" element={<ClienteAdicionaCartao />} />}
           {userRole === "cliente" && <Route path="/cartoes/*" element={<CartoesdoCliente />} />}
           {userRole === "cliente" && <Route path="/agendamento/:servicoId" element={<AgendarDados />} />}
           {userRole === "cliente" && <Route path="/favoritos/:servicoId" element={<FavoritosDados />} />}
           {userRole === "cliente" && <Route path="/favoritosCliente/*" element={<ClienteFavoritosDados />} />}
           {userRole === "cliente" && <Route path="/agendamentosCliente/*" element={<ClienteAgendamentoDados />} />}
+          {userRole === "profissional" && <Route path="/profissional/dados" element={<ProfissionalDadosPerfil />} />}
           {userRole === "profissional" && <Route path="/profissional/*" element={<ProfissionalDados />} />}
           {userRole === "profissional" && <Route path="/agendamentosProfissional" element={<ProfissionalAgendamentoDados />}/>}
+          {userRole === "empresa" && <Route path="/empresa/dados" element={<EmpresaDadosPerfil />} />}
           {userRole === "empresa" && <Route path="/empresa/*" element={<EmpresaDados />} />}
           {userRole === "empresa" && <Route path="/addServico/*" element={<EmpresaAdicionaServ />} />}
           {userRole === "empresa" && <Route path="/atualizaServico/*" element={<EmpresaAtualiza/>} />}
-          {userRole === "empresa" && <Route  path="/horarios/*" element={<EmpresaAdicionaHorario />}/>}
+          {userRole === "empresa" && <Route  path="/horarios/:servicoId" element={<EmpresaAdicionaHorario />}/>}
           {userRole === "empresa" && <Route path="/agendamentosEmpresa" element={<EmpresaAgendamentoDados />} />}
         </Routes>
       </div>

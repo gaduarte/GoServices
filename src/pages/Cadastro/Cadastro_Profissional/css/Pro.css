@@ -1,23 +1,23 @@
 /* Estilos gerais do formulário */
 .centeredForm-pro {
-  background-color: #6E7EC2;
+  background-color: #6E7EC2; 
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 5px;
-  width: 800px; /* Define a largura do formulário como 60% */
-  max-width: 400px; /* Define a largura máxima como 50% */
+  width: 100%;
+  max-width: 400px;
   margin: 0 auto;
-  height: 600px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  height: 650px;
 }
 
 
 .select-empresa {
   width: 100%;
   height: 30px;
-  margin-top: 2px; /* Reduz a margem superior para encaixar melhor */
+  margin-top: 1px; /* Reduz a margem superior para encaixar melhor */
   border: none;
   border-radius: 5px;
   padding: 2px;
@@ -27,42 +27,58 @@
 }
 
 .inputContainer-pro {
+  width: 100%;
   margin: 10px 0;
 }
 
 .inputFieldPro {
-  width: 100%; /* Faça os campos de entrada ocuparem 100% da largura do formulário */
+  width: 100%;
   height: 40px;
-  border: none;
-  border-radius: 5px;
-  padding: 5px;
-  background-color: #fff;
+  border: 1px solid #ccc; /* Cor da borda mais suave */
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #fff; /* Cor de fundo branca */
   outline: none;
-  color: black;
+  color: #333;
+  transition: border-color 0.3s ease, background-color 0.3s ease; /* Efeito de transição suave */
+}
+
+.inputFieldPro:focus {
+  border-color: #9E5A67; 
 }
 
 .button-pro {
-  width: 60%; /* Define a largura do botão como 60% */
+  width: 100%;
   height: 40px;
-  background-color: #C26E7E;
+  background-color: #C26E7E; 
   color: #fff;
   border: none;
-  margin: 5px auto;
-  border-radius: 5px;
+  margin: 3px 0;
+  border-radius: 7px;
   cursor: pointer;
   font-weight: bold;
+  transition: background-color 0.3s ease; /* Efeito de transição suave */
 }
 
 .buttonpro1{
-  width: 60%; /* Define a largura do botão como 60% */
+  width: 100%;
   height: 40px;
-  background-color: #C26E7E;
+  background-color: #C26E7E; 
   color: #fff;
   border: none;
-  margin: 7px auto;
-  border-radius: 5px;
+  margin: 3px 0;
+  border-radius: 7px;
   cursor: pointer;
   font-weight: bold;
+  transition: background-color 0.3s ease; /* Efeito de transição suave */
+}
+
+.buttonPro:hover {
+  background-color: #9E5A67; /* Cor mais escura ao passar o mouse */
+}
+
+.buttonPro1:hover {
+  background-color: #9E5A67; /* Cor mais escura ao passar o mouse */
 }
 
 /* Estilos para dispositivos menores, como smartphones */

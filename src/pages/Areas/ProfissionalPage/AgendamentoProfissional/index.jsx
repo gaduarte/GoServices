@@ -41,7 +41,6 @@ export function ProfissionalAgendamentoDados() {
             <>
             < ProfissionalAgendamentos />
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-            <button className="logoutEmp" onClick={logOut}>Sign Out</button>
             </>}
         </div>
     )

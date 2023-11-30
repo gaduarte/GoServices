@@ -23,6 +23,7 @@ const db = getFirestore(app);
 
 const Agendamento = () => {
   const { servicoId } = useParams();
+  const [currentServicoId, setCurrentServicoId] = useState(servicoId);
   const [servicoData, setServicoData] = useState(null);
   const [clienteData, setClienteData] = useState(null);
   const [cartao, setCartaoCliente] = useState(null);
@@ -223,6 +224,7 @@ const Agendamento = () => {
   
     fetchHorarios();
   }, [servicoData, horarioRef]);
+  
    
 
 
@@ -341,66 +343,62 @@ const Agendamento = () => {
               </div>
   
               <div className="professional-section">
-                <select
-                  className="select-dif"
-                  value={selectedProfissional}
-                  onChange={(e) => setSelectedProfissional(e.target.value)}
-                >
-                  <option value="">Selecione um Profissional</option>
-                  {profissionais.map((profissional) => (
-                    <option key={profissional.id} value={profissional.id}>
-                      {profissional.data.username}
-                    </option>
-                  ))}
-                </select>
-  
-                {selectedProfissional && profissionais && (
-                  <div>
-                    {profissionais.map((profissional) => {
-                      if (profissional.id === selectedProfissional) {
-                        return (
-                          <div key={profissional.id}>
-                            <p>Profissional selecionado: {profissional.data.username}</p>
-                          </div>
-                        );
-                      } else {
-                        return null;
-                      }
-                    })}
-                  </div>
-                )}
+              <select
+                className="select-dif"
+                value={selectedProfissional}
+                onChange={(e) => setSelectedProfissional(e.target.value)}
+              >
+                <option value="">Selecione um Profissional</option>
+                {profissionais.map((profissional) => (
+                  <option key={profissional.id} value={profissional.id}>
+                    {profissional.data && profissional.data.username} {/* Updated line */}
+                  </option>
+                ))}
+              </select>
+
+              {selectedProfissional && profissionais && (
+                <div>
+                  {profissionais.map((profissional) => {
+                    if (profissional.data && profissional.data.username) { /* Updated condition */
+                      return (
+                        <div key={profissional.id}>
+                          <p>Profissional selecionado: {profissional.data.username}</p> 
+                        </div>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
+                </div>
+              )}
               </div>
   
               <div className="schedule-section">
-                <select
-                  className="select-dif"
-                  value={selectedHorario}
-                  onChange={(e) => setSelectedHorario(e.target.value)}
-                >
-                  <option value="">Selecione Horário</option>
-                  {horarios &&
-                    horarios.map((horario, index) => (
-                      <option key={index} value={horario.id}>
-                        {horario.horario}
-                      </option>
-                    ))}
-                </select>
-  
-                {selectedHorario && horarios && (
-                  <div>
-                    {horarios.map((horario, index) => {
-                      if (horario.horario === selectedHorario) {
-                        return (
-                          <div key={index}>
-                            <p>Horário: {horario.horario}</p>
-                          </div>
-                        );
-                      } else {
-                        return null;
-                      }
-                    })}
+              <select
+            className="select-dif"
+            value={selectedHorario}
+            onChange={(e) => setSelectedHorario(e.target.value)}
+          >
+            <option value="">Selecione Horário</option>
+            {horarios &&
+              horarios.map((horario, index) => (
+                <option key={index} value={horario.id}>
+                  {horario.horario && new Date(horario.horario.seconds * 1000).toLocaleString()}
+                </option>
+              ))}
+          </select>
+
+          {selectedHorario && horarios && (
+            <div>
+              {horarios
+                .filter((horario) => horario.id === selectedHorario)
+                .map((selected, index) => (
+                  <div key={index}>
+                    <p>Horário selecionado: {new Date(selected.horario.seconds * 1000).toLocaleString()}</p>
                   </div>
-                )}
+                ))}
+            </div>
+          )}
               </div>
   
               <div className="card-section-agendamento">
