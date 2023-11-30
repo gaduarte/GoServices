@@ -180,17 +180,6 @@ app.delete('/cliente/remove/1/:id', async(req,res)=>{
     
 });
 
-app.delete('/agendamento/remove/1/:id', async(req, res) => {
-    const id = req.params.id;
-    try{
-        await gs.excluirAgendamento(id);
-        res.status(200).send('Agendamento cancelado com sucesso!');
-    } catch(error){
-        console.error("Erro ao cancelar agendamentoi", error);
-        res.status(500).send('Erro ao cancelar agendamento');
-    }
-})
-
 // Rota para adicionar um novo Cartão.
 app.post('/addCartao', async(req,res)=>{
     try{
@@ -720,6 +709,18 @@ app.post('/addFavoritos', async(req,res)=>{
     }catch(error){
         console.error("Erro ao cadastrar favoritos", error );
         res.status(500).json({error: "Erro interno ao cadastrar favoritos"});
+    }
+});
+
+// Rota para cancelar um agendamento por ID.
+app.delete('/agendamento/remove/:id', async(req, res) => {
+    const id = req.params.id;
+    try{
+        await gs.excluirAgendamento(id);
+        res.status(200).send("Agendamento cancelado com sucesso!");
+    }catch (error) {
+        console.error("Erro ao cancelar agendamento", error);
+        res.status(500).send('Erro ao cancelar agendamento');
     }
 });
 

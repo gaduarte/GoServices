@@ -225,8 +225,6 @@ const Agendamento = () => {
     fetchHorarios();
   }, [servicoData, horarioRef]);
   
-   
-
 
   useEffect(() => {
     async function fetchCartaoCliente() {
@@ -351,7 +349,7 @@ const Agendamento = () => {
                 <option value="">Selecione um Profissional</option>
                 {profissionais.map((profissional) => (
                   <option key={profissional.id} value={profissional.id}>
-                    {profissional.data && profissional.data.username} {/* Updated line */}
+                    {profissional.data && profissional.data.username} 
                   </option>
                 ))}
               </select>
@@ -359,7 +357,7 @@ const Agendamento = () => {
               {selectedProfissional && profissionais && (
                 <div>
                   {profissionais.map((profissional) => {
-                    if (profissional.data && profissional.data.username) { /* Updated condition */
+                    if (profissional.data && profissional.data.username) { 
                       return (
                         <div key={profissional.id}>
                           <p>Profissional selecionado: {profissional.data.username}</p> 

@@ -27,6 +27,7 @@ const ClienteAgendamentos = () => {
     const [agendamentoInfo, setAgendamentoInfo] = useState([]);
     const [slectedHorario, setSelectedHorario] = useState(null);
     const [horarios, setHorarios] = useState([]);
+    const [agendamentoId, setagendamentoId] = useState(null);
     const history = useNavigate();
 
     const [successMessage, setSuccessMessage] = useState("");
@@ -172,13 +173,13 @@ const ClienteAgendamentos = () => {
         fetchCliente();
     }, []);
    
-    const handleDeleteClick = async (event, agendamentoId) => {
+    const handleDeleteAgendamento = async (event, agendamentoId) => {
         try {
-          event.preventDefault(); // Evita o comportamento padrão do botão dentro de um formulário
+          event.preventDefault();
       
           const confirmCancel = window.confirm("Tem certeza de que deseja cancelar este agendamento?");
           if (!confirmCancel) {
-            return; // Se o usuário cancelar a confirmação, sai da função
+            return;
           }
       
           setIsLoading(true);
@@ -191,53 +192,80 @@ const ClienteAgendamentos = () => {
             throw new Error("Usuário não autenticado.");
           }
       
-          const agendamentoRef = collection(db, "agendamento");
-          const q = query(agendamentoRef, where("clienteId", "==", uid), where("id", "==", agendamentoId));
-          const agendamentoQuerySnapshot = await getDocs(q);
+          const agendamentoRef = doc(db, "agendamento", agendamentoId);
+          const agendamentoDoc = await getDoc(agendamentoRef);
       
-          agendamentoQuerySnapshot.forEach(async (doc) => {
-            try {
-              const dataAgendamento = doc.data().dataAgendamento;
+          console.log("Agendamento: ", agendamentoId);
       
-              if (dataAgendamento instanceof Date) {
-                // Verifica se dataAgendamento é um objeto de data válido
-                const currentDate = new Date();
+          if (!agendamentoDoc.exists()) {
+            console.log("Agendamento não encontrado.");
+            return;
+          }
       
-                // Verifica se dataAgendamento é estritamente maior que a data atual
-                if (dataAgendamento > currentDate) {
-                  const deleteConfig = {
-                    method: "DELETE",
-                    headers: {
-                      "Content-Type": "application/json; charset=UTF-8",
-                    },
-                  };
+          const horarioId = agendamentoDoc.data().dataAgendamento;
       
-                  const response = await fetch(`http://localhost:3000/agendamento/remove/1/${agendamentoId}`, deleteConfig);
+          const horarioDocRef = doc(db, "horariosDisponiveis", horarioId);
+          const horarioDoc = await getDoc(horarioDocRef);
       
-                  if (!response.ok) {
-                    throw new Error("Erro na solicitação da API");
-                  }
+          if (!horarioDoc.exists()) {
+            console.log("Horário não encontrado na coleção horariosDisponiveis.");
+            return;
+          }
       
-                  await deleteDoc(doc.ref);
+          const dataAgendamento = horarioDoc.data().horario; 
       
-                } else {
-                  console.log("Não é possível cancelar agendamento com data passada.");
-                }
-              } else {
-                console.log(`A data do agendamento não é válida.`);
-              }
-            } catch (error) {
-              console.error("Erro ao processar documento:", error);
+          if (dataAgendamento) {
+            const currentDate = new Date();
+            const formattedCurrentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 0, 0, 0);
+            const formattedDataAgendamento = new Date(dataAgendamento.seconds * 1000);
+      
+            console.log("Current Date:", formattedCurrentDate);
+            console.log("Data Agendamento:", formattedDataAgendamento);
+      
+            if (isNaN(formattedDataAgendamento.getTime())) {
+              console.error("Data Agendamento inválida:", dataAgendamento);
             }
-          });
+      
+            if (formattedDataAgendamento > formattedCurrentDate) {
+              const deleteConfig = {
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json; charset=UTF-8",
+                },
+              };
+      
+              console.log("Enviando solicitação de exclusão...");
+      
+              const response = await fetch(`http://localhost:3000/agendamento/remove/${agendamentoId}`, deleteConfig);
+      
+              console.log("Resposta da API:", response);
+      
+              if (!response.ok) {
+                throw new Error("Erro na solicitação da API");
+              }
+      
+              await deleteDoc(agendamentoRef);
+      
+              // Atualiza o status no Firestore para horarioAgendado: false
+              await updateDoc(horarioDocRef, { status: false });
+      
+              console.log("Agendamento cancelado com sucesso!");
+            } else {
+              console.log("Não é possível cancelar agendamento com data passada.");
+            }
+          } else {
+            console.log(`O campo de data do agendamento não contém um valor válido.`);
+          }
         } catch (error) {
-          console.error("Erro ao excluir conta", error);
-          setErrorMessage('Erro ao excluir conta: ' + error.message);
+          console.error("Erro ao excluir agendamento", error);
+          setErrorMessage('Erro ao excluir agendamento: ' + error.message);
         } finally {
           setIsLoading(false);
         }
       };
       
+      
+        
     return (
        <Container className="containerAgendamentoCliente">
         <h2>Seus Agendamentos, {clienteInfo.username}</h2>
@@ -295,7 +323,7 @@ const ClienteAgendamentos = () => {
                                     </Col>
                                 )}
                             </Row>
-                            <Button onClick={(e) => handleDeleteClick(e, agendamento.id)}>Cancelar</Button>
+                            <Button onClick={(e) => handleDeleteAgendamento(e, agendamento.id)}>Cancelar</Button>
                         </Card.Body>
                     </Card>
                 ))}
