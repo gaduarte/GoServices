@@ -105,6 +105,7 @@ const typeDefs = gql`
         descricao: String!
         empresa: String!
         valor: String!
+        categoria: String!
    }
 `;
 

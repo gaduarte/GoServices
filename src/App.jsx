@@ -27,6 +27,7 @@ import { ClienteFavoritosDados } from "./pages/Areas/ClientePage/FavoritosClient
 import { ClienteDadosPerfil } from "./pages/Areas/ClientePage/Perfil.jsx";
 import { EmpresaDadosPerfil } from "./pages/Areas/EmpresaPage/PerfilEmpresa/index.jsx";
 import { ProfissionalDadosPerfil } from "./pages/Areas/ProfissionalPage/Perfil/index.jsx";
+import { MaisAgendamentoDados } from "./pages/goservicesInfos/MaisAgendados/index.jsx";
 
 
 function App() {
@@ -112,6 +113,9 @@ function App() {
                 <NavLink to="/">Home</NavLink>
               </li>
               <li>
+                <NavLink to="/maisAgendados">Mais Agendados</NavLink>
+              </li>
+              <li>
                 {userRole === "cliente" ? (
                   <NavLink to="/cliente/dados">Meu Perfil</NavLink>
                 ) : null}
@@ -146,6 +150,7 @@ function App() {
           <Route path="/cadastro/*" element={<CadastrarUsuario />} />
           <Route path="/login" element={<LoginUsuario />} />
           <Route path="/resultados:servicoId" element={< Resultados />} />
+          <Route path="/maisAgendados" element={ <MaisAgendamentoDados />} />
           {userRole === "cliente" && <Route path="/cliente/*" element={<ClienteDados />} />}
           {userRole === "cliente" && <Route path="/cliente/dados" element={<ClienteDadosPerfil />} />}
           {userRole === "cliente" && <Route path="/addCartao/*" element={<ClienteAdicionaCartao />} />}

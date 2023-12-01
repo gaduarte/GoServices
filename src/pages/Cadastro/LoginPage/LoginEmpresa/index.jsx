@@ -56,7 +56,8 @@ const LoginEmpresa = ({onLogin}) => {
   
         
         setId(null);
-        setErrorMessage(`Erro de login: ${errorCode} - ${errorMessage}`);
+        console.log('Erro de login: ', errorCode);
+        setErrorMessage(`Erro de login: ${errorMessage}`);
       }
     };
   

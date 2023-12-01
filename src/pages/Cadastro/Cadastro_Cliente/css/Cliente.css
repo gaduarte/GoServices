@@ -64,7 +64,7 @@
   width: 100%;
   height: 40px;
   background-color: #C26E7E; 
-  color: #fff;
+  color: #333;
   border: none;
   margin: 3px 0;
   border-radius: 7px;
@@ -76,6 +76,8 @@
 .buttonCli:hover {
   background-color: #9E5A67; /* Cor mais escura ao passar o mouse */
 }
+
+
 
 @media (min-width: 701px) {
   form {

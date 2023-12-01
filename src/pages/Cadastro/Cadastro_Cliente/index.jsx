@@ -4,7 +4,7 @@ import "./css/Cliente.css";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import {Form, Button } from "react-bootstrap";
 
 const CadastroCliente = () => {
   const nomeRef = useRef(null);
@@ -143,7 +143,6 @@ const CadastroCliente = () => {
   function validateField(field) {
     return field !== null && field.trim() !== "";
   }
-
   return (
     <div className="centeredFormCli">
       {successMessage && <div className="successMessageCli">{successMessage}</div>}
@@ -159,7 +158,7 @@ const CadastroCliente = () => {
           <input type="text" ref={enderecoRef} className="inputFieldCli" name="endereco" placeholder="Endereço" />
         </div>
         <div className="inputContainerCli">
-          <input type="text" ref={cpfRef} className="inputFieldCli" name="cpf" placeholder="Cpf" />
+          <input type="text" ref={cpfRef} className="inputFieldCli" name="cpf" placeholder="CPF" />
         </div>
         <div className="inputContainerCli">
           <input type="text" ref={telefoneRef} className="inputFieldCli" placeholder="Telefone" />
@@ -168,14 +167,15 @@ const CadastroCliente = () => {
           <input type="password" ref={passwordRef} className="inputFieldCli" placeholder="Senha" />
         </div>
 
-        <button type="submit" className="buttonCli">
+        <button type="submit" className="buttonCli submitButton">
           Cadastrar
         </button>
-        <button className="buttonCli" onClick={() => navigate("/")}>
+        <button className="buttonCli cancelButton" onClick={() => history("/")}>
           Cancelar
         </button>
-      </form>
+        </form>
     </div>
+    
   );
 };
 

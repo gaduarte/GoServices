@@ -6,6 +6,8 @@ import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { ref, getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
@@ -370,7 +372,7 @@ const handleDelete = async (servicoId) => {
 
                 </Col>
               </Row>
-              <Row style={{ margin: "12px", marginBottom: "20px" }}>
+              <Row className="rowServ">
                 <Col md={3}>
                   <Form.Group>
                     <Form.Label style={{ color: "black" }}>Escolha uma nova imagem:</Form.Label>
@@ -387,7 +389,7 @@ const handleDelete = async (servicoId) => {
                 </Col>
               </Row>
 
-              <Row style={{margin: "12px", marginBottom: "20px"}}>
+              <Row className="rowServ">
                 <Col md={3}>
                   <Form.Group>
                     <Form.Label style={{ color: "black" }}>Nome do Serviço</Form.Label>
@@ -396,11 +398,11 @@ const handleDelete = async (servicoId) => {
                 <Col md={9} className="text-secondary">
                   <Form.Group >
                     <Form.Control type="text" ref={nomeRef} defaultValue={servicosDaEmpresa[selectedServicoId].nome || ""} 
-                    style={{width: "100%"}}/>
+                     className="controlEmp"/>
                   </Form.Group>
                 </Col>
               </Row>
-              <Row style={{margin: "12px", marginBottom: "20px"}}>
+              <Row className="rowServ">
                 <Col md={3}>
                   <Form.Group>
                     <Form.Label  style={{color: "black" }}>Descrição do Serviço</Form.Label>
@@ -412,13 +414,13 @@ const handleDelete = async (servicoId) => {
                       as="textarea"
                       rows={3}
                       ref={descricaoRef}
-                      style={{  width: "100%" }}
+                      className="controlEmp1"
                       defaultValue={servicosDaEmpresa[selectedServicoId].descricao || ""}
                     />
                   </Form.Group>
                 </Col>
               </Row>
-              <Row style={{margin: "12px", marginBottom: "20px"}}>
+              <Row className="rowServ">
                 <Col md={3}>
                   <Form.Group>
                     <Form.Label style={{ color: "black" }}>Valor do Serviço</Form.Label>
@@ -427,7 +429,7 @@ const handleDelete = async (servicoId) => {
                 <Col md={9} className="text-secondary">
                   <Form.Group>
                     <Form.Control type="text" ref={valorRef} defaultValue={servicosDaEmpresa[selectedServicoId].valor || ""}
-                    style={{width: "100%"}} />
+                    className="controlEmp" />
                   </Form.Group>
                 </Col>
               </Row>
@@ -467,6 +469,12 @@ const handleDelete = async (servicoId) => {
                 </Row>
                 <Row className="rowServ">
                   <Col md={3}>
+                  <strong>Categoria: </strong>
+                  {servico.categoria && <span>{servico.categoria}</span>}
+                  </Col>
+                </Row>
+                <Row className="rowServ">
+                  <Col md={3}>
                     <strong>Descrição: </strong>
                     {servico.descricao && <span>{servico.descricao}</span>}
                   </Col>
@@ -477,17 +485,17 @@ const handleDelete = async (servicoId) => {
                     {servico.valor && <span>R$ {servico.valor}</span>}
                   </Col>
                 </Row>
-                <Button className="buttonServ" onClick={() => handleServicoSelect(index)}>Editar</Button>
-                <Button className="buttonServ1" onClick={() => handleDelete(index)}>Excluir</Button>
-                <Button className="buttonServ2"> <Link to={`/horarios/${servico.id}`}>Adicionar Horário</Link>
-                  </Button>
+                <Button className="buttonServ" onClick={() => handleServicoSelect(index)}><FontAwesomeIcon icon={faEdit} /> </Button>
+                <Button className="buttonServ1"> <Link className="buttonServ1" to={`/horarios/${servico.id}`}>Adicionar Horário</Link>
+                </Button>
+                <Button className="buttonServ" onClick={() => handleDelete(index)}><FontAwesomeIcon icon={faTrash} /> </Button>
               </Card.Body>
             </Card>
           </div>
         ))}
       </div>
       )}
-      <button><a href="/addServico">Voltar</a></button>
+      <button className="logoutEmp"><a href="/empresa/dados">Voltar</a></button>
     </Container>
   );
   

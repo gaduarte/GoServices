@@ -55,6 +55,8 @@
   position: fixed;
   top: 0;
   z-index: 1000;
+  left: 0;
+  right: 0;
 }
 
 .my-list {
@@ -79,6 +81,7 @@
   text-decoration: none; 
   padding: 10px; 
   border-bottom: 3px solid transparent;
+  width: 130px;
 }
 
 .my-list li a.active {
@@ -96,7 +99,8 @@
   color: #fff;
   position: fixed;
   bottom: 0;
-  
+  left: 0;
+  right: 0;
 }
 
 /* Estilos específicos para telas com largura entre 320px e 768px */

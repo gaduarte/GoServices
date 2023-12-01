@@ -1,6 +1,50 @@
 .main-home {
-  padding: 20px;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 4px 2px -2px gray;
 }
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.h1-home {
+  font-size: 1.5rem;
+  color: #fff;
+  margin: 0;
+  padding: 15px;
+  left: 0;
+}
+
+.categorias {
+  display: flex;
+  margin: 0;
+  padding: 10px;
+  background-color: #ccc;
+}
+
+.categorias button {
+  margin-right: 10px;
+  color: #333;
+  background-color: #ddd;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  &:hover {
+    background-color: #c26e7e;
+    color: #fff;
+  }
+}
+
+.categorias button:first-child {
+  margin-right: auto; /* Move o botão "Todos" para a esquerda */
+}
+
 
 .img {
   width: 100%;
@@ -33,7 +77,6 @@
   background-color: #6e7ec2;
   padding: 2px;
   margin: 10px;
-  height: 390px;
   border: 1px solid #ddd;
   border-radius: 10px;
   display: flex;
@@ -61,10 +104,31 @@
 
 .card-description-home {
   font-size: 14px;
-  display: flex;
   text-align: left;
-  line-break: anywhere;
+  overflow: hidden;
   color: #333;
+}
+
+/* Se desejar uma altura máxima para a descrição */
+.card-description-home::after {
+  content: ''; /* Cria um pseudo-elemento após o texto */
+  display: inline-block;
+  width: 100%; /* Garante que o elemento ocupe a largura total disponível */
+}
+
+.card-description-home button {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  margin-left: 5px;
+  background-color: transparent;
+}
+
+.card-description-home button:hover{
+  background-color: transparent;
 }
 
 .card-title {
@@ -74,10 +138,23 @@
   color: black;
 }
 
-.card-price-home{
+.card-price-home {
   text-align: center;
   font-size: 13px;
   margin-bottom: -28px;
+  color: #f05;
+}
+
+.price-container {
+  width: 80px; /* Defina a largura desejada */
+  text-align: right; /* Alinha o texto à direita dentro do contêiner */
+  margin: auto; /* Centraliza o conteúdo horizontalmente */
+  padding-top: 5px; /* Ajusta o espaçamento superior para melhorar a aparência */
+}
+
+/* Adicione esta regra se desejar que o preço seja exibido na mesma linha que o "R$:" */
+.card-price-home span {
+  vertical-align: top;
 }
 
 .favoritoButton {
@@ -204,9 +281,6 @@
   border-radius: 7px;
   cursor: pointer;
 }
-
-
-
 
     .containerFav {
       background-color: #6e7ec2;

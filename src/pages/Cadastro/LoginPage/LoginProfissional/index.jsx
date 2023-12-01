@@ -56,7 +56,8 @@ const LoginProfissional = ({onLogin}) => {
   
         
         setId(null);
-        setErrorMessage(`Erro de login: ${errorCode} - ${errorMessage}`);
+        console.log('Erro de login: ', errorCode);
+        setErrorMessage(`Erro de login: ${errorMessage}`);
       }
     };
   
@@ -94,7 +95,7 @@ const LoginProfissional = ({onLogin}) => {
             className="inputFieldLoginPro"
           />
         </div>
-        <button type="submit" className="buttonLoginPro"> 
+        <button type="submit" className="buttonLoginPro" > 
           Entrar
         </button>
       </form>

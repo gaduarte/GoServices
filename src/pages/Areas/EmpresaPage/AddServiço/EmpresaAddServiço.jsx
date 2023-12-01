@@ -39,7 +39,9 @@ const EmpresaAddServico = () => {
   const nomeRef = useRef(null);
   const valorRef = useRef(null);
   const empresaRef = useRef(null);
+  const categoriaRef = useRef(null);
   const profissionalRef = collection(db, "profissional");
+ 
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -190,6 +192,7 @@ const EmpresaAddServico = () => {
 
       const descricao = descricaoRef.current.value;
       const nome = nomeRef.current.value;
+      const categoria = categoriaRef.current ? categoriaRef.current.value : null;
       const valor = parseFloat(valorRef.current.value);
       const empresa = empresaRef.current.value;
       const profissional = selectedProfissional;
@@ -200,6 +203,7 @@ const EmpresaAddServico = () => {
           nome,
           valor,
           empresa,
+          categoria,
           empresaId: uid,
           profissional: profissional,
           img: imgUrl,
@@ -235,6 +239,9 @@ const EmpresaAddServico = () => {
         nomeRef.current.value = "";
         valorRef.current.value = "";
         empresaRef.current.value = "";
+        if (categoriaRef.current) {
+          categoriaRef.current.value = "";
+        }
 
         console.log('Serviço cadastrado com sucesso!');
         setSuccessMessage('Serviço cadastrado com sucesso!');
@@ -310,6 +317,18 @@ const EmpresaAddServico = () => {
           <Col md={9} className="text-secundary">
             <Form.Control type="text" ref={nomeRef} style={{width: "400px", height: "30px"}} />
           </Col>
+        </Row>
+        <Row className="rowProfileEmp">
+          <Col md={3}>
+          <Form.Group>
+            <Form.Label style={{ color: "black" }}>
+              Categoria
+            </Form.Label>
+            </Form.Group>
+            </Col>
+            <Col md={9} className="text-secundary">
+            <Form.Control type="text" ref={categoriaRef} style={{width: "400px", height: "30px"}}  />
+            </Col>
         </Row>
         <Row className="rowProfileEmp">
           <Col md={3}>

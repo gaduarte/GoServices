@@ -263,9 +263,8 @@
 
 .logoutButton {
   width: 100%;
-  margin-top: 20px;
+  margin-top: 30px;
 }
-
 
 .nav-link {
   display: flex;
@@ -290,21 +289,31 @@
 .nav-link.toPerfil {
   background-color: #ff9800; 
   color: #fff;
+  border-radius: 3px;
 }
 
 .nav-link.toAddCartao {
   background-color: #03a9f4; 
   color: #fff;
+  border-radius: 3px;
 }
 
 .nav-link.toAgendamentos {
   background-color: #4caf50; 
   color: #fff;
+  border-radius: 3px;
 }
 
 .nav-link.toFavoritos {
   background-color: #e91e63;
   color: #fff;
+  border-radius: 3px;
+}
+
+.nav-link.toAtualizar {
+  background-color: #8E44AD;
+  color: #fff;
+  border-radius: 3px;
 }
 
 

@@ -383,6 +383,7 @@ app.post('/addServico', async (req, res) => {
         nome: req.body.nome,
         valor: req.body.valor,
         empresa: req.body.empresa,
+        categoria: req.body.categoria,
         empresaId: req.body.empresaId,
         profissional: req.body.profissional,
         id: generatedId,
@@ -439,10 +440,7 @@ app.post('/addHorario', async(req,res)=>{
             id: generatedId
         };
 
-        
-        console.log('Dados recebidos no servidor:', horarioData);
-
-        const formattedDate = horario.toLocaleString('pt-BR', {
+        const formattedDate = horarioData.diasSelecionados.toLocaleString('pt-BR', {
             day: 'numeric',
             month: 'long',
             year: 'numeric',
@@ -452,9 +450,9 @@ app.post('/addHorario', async(req,res)=>{
             timeZone: 'America/Sao_Paulo',
           });
           
-          console.log('Data formatada:', formattedDate);      
+          console.log('Data formatada:', formattedDate);              
         
-        console.log('Dados de serviço de empresa:', horarioData);
+        console.log('Dados de horário de empresa:', horarioData);
 
         const webhookURL = 'http://localhost:3000/webhook';
         const webhookData = {

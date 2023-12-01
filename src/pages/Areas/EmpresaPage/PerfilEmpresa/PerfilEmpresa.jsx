@@ -126,6 +126,9 @@ const checkUserRole = async () => {
                 </NavLink>
               </Nav.Item>
               <Nav.Item>
+                <NavLink to="/atualizaServico/" className="nav-link toAtualizar"><i className="fas fa-sync"></i> Atualizar Serviço</NavLink>
+            </Nav.Item>
+              <Nav.Item>
                 <NavLink to="/agendamentosEmpresa" className="nav-link toAgendamentos">
                   <i className="fas fa-history"></i> Relatório de Agendamentos
                 </NavLink>

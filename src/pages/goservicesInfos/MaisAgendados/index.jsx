@@ -1,12 +1,9 @@
 import { getAuth, signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import EmpresaAddServico from "./EmpresaAddServiço";
-import { NavLink } from "react-router-dom";
-import { Nav } from "react-bootstrap";
+import MaisAgendados from "./MaisAgendados";
 
-
-export function EmpresaAdicionaServ() {
+export function MaisAgendamentoDados() {
     const history = useNavigate();
     const[id, setId] = useState(null);
 
@@ -41,9 +38,8 @@ export function EmpresaAdicionaServ() {
         <div>
             {id && 
             <>
-            <EmpresaAddServico />
+            < MaisAgendados />
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-            <button className="logoutEmp"><a href="/empresa/dados">Voltar</a></button>
             </>}
         </div>
     )

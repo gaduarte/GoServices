@@ -7,8 +7,9 @@
   
   .search-input {
     height: 30px;
-    width: 100%;
-    padding: 5px;
+    width: 350px;
+    padding: 1px;
+    border-radius: 5px;
     margin: 1px;
     margin-top: 14px;
   }
@@ -20,7 +21,7 @@
     width: 30px;
     color: white;
     margin-top: 2px;
-    margin-left: 10px;
+    margin-left: 3px;
     margin-bottom: -10px;
     background-color: #C26E7E; 
     border: none;

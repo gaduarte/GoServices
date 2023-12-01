@@ -234,7 +234,7 @@ export const AdicionarHorarioDisponivel = () => {
         {errorMessage && <div className="errorMessage">{errorMessage}</div>}
       </div>
       <button className="infoButtonEmp">
-        <a href="/addServico">Voltar</a>
+        <a href="/empresa/dados">Voltar</a>
       </button>
     </div>
 

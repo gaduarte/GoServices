@@ -50,16 +50,12 @@ const LoginCliente = ({ onLogin }) => {
       // Mensagem de sucesso
       setSuccessMessage("Usuário cliente logado!");
 
-     
       history("/cliente");
       onLogin("cliente");
     } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-
-      
+      console.error('Erro de login:', error);
+      setErrorMessage(`Erro de login: ${error.message}`);
       setId(null);
-      setErrorMessage(`Erro de login: ${errorCode} - ${errorMessage}`);
     }
   };
 
@@ -99,7 +95,7 @@ const LoginCliente = ({ onLogin }) => {
             className="inputFieldLoginCli" 
           />
         </div>
-        <button type="submit" className="buttonLoginCli"> 
+        <button type="submit" className="buttonLoginCli" > 
           Entrar
         </button>
       </form>

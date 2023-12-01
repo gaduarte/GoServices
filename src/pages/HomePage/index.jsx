@@ -32,6 +32,8 @@ export function HomePage() {
   const clienteRef = collection(db, "cliente");
   const empresaRef = collection(db, "empresa");
   const profissionalRef = collection(db, "profissional");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const history = useNavigate(); 
 
   const [successMessage, setSuccessMessage] = useState("");
@@ -54,6 +56,37 @@ export function HomePage() {
     fetchServicos();
 
   }, []);
+
+  const categorias = [...new Set(servicos.map((servico) => {
+    if (servico.data && servico.data.categoria) {
+      const categoria = servico.data.categoria; // Remova o [0]
+      if (categoria) {
+        return categoria.toUpperCase();
+      }
+    }
+    return null;
+  }).filter(Boolean))];
+  
+  const sortedServicos = [...servicos].sort((a, b) => {
+    const categoriaA = a.data && a.data.categoria;
+    const categoriaB = b.data && b.data.categoria;
+  
+    if (categoriaA && categoriaB) {
+      return categoriaA.localeCompare(categoriaB);
+    }
+  
+    // Se uma das categorias for undefined, considere-as iguais para evitar erros
+    return 0;
+  });
+  
+  const filteredServicos = selectedCategory
+    ? sortedServicos.filter((servico) =>
+        selectedCategory.toLowerCase() === "todos" ||
+        (servico.data?.categoria?.toLowerCase() === selectedCategory.toLowerCase())
+      )
+    : sortedServicos;
+  
+
 
   function getDecimal(value){
     const stringValue = value.toString();
@@ -161,19 +194,35 @@ export function HomePage() {
     }
   };
 
-  const itemsPerRow = 7;
+  const truncateText = (text, maxLength) => {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return text.slice(0, maxLength) + '...';
+  };
 
+  const itemsPerRow = 7;
   return (
     <main className="main-home">
       {successMessage && <div className="successMessageCli">{successMessage}</div>}
       {errorMessage && <div className="errorMessageCli">{errorMessage}</div>}
-      <h2 className="h1-home">Lista de Serviços:</h2>
+
+      <div className="header-container">
+        <h2 className="h1-home">Lista de Serviços:</h2>
+
+        <div className="categorias">
+          <button onClick={() => setSelectedCategory(null)}>Todos</button>
+          {categorias.map((categoria) => (
+            <button key={categoria} onClick={() => setSelectedCategory(categoria)}>
+              {categoria}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="container-home">
-        {servicos.map((servico, index) => (
-          <div
-            className="card-container-home"
-            key={servico.id}
-          >
+        {filteredServicos.map((servico, index) => (
+          <div className="card-container-home" key={servico.id}>
             <img src={servico.data.img} alt={servico.data.nome} className="img" />
             <div className="card-body-home">
               <div style={{ marginBottom: "-10px" }}>
@@ -183,14 +232,22 @@ export function HomePage() {
                 <p style={{ fontSize: "15px", display: "flex", color: "#0F1111", textAlign: "left" }}>
                   {servico.data.empresa}
                 </p>
-                <p className="card-description-home">
-                  {servico.data.descricao}
-                </p>
+                <div className="card-description-home">
+                {isDescriptionExpanded ? (
+                  servico.data.descricao
+                ) : (
+                  <>
+                    {truncateText(servico.data.descricao, 30)} {/* Limita a descrição a 100 caracteres */}
+                    <button onClick={() => setIsDescriptionExpanded(true)}>Mostrar Mais</button>
+                  </>
+                )}
+              </div>
               </div>
               <div className="card-price-home">
-                R$:{' '}
-                <span style={{ fontSize: "28px", color: "#0F1111" }}>{getDecimal(servico.data.valor).integerPart}</span>
-                <span style={{ fontSize: "13px", top: "-.75em", color: "#0F1111" }}>.{getDecimal(servico.data.valor).decimalPart}</span>
+                R$: <span style={{ fontSize: "28px", color: "#0F1111" }}>{getDecimal(servico.data.valor).integerPart}</span>
+                <span style={{ fontSize: "13px", top: "-.75em", color: "#0F1111" }}>
+                  .{getDecimal(servico.data.valor).decimalPart}
+                </span>
               </div>
             </div>
             <div className="card-footer-home">
@@ -213,6 +270,5 @@ export function HomePage() {
     </main>
   );
   
-
 }
 
