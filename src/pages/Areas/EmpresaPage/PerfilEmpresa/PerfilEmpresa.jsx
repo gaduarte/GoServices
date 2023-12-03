@@ -133,6 +133,11 @@ const checkUserRole = async () => {
                   <i className="fas fa-history"></i> Relatório de Agendamentos
                 </NavLink>
               </Nav.Item>
+              <Nav.Item>
+                <NavLink to="/empresa/pagamentos" className="nav-link toPagamentos">
+                  <i className="fas fa-history"></i> Histórico Pagamentos
+                </NavLink>
+              </Nav.Item>
             </Nav>
             <Button onClick={handleLogout} className="logoutButton">
               Sair

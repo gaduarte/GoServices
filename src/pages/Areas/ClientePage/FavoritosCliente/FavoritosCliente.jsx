@@ -263,7 +263,7 @@ return (
             </Card.Body>
           </Card>
         ))}
-        <button className="buttonFav1"><a href="/cliente/dados">Voltar</a></button>
+        <button className="buttonFav1"><a href="/cliente/dados" className="buttonFav1">Voltar</a></button>
       </div>
     )}
   </Container>

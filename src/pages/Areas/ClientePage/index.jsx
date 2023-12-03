@@ -42,7 +42,7 @@ export function ClienteDados() {
         <>
           <ClienteDashboard /> 
           {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-          <button className="logoutCli"> <a href="/cliente/dados">Voltar</a></button>
+          <button className="logoutCli"> <a className="logoutCli" href="/cliente/dados">Voltar</a></button>
         </>
     }
     </div>

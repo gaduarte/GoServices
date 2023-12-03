@@ -45,12 +45,11 @@
 }
 
 .infoButtonProfileEmp{
-    padding: 2px;
-    margin-top: 3px;
+    padding: 10px 20px;
+    margin-top: 5px;
     margin-right: 10px;
     width: 150px;
-    height: 40px;
-    color: #fff;
+    color: #333;
     background-color: #C26E7E;
     border: none;
     border-radius: 8px;
@@ -69,6 +68,7 @@
   font-size: 15px;
   font-weight: 700;
   background-color: #C26E7E;
+  color: #333;
 }
 
 
@@ -259,4 +259,9 @@
   display: flex;
   justify-content: space-between; 
   align-items: center; 
+}
+
+.iconE{
+  color: #333;
+  margin: 1px;
 }

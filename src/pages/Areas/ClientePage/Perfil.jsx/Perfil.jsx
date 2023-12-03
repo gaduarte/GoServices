@@ -101,6 +101,11 @@ const ClientePerfil = () => {
                 </NavLink>
               </Nav.Item>
               <Nav.Item>
+                <NavLink to="/pagamentos" className="nav-link toPagamentos">
+                  <i className="fas fa-credit-card"></i> Seus Pagamentos
+                </NavLink>
+              </Nav.Item>
+              <Nav.Item>
                 <NavLink to="/favoritosCliente" className="nav-link toFavoritos">
                   <i className="fas fa-heart"></i> Favoritos
                 </NavLink>

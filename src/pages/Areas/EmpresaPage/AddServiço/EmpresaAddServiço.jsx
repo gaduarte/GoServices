@@ -198,6 +198,11 @@ const EmpresaAddServico = () => {
       const profissional = selectedProfissional;
 
       try {
+        if(!descricao || !nome || !valor || !categoria){
+          alert("Campos obrigatórios não preenchidos.");
+          return;
+        }
+
         const newService = {
           descricao,
           nome,

@@ -68,6 +68,10 @@
   list-style: none; 
   position: absolute;
   bottom: 0px;
+  width: 100vw;
+  top: 0;
+  margin-top: 0;
+  height: 60px;
 }
 
 .my-list li a {

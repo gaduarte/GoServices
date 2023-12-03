@@ -197,11 +197,13 @@ const ProfissionalAgendamentos = () => {
                                     )}
                                 </Row>
                                 <Row>
-                                    {agendamento.horario && (
-                                        <Col md={3} className="rowAgendProfissional">
-                                            <strong>Horário Selecionado: </strong>
-                                            {agendamento.horario.horario}
-                                        </Col>
+                                {agendamento.horario && (
+                                    <Col md={3} className="rowAgendProfissional">
+                                        <strong>Horário Selecionado: </strong>
+                                        {agendamento.horario.horario.seconds && agendamento.horario.horario.nanoseconds
+                                        ? new Date(agendamento.horario.horario.seconds * 1000).toLocaleString()
+                                        : 'Horário não disponível'}
+                                    </Col>
                                     )}
                                 </Row>
                                 <Row>

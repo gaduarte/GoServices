@@ -39,11 +39,10 @@ export function ClienteAdicionaCartao() {
             {id && 
             <>
             <ClienteAddCartao />
-            <button>
-                <NavLink to="/cartoes" state={{color: "white"}}>Meus Cartões</NavLink>
+            <button className="meusCartoes">
+                <NavLink to="/cartoes" className="logoutCli">Meus Cartões</NavLink>
             </button>
             {alertMessage && <div style={{color: "green"}}>{alertMessage}</div>}
-            <button className="logoutCli"><a href="/cliente/dados">Voltar</a></button>
             </>}
         </div>
     )

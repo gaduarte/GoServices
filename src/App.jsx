@@ -28,6 +28,9 @@ import { ClienteDadosPerfil } from "./pages/Areas/ClientePage/Perfil.jsx";
 import { EmpresaDadosPerfil } from "./pages/Areas/EmpresaPage/PerfilEmpresa/index.jsx";
 import { ProfissionalDadosPerfil } from "./pages/Areas/ProfissionalPage/Perfil/index.jsx";
 import { MaisAgendamentoDados } from "./pages/goservicesInfos/MaisAgendados/index.jsx";
+import { ClientePagamentoDados } from "./pages/Areas/ClientePage/Pagamentos.java/index.jsx";
+import { EmpresaPagamentoDados } from "./pages/Areas/EmpresaPage/HistoricoPagamento/index.jsx";
+import { ProfissionalPagamentoDados } from "./pages/Areas/ProfissionalPage/HistoricoPag/index.jsx";
 
 
 function App() {
@@ -159,10 +162,13 @@ function App() {
           {userRole === "cliente" && <Route path="/favoritos/:servicoId" element={<FavoritosDados />} />}
           {userRole === "cliente" && <Route path="/favoritosCliente/*" element={<ClienteFavoritosDados />} />}
           {userRole === "cliente" && <Route path="/agendamentosCliente/*" element={<ClienteAgendamentoDados />} />}
+          {userRole === "cliente" && <Route path="/pagamentos/*" element={<ClientePagamentoDados />} />}
           {userRole === "profissional" && <Route path="/profissional/dados" element={<ProfissionalDadosPerfil />} />}
           {userRole === "profissional" && <Route path="/profissional/*" element={<ProfissionalDados />} />}
           {userRole === "profissional" && <Route path="/agendamentosProfissional" element={<ProfissionalAgendamentoDados />}/>}
+          {userRole === "profissional" && <Route path="/profissional/pagamentos" element={<ProfissionalPagamentoDados />}/>}
           {userRole === "empresa" && <Route path="/empresa/dados" element={<EmpresaDadosPerfil />} />}
+          {userRole === "empresa" && <Route path="/empresa/pagamentos" element={<EmpresaPagamentoDados />} />}
           {userRole === "empresa" && <Route path="/empresa/*" element={<EmpresaDados />} />}
           {userRole === "empresa" && <Route path="/addServico/*" element={<EmpresaAdicionaServ />} />}
           {userRole === "empresa" && <Route path="/atualizaServico/*" element={<EmpresaAtualiza/>} />}

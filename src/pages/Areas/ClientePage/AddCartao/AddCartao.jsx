@@ -155,6 +155,11 @@ const ClienteAddCartao = () => {
         const dataValidade = dataValidadeRef.current.value;
 
         try{
+          if(!numero || !nome || !codigo){
+                alert("Campos obrigatórios não preenchidos")
+                return;
+            }
+
             const newCartao = {
                 numero: numero,
                 nome: nome,
@@ -162,6 +167,7 @@ const ClienteAddCartao = () => {
                 dataValidade: dataValidade,
                 clienteId: uid
             }
+
 
             const configCartao = {
                 method: "POST",
@@ -195,6 +201,8 @@ const ClienteAddCartao = () => {
             nomRef.current.value = "";
             codSegRef.current.value = "";
             dataValidadeRef.current.value = "";
+
+            history("/cartoes/");
         } catch (error) {
             console.error("Erro ao adicionar cartão", error);
             setErrorMessage("Erro ao adicionar cartão: " + error.message);
@@ -304,7 +312,7 @@ const ClienteAddCartao = () => {
                 <Button variant="primary" onClick={handleCarataoSubmit} className="buttonCartaoCli">
                 Adicionar
                 </Button>
-                <Button onClick={handleCancelClick} className="buttonCartaoCli"><NavLink to="/cliente">Cancelar</NavLink></Button>
+                <Button onClick={handleCancelClick} className="buttonCartaoCli"><NavLink to="/cliente/dados" className="buttonCartaoCli">Cancelar</NavLink></Button>
             </div>
           </Form>
         </Container>

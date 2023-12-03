@@ -108,6 +108,9 @@ const CartoesCliente = () => {
                     const cartaoRef = doc(collection(clienteDocRef, "cartao"), cartaoId);
     
                     await deleteDoc(cartaoRef);
+
+                    setCartaoCliente((prevCartoes) => prevCartoes.filter((cartao) => cartao.id !== cartaoId)
+                  );
     
                     const deleteConfig = {
                         method: 'DELETE',
@@ -148,7 +151,7 @@ const CartoesCliente = () => {
               <p className="cartaoCli">Código do Cartão: {cartaoItem.codigo} </p>
               <p className="cartaoCli">Data de Validade: {cartaoItem.dataValidade} </p>
               <Button className="buttonExcluirCartao" onClick={() => handleDeleteCartao( cartaoItem.id)}>Excluir</Button>
-              <Button className="buttonVoltarCartao"><a href="/cliente">Voltar</a></Button>
+              <Button className="buttonVoltarCartao"><a href="/cliente/dados">Voltar</a></Button>
             </div>
           ))}
         </>

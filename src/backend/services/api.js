@@ -231,11 +231,12 @@ app.post('/addCartao', async(req,res)=>{
 });
 
 //Rota para recuperar informações do cartao por ID.
-app.get('/cartao/1/:id', async (req, res) => {
-    const clienteId = req.params.id;
+app.get('/cliente/:clienteId/cartao/:cartaoId', async (req, res) => {
+    const clienteId = req.params.clienteId;
+    const cartaoId = req.params.cartaoId;
 
     try {
-        const cartaoData = await gs.retrieveCartao(clienteId);
+        const cartaoData = await gs.retrieveCartao(clienteId, cartaoId);
 
         if (!cartaoData) {
             res.status(404).send('Cartao not found.');
@@ -249,11 +250,11 @@ app.get('/cartao/1/:id', async (req, res) => {
 });
 
 // Rota para excluir cartão por ID.
-app.delete('/cartao/remove/1/:id/', async (req, res) => {
-    const id = req.params.id;
+app.delete('/cartao/remove/1/:cartaoId', async (req, res) => {
+    const cartaoId = req.params.cartaoId;
 
     try {
-        await gs.excluirCartao(id);
+        await gs.excluirCartao(cartaoId);
         res.status(200).json('Cartão excluído com Sucesso!');
     } catch (error) {
         console.error("Erro ao excluir cartão:", error);

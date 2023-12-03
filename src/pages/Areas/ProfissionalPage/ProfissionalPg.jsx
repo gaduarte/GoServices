@@ -191,6 +191,8 @@ const ProfissionalDashboard = () => {
                 if(!response.ok){
                     throw new Error("Erro na solicitação da API");
                   }
+
+                  await auth.signOut();
             
                   setSuccessMessage("Conta excluída com sucesso!");
                   setErrorMessage('');
@@ -205,8 +207,8 @@ const ProfissionalDashboard = () => {
 
     return (
         <Container className="centeredFormProfilePro">
-          {successMessage && <div className="successMessageCli">{successMessage}</div>}
-          {errorMessage && <div className="errorMessageCli">{errorMessage}</div>}
+          {successMessage && <div className="successMessage">{successMessage}</div>}
+          {errorMessage && <div className="errorMessage">{errorMessage}</div>}
           {editMode ? (
             <Form>
               <Row className="rowProfilePro">

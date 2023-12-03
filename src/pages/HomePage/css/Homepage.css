@@ -10,19 +10,12 @@
   margin-bottom: 15px;
 }
 
-.h1-home {
-  font-size: 1.5rem;
-  color: #fff;
-  margin: 0;
-  padding: 15px;
-  left: 0;
-}
-
 .categorias {
   display: flex;
   margin: 0;
   padding: 10px;
   background-color: #ccc;
+  border-radius: 5px;
 }
 
 .categorias button {
@@ -44,7 +37,6 @@
 .categorias button:first-child {
   margin-right: auto; /* Move o botão "Todos" para a esquerda */
 }
-
 
 .img {
   width: 100%;
@@ -90,7 +82,6 @@
   background-color: #5A679E; /* Cor de fundo ao passar o mouse */
 }
 
-
 .card-body-home {
   padding: 2px;
   margin: 2px;
@@ -107,6 +98,7 @@
   text-align: left;
   overflow: hidden;
   color: #333;
+  letter-spacing: normal;
 }
 
 /* Se desejar uma altura máxima para a descrição */
@@ -146,13 +138,12 @@
 }
 
 .price-container {
-  width: 80px; /* Defina a largura desejada */
+  width: 80px; 
   text-align: right; /* Alinha o texto à direita dentro do contêiner */
   margin: auto; /* Centraliza o conteúdo horizontalmente */
   padding-top: 5px; /* Ajusta o espaçamento superior para melhorar a aparência */
 }
 
-/* Adicione esta regra se desejar que o preço seja exibido na mesma linha que o "R$:" */
 .card-price-home span {
   vertical-align: top;
 }
@@ -248,6 +239,8 @@
   margin: 10px 0;
   border-radius: 5px;
   background-color: #6e7ec2;
+  color: #111;
+  text-align: left;
 }
 
 .select-dif {
@@ -257,6 +250,7 @@
   background-color: #6e7ec2;
   border: 1px solid #ddd;
   border-radius: 5px;
+  color: black;
 }
 
 .professional-section,
@@ -268,6 +262,7 @@
   background-color: #6e7ec2;
   border: 1px solid #ddd;
   border-radius: 5px;
+  color: #111;
 }
 
 .buttonAgendar,
@@ -276,10 +271,18 @@
   padding: 10px;
   margin: 10px 0;
   background-color: #c26e7e;
-  color: #fff;
+  color: #111;
   border: none;
   border-radius: 7px;
   cursor: pointer;
+}
+
+.buttonAgendar2 a {
+  color: #333;
+}
+
+.buttonAgendar2 a:hover{
+  color: #111;
 }
 
     .containerFav {

@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 const serviceAccount = require('../Firebase/key.json');
-const { doc, deleteDoc, collection, getDocs } = require('firebase/firestore');
+const { doc, deleteDoc, collection, getDocs, getDoc } = require('firebase/firestore');
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
@@ -263,29 +263,35 @@ let Goservice = class {
     }
 
     // Retorna dados do cartão por ID.
-    async retrieveCartao(clienteId) {
+    async retrieveCartao(clienteId, cartaoId) {
         try {
-            const userRef = doc(db, "cliente", clienteId);
-            console.log("userRef:", userRef);
-    
-            const cartaoRef = collection(userRef, "cartao");
-            console.log("cartaoRef:", cartaoRef);
-    
-            const cartaoSnapshot = await getDocs(cartaoRef);
-    
-            if (cartaoSnapshot.empty) {
+            const userRef = db.collection("cliente").doc(clienteId);
+
+            // Verifica se o documento do cliente existe antes de acessar a coleção cartao
+            const clienteSnapshot = await getDoc(userRef);
+            if (!clienteSnapshot.exists()) {
+                console.log("Cliente not found.");
+                return null;
+            }
+
+            const cartaoRef = userRef.collection("cartao").doc(cartaoId);
+
+            const cartaoSnapshot = await getDoc(cartaoRef);
+
+            if (!cartaoSnapshot.exists()) {
                 console.log("Cartao not found.");
                 return null;
             }
-    
-            const cartaoData = cartaoSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            console.log("Cartao data:", cartaoData); 
+
+            const cartaoData = { id: cartaoSnapshot.id, ...cartaoSnapshot.data() };
+            console.log("Cartao data:", cartaoData);
             return cartaoData;
         } catch (error) {
             console.error("Error retrieving cartao:", error);
             return null;
         }
     }
+
     
     // Retorna dados do agendamento por ID.
     async retrieveAgendamento(id){

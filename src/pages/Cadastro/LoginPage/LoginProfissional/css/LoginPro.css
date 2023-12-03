@@ -75,7 +75,7 @@
   transition: background-color 0.3s ease;
 }
 
-.buttonLoginPro{
+.buttonLoginPro:hover{
   background-color: #9E5A67;
 }
 

@@ -8,13 +8,12 @@
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    background-color: #f5f5f5;
+    background-color: #6E7EC2;
   }
 
   .cardProfile{
     padding: 0px;
     width: 400px;
-    border: 1px solid #ddd;
   }
   .centeredFormProfileCli {
     text-align: center;
@@ -39,15 +38,21 @@
   }
   
   .infoButtonProfileCli {
+    margin-top: auto;
     background-color: #C26E7E; 
-    color: #fff;
+    color: #333;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 7px;
     margin: 5px;
     margin-right: 1px;
-    width: 150px;
+    width: 130px;
+    padding: 12px;
+  }
+
+  .icon{
+    margin: 2px;
   }
 
  .cartaoButton{
@@ -60,12 +65,29 @@
   margin-left: 20px;
  }
 
+ .buttonProfileCli{
+  margin: 0 auto;
+  width: 100%;
+  color: #333;
+ }
+
  .logoutCli{
-  width: 150px;
+  width: 100px;
   height: 40px;
+  bottom: 0;
+  margin: 10px auto;
   font-size: 15px;
   font-weight: 700;
   background-color: #C26E7E;
+  color: #333;
+ }
+
+ .logoutCli a {
+  color: #333;
+ }
+
+ .logoutCli:hover {
+  color: #333;
  }
 
  .cartaoRowCli{
@@ -88,22 +110,12 @@
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  background-color: #eae5dc;
+  background-color: #6E7EC2;
 }
 
-.buttonCartaoCli{
-  padding: 12px;
-  margin: 24px;
-  margin-right: 1px;
-  width: 150px;
-  height: 40px;
-  font-weight: 700;
-  color: #fff;
-  background-color: #C26E7E;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
+
+.buttonCartaoCli a:hover{
+  color: #333;
 }
 
 .containerAgendamentoCliente {
@@ -143,8 +155,17 @@
 }
 
 .buttonAg{
+  width: 140px;
   background-color: #C26E7E;
   margin: 2px;
+}
+
+.buttonAg a {
+  color: #333;
+}
+
+.buttonAg a:hover{
+  color: #333;
 }
 
 .containerCartao {
@@ -180,9 +201,24 @@
   background-color: #B82C3A; /* Cor de fundo ao passar o mouse */
 }
 
+.buttonCartaoCli{
+  margin: 20px;
+  width: 150px;
+  font-weight: 700;
+  color: #333;
+  background-color: #C26E7E;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.buttonCartaoCli a {
+  color: #333;
+}
+
 .containerFavs{
-  display: flex; /* Use flex para alinhar os itens verticalmente */
-  flex-direction: column; /* Alinhe os itens em uma coluna */
+  display: flex;
+  flex-direction: column; 
   justify-content: space-around;
 }
 
@@ -201,7 +237,7 @@
   height: 150px;
   object-fit: cover;
   border-radius: 5px;
-  margin-bottom: 10px; /* Ajuste o espaçamento inferior */
+  margin-bottom: 10px; 
 }
 
 .rowFavs {
@@ -231,7 +267,7 @@
 .buttonFav1 {
   margin: 10px;
   background-color: #C26E7E;
-  color: #fff;
+  color: #333;
   border: none;
   padding: 10px 20px;
   cursor: pointer;
@@ -239,6 +275,9 @@
   text-decoration: none;
 }
 
+.buttonFav1 a:hover{
+  color: #333;
+}
 
 .centeredFormPerfilCli {
   max-width: 800px;
@@ -316,6 +355,78 @@
   border-radius: 3px;
 }
 
+.nav-link.toPagamentos{
+  background-color: palevioletred;
+  color: #fff;
+  border-radius: 3px;
+}
+
+
+.containerPagamentoCliente {
+  padding: 20px;
+}
+
+.pagamentoCliente {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.pmts-transaction-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  padding: 0px;
+}
+
+.cardColor {
+  background-color: #f8f8f8;
+  padding: 15px;
+}
+
+.pmts-transaction-title {
+  font-size: 18px;
+  color: #111;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.pmts-transaction-info {
+  display: flex;
+  flex-direction: column; /* Alteração para exibir as informações em coluna */
+  margin-bottom: 10px;
+}
+
+.apx-transaction-date-container {
+  background-color: #ddd;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.buttonAg {
+  margin-top: 20px;
+  background-color: #C26E7E;
+  color: #333;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.buttonAg a {
+  color: #333;
+  text-decoration: none;
+}
+
+.colPagamento{
+  color: #111;
+  text-align: left;
+  margin: 3px;
+}
+
+.h2title{
+  color: #111;
+  text-align: left;
+}
 
 
 

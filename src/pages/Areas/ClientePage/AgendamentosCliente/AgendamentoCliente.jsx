@@ -266,74 +266,77 @@ const ClienteAgendamentos = () => {
           setIsLoading(false);
         }
       };
-      
-      
-        
-    return (
-       <Container className="containerAgendamentoCliente">
-        <h2>Seus Agendamentos, {clienteInfo.username}</h2>
-        {isLoading ? (
-            <p>Carregando...</p>
-        ) : (
-            <div className="agendamentoCliente">
-                {agendamentoInfo.map((agendamento)=>(
-                    <Card key={agendamento.id} className="mb-3">
-                        <Card.Body className="cardColor">
-                        <Row >
-                                {agendamento.servico && (
-                                    <img src={agendamento.servico.img} alt={agendamento.servico.nome} className="imgAg1" />
-                                )}
-                            </Row>
-                            <Row style={{color: "Black"}}>
-                                {agendamento.horario && (
-                                    <Col md={3} className="rowAgendCliente">
-                                        <strong>Data Agendamento: </strong>
-                                        {new Date(agendamento.horario.horario.seconds * 1000).toLocaleString()}
-                                    </Col>
-                                )}
-                            </Row>
 
-                        <Row style={{color: "Black"}}>
-                            {agendamento.servico && (
-                                <Col md={3} className="rowAgendCliente">
-                                    <strong>Serviço: </strong>{agendamento.servico.nome}
-                                   
-                                </Col>
-                            )}
-                            </Row>
-                            <Row style={{color: "Black"}}>
-                                {agendamento.empresa && (
-                                    <Col md={3} className="rowAgendCliente">
-                                        <strong>Empresa: </strong>
-                                        {agendamento.empresa.username}
-                                       
-                                    </Col>
-                                )}
-                            </Row>
-                            <Row style={{color: "Black"}}>
-                                {agendamento.profissional && (
-                                    <Col md={3} className="rowAgendCliente">
-                                       <strong>Profissional: </strong> {agendamento.profissional.username}
-                                      
-                                    </Col>
-                                )}
-                            </Row>
-                            <Row style={{color: "Black"}} >
-                                {agendamento.servico && (
-                                     <Col md={3} className="rowAgendCliente">
-                                     <strong>Valor: </strong>{agendamento.servico && agendamento.servico.valor}
-                                    
-                                    </Col>
-                                )}
-                            </Row>
-                            <Button onClick={(e) => handleDeleteAgendamento(e, agendamento.id)}>Cancelar</Button>
-                        </Card.Body>
-                    </Card>
-                ))}
-            </div>
-        )}
-        <button className="buttonAg"><a href="/cliente/dados">Voltar</a></button>
-       </Container>
-    )
+
+return (
+  <Container className="containerAgendamentoCliente">
+    <h2>Seus Agendamentos, {clienteInfo.username}</h2>
+    {isLoading ? (
+      <p>Carregando...</p>
+    ) : (
+      <div className="agendamentoCliente">
+        {agendamentoInfo.map((agendamento) => {
+          const formattedDataAgendamento = new Date(agendamento.horario.horario.seconds * 1000);
+          const formattedCurrentDate = new Date(); 
+
+          return (
+            <Card key={agendamento.id} className="mb-3">
+              <Card.Body className="cardColor">
+                <Row>
+                  {agendamento.servico && (
+                    <img src={agendamento.servico.img} alt={agendamento.servico.nome} className="imgAg1" />
+                  )}
+                </Row>
+                <Row style={{ color: "Black" }}>
+                  {agendamento.horario && (
+                    <Col md={3} className="rowAgendCliente">
+                      <strong>Data Agendamento: </strong>
+                      {formattedDataAgendamento.toLocaleString()}
+                    </Col>
+                  )}
+                </Row>
+                <Row style={{ color: "Black" }}>
+                  {agendamento.servico && (
+                    <Col md={3} className="rowAgendCliente">
+                      <strong>Serviço: </strong>{agendamento.servico.nome}
+                    </Col>
+                  )}
+                </Row>
+                <Row style={{ color: "Black" }}>
+                  {agendamento.empresa && (
+                    <Col md={3} className="rowAgendCliente">
+                      <strong>Empresa: </strong>{agendamento.empresa.username}
+                    </Col>
+                  )}
+                </Row>
+                <Row style={{ color: "Black" }}>
+                  {agendamento.profissional && (
+                    <Col md={3} className="rowAgendCliente">
+                      <strong>Profissional: </strong>{agendamento.profissional.username}
+                    </Col>
+                  )}
+                </Row>
+                <Row style={{ color: "Black" }}>
+                  {agendamento.servico && (
+                    <Col md={3} className="rowAgendCliente">
+                      <strong>Valor: </strong>{agendamento.servico.valor}
+                    </Col>
+                  )}
+                </Row>
+                <Button onClick={(e) => handleDeleteAgendamento(e, agendamento.id)}>
+                  {formattedDataAgendamento > formattedCurrentDate ? 'Cancelar' : 'Data passada'}
+                </Button>
+              </Card.Body>
+            </Card>
+          );
+        })}
+      </div>
+    )}
+    <button className="buttonAg">
+      <a href="/cliente/dados">Voltar</a>
+    </button>
+  </Container>
+);
+
 }
 export default ClienteAgendamentos;

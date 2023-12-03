@@ -14,6 +14,8 @@ import {
   faPhone,
   faIdCard,
   faMapMarker,
+  faEdit,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
 const firebaseConfig = {
@@ -225,6 +227,7 @@ const EmpresaDashboard = () => {
                     throw new Error("Erro na solicitação da API");
                   }
 
+                  await auth.signOut();
                   
                   setSuccessMessage('Conta excluída com sucesso!');
                   setErrorMessage('');
@@ -437,11 +440,11 @@ const EmpresaDashboard = () => {
                         </Row>
                       </Card.Body>
                       <div className="buttonContainer">
-                          <Button className="infoButtonProfileEmp" onClick={handleEditClick}>
+                          <Button className="infoButtonProfileEmp" onClick={handleEditClick}> <FontAwesomeIcon icon={faEdit} className="iconE" />
                             Editar
                           </Button>
-                          <Button className="infoButtonProfileEmp" onClick={handleDelete}>
-                            Excluir Conta
+                          <Button className="infoButtonProfileEmp" onClick={handleDelete}><FontAwesomeIcon icon={faTrash} className="iconE"/> 
+                            Excluir
                           </Button>
                         </div>
                     </Card>

@@ -3,7 +3,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import {  ref, update } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 import './css/LoginEmp.css';
-import { collection,  getDocs, getFirestore, where, query } from "firebase/firestore";
+import { collection,  getDocs, getFirestore, where, query, setDoc, doc } from "firebase/firestore";
 
 const LoginEmpresa = ({onLogin}) => {
     const [email, setEmail] = useState("");
@@ -42,7 +42,9 @@ const LoginEmpresa = ({onLogin}) => {
         const user_data = {
           last_login: Date.now(),
         };
-        update(ref(db, `empresa/${uid}`), user_data);
+
+        const userRef = doc(db, "empresa", uid);
+        await setDoc(userRef, user_data, {merge: true});
 
         setId(uid);
 

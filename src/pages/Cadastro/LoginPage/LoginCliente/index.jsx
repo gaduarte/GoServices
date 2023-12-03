@@ -3,7 +3,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { ref, update } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 import './css/LoginPage.css';
-import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
+import { getFirestore, collection, query, where, getDocs, doc, setDoc } from "firebase/firestore";
 
 const LoginCliente = ({ onLogin }) => {
   const [email, setEmail] = useState("");
@@ -43,14 +43,16 @@ const LoginCliente = ({ onLogin }) => {
       const user_data = {
         last_login: Date.now(),
       };
-      update(ref(db, `cliente/${uid}`), user_data);
+
+      const userRef = doc(db, "cliente", uid);
+      await setDoc(userRef, user_data, {merge: true});
 
       setId(uid);
 
       // Mensagem de sucesso
       setSuccessMessage("Usuário cliente logado!");
 
-      history("/cliente");
+      history("/cliente/dados");
       onLogin("cliente");
     } catch (error) {
       console.error('Erro de login:', error);
