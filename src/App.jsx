@@ -120,7 +120,7 @@ function App() {
               </li>
               <li>
                 {userRole === "cliente" ? (
-                  <NavLink to="/cliente/dados">Meu Perfil</NavLink>
+                  <NavLink to="/cliente/dados/">Meu Perfil</NavLink>
                 ) : null}
               </li>
               <li>
@@ -155,7 +155,7 @@ function App() {
           <Route path="/resultados:servicoId" element={< Resultados />} />
           <Route path="/maisAgendados" element={ <MaisAgendamentoDados />} />
           {userRole === "cliente" && <Route path="/cliente/*" element={<ClienteDados />} />}
-          {userRole === "cliente" && <Route path="/cliente/dados" element={<ClienteDadosPerfil />} />}
+          {userRole === "cliente" && <Route path="/cliente/dados/*" element={<ClienteDadosPerfil />} />}
           {userRole === "cliente" && <Route path="/addCartao/*" element={<ClienteAdicionaCartao />} />}
           {userRole === "cliente" && <Route path="/cartoes/*" element={<CartoesdoCliente />} />}
           {userRole === "cliente" && <Route path="/agendamento/:servicoId" element={<AgendarDados />} />}
@@ -163,11 +163,11 @@ function App() {
           {userRole === "cliente" && <Route path="/favoritosCliente/*" element={<ClienteFavoritosDados />} />}
           {userRole === "cliente" && <Route path="/agendamentosCliente/*" element={<ClienteAgendamentoDados />} />}
           {userRole === "cliente" && <Route path="/pagamentos/*" element={<ClientePagamentoDados />} />}
-          {userRole === "profissional" && <Route path="/profissional/dados" element={<ProfissionalDadosPerfil />} />}
+          {userRole === "profissional" && <Route path="/profissional/dados/*" element={<ProfissionalDadosPerfil />} />}
           {userRole === "profissional" && <Route path="/profissional/*" element={<ProfissionalDados />} />}
           {userRole === "profissional" && <Route path="/agendamentosProfissional" element={<ProfissionalAgendamentoDados />}/>}
           {userRole === "profissional" && <Route path="/profissional/pagamentos" element={<ProfissionalPagamentoDados />}/>}
-          {userRole === "empresa" && <Route path="/empresa/dados" element={<EmpresaDadosPerfil />} />}
+          {userRole === "empresa" && <Route path="/empresa/dados/*" element={<EmpresaDadosPerfil />} />}
           {userRole === "empresa" && <Route path="/empresa/pagamentos" element={<EmpresaPagamentoDados />} />}
           {userRole === "empresa" && <Route path="/empresa/*" element={<EmpresaDados />} />}
           {userRole === "empresa" && <Route path="/addServico/*" element={<EmpresaAdicionaServ />} />}

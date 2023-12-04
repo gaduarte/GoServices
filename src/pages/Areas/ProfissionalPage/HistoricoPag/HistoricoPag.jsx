@@ -105,19 +105,11 @@ const ProfissionalPagamentos= () => {
             const clienteId = agendamentoData.clienteId;
             const clienteDocRef = doc(db, "cliente", clienteId);
             const clienteDocSnapshot = await getDoc(clienteDocRef);
-  
-            const cartaoCollectionRef = collection(clienteDocRef, "cartao");
-            const cartaoQuerySnapshot = await getDocs(cartaoCollectionRef);
 
-            const cartoes = [];
-            cartaoQuerySnapshot.forEach((cartaoDoc) => {
-              cartoes.push({
-                id: cartaoDoc.id,
-                ...cartaoDoc.data(),
-              });
-            });
+            const cartaoId = agendamentoData.cartao;
 
-            agendamentoData.cartoes = cartoes;
+            const cartaoDocRef = doc(clienteDocRef, "cartao", cartaoId);
+            const cartaoDocSnapshot = await getDoc(cartaoDocRef);
   
             const horarioId = agendamentoData.dataAgendamento;
             const horarioDocRef = doc(db, "horariosDisponiveis", horarioId);
@@ -127,6 +119,7 @@ const ProfissionalPagamentos= () => {
               servicoDocSnapshot.exists() ? servicoDocSnapshot.data() : null,
               clienteDocSnapshot.exists() ? clienteDocSnapshot.data() : null,
               getDoc(horarioDocRef).then(snapshot => snapshot.exists() ? snapshot.data() : null),
+              cartaoDocSnapshot.exists() ? cartaoDocSnapshot.data() : null,
             ]);
   
             agendamentoInfo.push({
@@ -135,6 +128,7 @@ const ProfissionalPagamentos= () => {
               servico: servicoData,
               cliente: clienteData,
               horario: horarioData,
+              cartaoInfo: cartaoData,
             });
           }
   
@@ -227,13 +221,14 @@ const ProfissionalPagamentos= () => {
                         {agendamento.cliente && agendamento.cliente.username}
                         </Col>
                      </Row>
-                      {agendamento.cartoes.map((cartao, index) => (
-                        <Row key={index} className="mb-3 pmts-transaction-info apx-transaction-date-container">
-                            <Col md={3} style={{ color: "black" }}>
-                            <strong style={{ color: "black" }}>Número do Cartão:</strong> {cartao.numero}
-                            </Col>
-                        </Row>
-                        ))}
+                     {agendamento.cartaoInfo && (
+                       <Row className="mb-3 pmts-transaction-info apx-transaction-date-container">
+                       <Col md={3} style={{ color: "black" }}>
+                           <strong style={{ color: "black" }}>Número do Cartão:</strong>{" "}
+                           {agendamento.cartaoInfo.numero}
+                       </Col>
+                      </Row>
+                     )}
                     </Card.Body>
                   </Card>
                 );

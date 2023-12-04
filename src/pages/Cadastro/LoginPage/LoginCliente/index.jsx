@@ -52,8 +52,8 @@ const LoginCliente = ({ onLogin }) => {
       // Mensagem de sucesso
       setSuccessMessage("Usuário cliente logado!");
 
-      history("/cliente/dados");
       onLogin("cliente");
+      history("/cliente/dados/");
     } catch (error) {
       console.error('Erro de login:', error);
       setErrorMessage(`Erro de login: ${error.message}`);

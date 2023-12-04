@@ -26,6 +26,14 @@ const ClientePerfil = () => {
   const [id, setId] = useState(null);
   const history = useNavigate();
 
+  const checkUserInClienteCollection = async (email) => {
+    const db = getFirestore();
+    const usersRef = collection(db, "cliente");
+    const q = query(usersRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+  };
+
   useEffect(() => {
     const auth = getAuth();
 
@@ -39,6 +47,33 @@ const ClientePerfil = () => {
       setIsLoading(false);
     });
   }, [history]);
+
+  const checkUserRole = async () => {
+    try{
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        if(!user){
+            history("/login");
+        }else {
+            const isCliente = await checkUserInClienteCollection(user.email);
+
+            if(!isCliente){
+                history("/login");
+            }else {
+                sessionStorage.setItem("role", "cliente");
+                setIsLoading(false);
+            }
+        }
+    }catch (error) {
+        console.error("Erro ao verificar a função do usuário: ", error);
+        setIsLoading(false);
+      }
+}
+
+useEffect(()=>{
+    checkUserRole();
+}, [history]);
 
   useEffect(() => {
     async function fetchCliente() {

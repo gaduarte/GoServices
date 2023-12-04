@@ -659,7 +659,7 @@ app.post('/addAgendamento', async (req, res)=>{
         console.error("Erro ao cadastrar agendamento", error );
         res.status(500).json({error: "Erro interno ao cadastrar agendamento"});
     }
-})
+});
 
 // Rota para adicionar um novo Favorito.
 app.post('/addFavoritos', async(req,res)=>{

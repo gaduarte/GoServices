@@ -23,6 +23,18 @@ export function ClienteDadosPerfil() {
     });
   }, [history]);
 
+  const logOut = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        setAlertMessage("Signed Out");
+        history("/login");
+      })
+      .catch((error) => {
+        console.error("Sign out Error", error);
+      });
+  };
+
   return (
     <div>
       {id && 

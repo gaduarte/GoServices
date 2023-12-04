@@ -50,8 +50,8 @@ const LoginEmpresa = ({onLogin}) => {
 
         setSuccessMessage("Usuário empresa logado!");
 
-        history("/empresa");
-        onLogin("empresa")
+        onLogin("empresa");
+        history("/empresa/dados");
       }catch (error) {
         const errorCode = error.code;
         const errorMessage = error.message;

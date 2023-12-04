@@ -84,75 +84,70 @@ const EmpresaPagamentos= () => {
   
     useEffect(() => {
       async function fetchEmpresaAgendamento() {
-        try {
-          setIsLoading(true);
-          const auth = getAuth();
-          const user = auth.currentUser;
-          const uid = user ? user.uid : null;
+          try {
+              setIsLoading(true);
+              const auth = getAuth();
+              const user = auth.currentUser;
+              const uid = user ? user.uid : null;
   
-          const agendamentoDoc = query(collection(db, "agendamento"), where("empresaId", "==", uid));
-          const querySnapshot = await getDocs(agendamentoDoc);
-          const agendamentoInfo = [];
+              const agendamentoDoc = query(collection(db, "agendamento"), where("empresaId", "==", uid));
+              const querySnapshot = await getDocs(agendamentoDoc);
+              const agendamentoInfo = [];
   
-          for (const docSnapshot of querySnapshot.docs) {
-            const agendamentoData = docSnapshot.data();
+              for (const docSnapshot of querySnapshot.docs) {
+                  const agendamentoData = docSnapshot.data();
   
-            const servicoId = agendamentoData.servicoId;
-            const servicoDocRef = doc(db, "servico", servicoId);
-            const servicoDocSnapshot = await getDoc(servicoDocRef);
+                  const servicoId = agendamentoData.servicoId;
+                  const servicoDocRef = doc(db, "servico", servicoId);
+                  const servicoDocSnapshot = await getDoc(servicoDocRef);
   
-            const clienteId = agendamentoData.clienteId;
-            const clienteDocRef = doc(db, "cliente", clienteId);
-            const clienteDocSnapshot = await getDoc(clienteDocRef);
+                  const clienteId = agendamentoData.clienteId;
+                  const clienteDocRef = doc(db, "cliente", clienteId);
+                  const clienteDocSnapshot = await getDoc(clienteDocRef);
   
-            const cartaoCollectionRef = collection(clienteDocRef, "cartao");
-            const cartaoQuerySnapshot = await getDocs(cartaoCollectionRef);
-
-            const cartoes = [];
-            cartaoQuerySnapshot.forEach((cartaoDoc) => {
-              cartoes.push({
-                id: cartaoDoc.id,
-                ...cartaoDoc.data(),
-              });
-            });
-
-            agendamentoData.cartoes = cartoes;
+                  const cartaoId = agendamentoData.cartao; 
+                  
+                  // Consulta o documento do cartão específico usado no agendamento
+                  const cartaoDocRef = doc(clienteDocRef, "cartao", cartaoId);
+                  const cartaoDocSnapshot = await getDoc(cartaoDocRef);
   
-            const horarioId = agendamentoData.dataAgendamento;
-            const horarioDocRef = doc(db, "horariosDisponiveis", horarioId);
+                  const horarioId = agendamentoData.dataAgendamento;
+                  const horarioDocRef = doc(db, "horariosDisponiveis", horarioId);
   
-            const profissionalId = agendamentoData.profissionalId;
-            const profissionalDocRef = doc(db, "profissional", profissionalId);
+                  const profissionalId = agendamentoData.profissionalId;
+                  const profissionalDocRef = doc(db, "profissional", profissionalId);
   
-            // Espera todas as consultas assíncronas
-            const [servicoData, clienteData, horarioData, profissionalData, cartaoData] = await Promise.all([
-              servicoDocSnapshot.exists() ? servicoDocSnapshot.data() : null,
-              clienteDocSnapshot.exists() ? clienteDocSnapshot.data() : null,
-              getDoc(horarioDocRef).then(snapshot => snapshot.exists() ? snapshot.data() : null),
-              getDoc(profissionalDocRef).then(snapshot => snapshot.exists() ? snapshot.data() : null),
-            ]);
+                  // Espera todas as consultas assíncronas
+                  const [servicoData, clienteData, horarioData, profissionalData, cartaoData] = await Promise.all([
+                      servicoDocSnapshot.exists() ? servicoDocSnapshot.data() : null,
+                      clienteDocSnapshot.exists() ? clienteDocSnapshot.data() : null,
+                      getDoc(horarioDocRef).then((snapshot) => (snapshot.exists() ? snapshot.data() : null)),
+                      getDoc(profissionalDocRef).then((snapshot) => (snapshot.exists() ? snapshot.data() : null)),
+                      cartaoDocSnapshot.exists() ? cartaoDocSnapshot.data() : null, // Adiciona o cartão usado no agendamento
+                  ]);
   
-            agendamentoInfo.push({
-              id: docSnapshot.id,
-              ...agendamentoData,
-              servico: servicoData,
-              cliente: clienteData,
-              horario: horarioData,
-              profissional: profissionalData,
-            });
+                  agendamentoInfo.push({
+                      id: docSnapshot.id,
+                      ...agendamentoData,
+                      servico: servicoData,
+                      cliente: clienteData,
+                      horario: horarioData,
+                      profissional: profissionalData,
+                      cartaoInfo: cartaoData, // Adiciona informações do cartão usado no agendamento
+                  });
+              }
+  
+              setAgendamentoInfo(agendamentoInfo);
+              setIsLoading(false);
+          } catch (error) {
+              console.error("Erro ao buscar informações: ", error);
+              setIsLoading(false);
           }
-  
-          setAgendamentoInfo(agendamentoInfo);
-          setIsLoading(false);
-  
-        } catch (error) {
-          console.error("Erro ao buscar informações: ", error);
-          setIsLoading(false);
-        }
       }
   
       fetchEmpresaAgendamento();
-    }, [db]);
+  }, [db]);
+  
   
     useEffect(() => {
       async function fetchClientes() {
@@ -219,60 +214,62 @@ const EmpresaPagamentos= () => {
   
     return (
       <Container className="containerPagamentoCliente">
-        <h2 className="h2title">Histórico Pagamentos, {empresaInfo.username}</h2>
-        {isLoading ? (
-          <p>Carregando...</p>
-        ) : (
-          <div className="pagamentoCliente">
-            {agendamentoInfo.length > 0 ? (
-              agendamentoInfo.map((agendamento, index) => {
-                const formattedDataAgendamento = new Date(agendamento.horario.horario.seconds * 1000);
+          <h2 className="h2title">Histórico Pagamentos, {empresaInfo.username}</h2>
+          {isLoading ? (
+              <p>Carregando...</p>
+          ) : (
+              <div className="pagamentoCliente">
+                  {agendamentoInfo.length > 0 ? (
+                      agendamentoInfo.map((agendamento, index) => {
+                          const formattedDataAgendamento = new Date(agendamento.horario.horario.seconds * 1000);
   
-                return (
-                  <Card key={index} className="mb-3 pmts-transaction-card">
-                    <Card.Body className="cardColor pmts-transaction-info apx-transaction-date-container">
-                      <Row>
-                        <Col md={12}>
-                          <h5 className="pmts-transaction-title">Detalhes do Pagamento</h5>
-                        </Col>
-                      </Row>
-                      <Row className="pmts-transaction-info">
-                        <Col md={6} className="colPagamento">
-                          <strong>Data Agendamento: </strong>
-                          {formattedDataAgendamento.toLocaleString()}
-                        </Col>
-                        <Col md={6} className="colPagamento">
-                          <strong>Serviço: </strong>
-                          {agendamento.servico.nome}
-                        </Col>
-                      </Row>
-                     <Row className="pmts-transaction-info">
-                        <Col md={6} className="colPagamento">
-                        <strong>Cliente: </strong>
-                        {agendamento.cliente.username}
-                        </Col>
-                     </Row>
-                      {agendamento.cartoes.map((cartao, index) => (
-                        <Row key={index} className="mb-3 pmts-transaction-info apx-transaction-date-container">
-                            <Col md={3} style={{ color: "black" }}>
-                            <strong style={{ color: "black" }}>Número do Cartão:</strong> {cartao.numero}
-                            </Col>
-                        </Row>
-                        ))}
-                    </Card.Body>
-                  </Card>
-                );
-              })
-            ) : (
-              <p>Nenhum pagamento encontrado.</p>
-            )}
-          </div>
-        )}
-        <button className="buttonAg">
-          <a href="/empresa/dados">Voltar</a>
-        </button>
+                          return (
+                              <Card key={index} className="mb-3 pmts-transaction-card">
+                                  <Card.Body className="cardColor pmts-transaction-info apx-transaction-date-container">
+                                      <Row>
+                                          <Col md={12}>
+                                              <h5 className="pmts-transaction-title">Detalhes do Pagamento</h5>
+                                          </Col>
+                                      </Row>
+                                      <Row className="pmts-transaction-info">
+                                          <Col md={6} className="colPagamento">
+                                              <strong>Data Agendamento: </strong>
+                                              {formattedDataAgendamento.toLocaleString()}
+                                          </Col>
+                                          <Col md={6} className="colPagamento">
+                                              <strong>Serviço: </strong>
+                                              {agendamento.servico.nome}
+                                          </Col>
+                                      </Row>
+                                      <Row className="pmts-transaction-info">
+                                          <Col md={6} className="colPagamento">
+                                              <strong>Cliente: </strong>
+                                              {agendamento.cliente.username}
+                                          </Col>
+                                      </Row>
+                                      {agendamento.cartaoInfo && (
+                                          <Row className="mb-3 pmts-transaction-info apx-transaction-date-container">
+                                              <Col md={3} style={{ color: "black" }}>
+                                                  <strong style={{ color: "black" }}>Número do Cartão:</strong>{" "}
+                                                  {agendamento.cartaoInfo.numero}
+                                              </Col>
+                                          </Row>
+                                      )}
+                                  </Card.Body>
+                              </Card>
+                          );
+                      })
+                  ) : (
+                      <p>Nenhum pagamento encontrado.</p>
+                  )}
+              </div>
+          )}
+          <button className="buttonAg">
+              <a href="/empresa/dados">Voltar</a>
+          </button>
       </Container>
-    );
+  );
+  
       
 }
 

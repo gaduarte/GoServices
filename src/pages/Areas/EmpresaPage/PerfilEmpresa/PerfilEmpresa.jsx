@@ -71,6 +71,10 @@ const checkUserRole = async () => {
     }
   }
 
+useEffect(()=>{
+    checkUserRole();
+}, [history]);
+
   useEffect(()=>{
     async function fetchEmpresa(){
         try{

@@ -195,7 +195,7 @@ export const AdicionarHorarioDisponivel = () => {
       const responseData = await response.json();
       console.log('Resposta da API:', responseData);
   
-      setSuccessMessage('Serviço cadastrado com sucesso!');
+      setSuccessMessage('Horário cadastrado com sucesso!');
       setErrorMessage('');
     } catch (error) {
       console.error('Erro ao adicionar horário:', error);

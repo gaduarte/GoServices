@@ -108,7 +108,7 @@
 }
 
 /* Estilos específicos para telas com largura entre 320px e 768px */
-@media (min-width: 320px) and (max-width: 768px) {
+@media  (max-width: 768px) {
   .footer {
     height: 30px; 
   }
@@ -120,12 +120,6 @@
   .footer {
     height: 60px; 
   }
-  .my-header{
-    width: 10px;
-  }
-  .my-list{
-    padding: 1px;
-  }
 }
 
 /* Estilos específicos para telas maiores que 1024px */
@@ -135,18 +129,28 @@
   }
 }
 
+@media (max-width: 768px) {
+  .my-header {
+    height: 80px; /* Adjust height for tablets */
+  }
 
-/* Estilos específicos para telas com largura entre 320px e 768px */
-@media (min-width: 320px) and (max-width: 768px) {
   .my-list {
-    padding: 1rem 3rem; /* Estilos diferentes para telas menores */
-    text-align: left;
+    height: 40px; /* Adjust height for tablets */
+  }
+
+  .my-list li a {
+    font-size: 1.2em; /* Adjust font size for tablets */
   }
 }
 
-/* Estilos específicos para telas com largura menor que 320px */
-@media (max-width: 319px) {
+/* Media query for mobile devices */
+@media (max-width: 576px) {
   .my-list {
-    padding: 0.5rem 1rem; /* Estilos diferentes para telas muito pequenas */
+    height: 150px; /* Allow the list to expand based on content */
+    position: relative; /* Change position for stacking */
+  }
+
+  .my-list li a {
+    margin: 1px 0; /* Adjust margin for better spacing */
   }
 }

@@ -117,4 +117,9 @@
 .buttonAgendPro{
     padding: 2px;
     margin: 2px;
+    color: #333;
+}
+
+.buttonAgendPro:hover{
+    color: #333;
 }

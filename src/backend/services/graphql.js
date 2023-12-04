@@ -75,7 +75,7 @@ const typeDefs = gql`
 
     type Horario {
         id: ID!
-        diasSelecionados: String!
+        horario: String!
         empresaId: String!
         servico: String!
         status: Boolean!

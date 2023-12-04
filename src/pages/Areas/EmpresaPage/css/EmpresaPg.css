@@ -61,7 +61,7 @@
   color: black;
 }
 
-.logoutEmp{
+.logoutEmp a{
   width: 150px;
   height: 40px;
   margin: 5px auto;
@@ -71,6 +71,9 @@
   color: #333;
 }
 
+.logoutEmp a:hover{
+  color: #333;
+}
 
 .select-profissional{
   width: 400px;

@@ -29,7 +29,7 @@ const LoginProfissional = ({onLogin}) => {
         const userExistsInProfissionalCollection = await checkUserInProfissionalCollection(email);
 
         if(!userExistsInProfissionalCollection){
-          setErrorMessage("Erro de login: Usuário não encontrado na coleção 'empresa'.");
+          setErrorMessage("Erro de login: Usuário não encontrado na coleção 'profissional'.");
           return;
         }
 
@@ -50,8 +50,8 @@ const LoginProfissional = ({onLogin}) => {
 
         setSuccessMessage("Usuário profissional logado!");
 
-        history("/profissional/dados");
         onLogin("profissional");
+        history("/profissional/dados");
       }catch (error) {
         const errorCode = error.code;
         const errorMessage = error.message;

@@ -85,64 +85,83 @@ const ClientePagamentos= () => {
 
 
     useEffect(() => {
-        async function fetchClienteAgendamento() {
-            try {
-                setIsLoading(true);
-                const auth = getAuth();
-                const user = auth.currentUser;
-                const uid = user ? user.uid : null;
-    
-                const agendamentoDoc = query(collection(db, "agendamento"), where("clienteId", "==", uid));
-                const querySnapshot = await getDocs(agendamentoDoc);
-                const agendamentoInfo = [];
-    
-                for (const docSnapshot of querySnapshot.docs) {
-                    const agendamentoData = docSnapshot.data();
-    
-                    const servicoId = agendamentoData.servicoId;
-                    const servicoDocRef = doc(db, "servico", servicoId);
-                    const servicoDocSnapshot = await getDoc(servicoDocRef);
-    
-                    const empresaId = agendamentoData.empresaId;
-                    const empresaDocRef = doc(db, "empresa", empresaId);
-                    const empresaDocSnapshot = await getDoc(empresaDocRef);
-    
-                    const horarioId = agendamentoData.dataAgendamento;
-                    const horarioDocRef = doc(db, "horariosDisponiveis", horarioId);
-    
-                    const profissionalId = agendamentoData.profissionalId;
-                    const profissionalDocRef = doc(db, "profissional", profissionalId);
-    
-                    // Espera todas as consultas assíncronas
-                    const [servicoData, empresaData, horarioData, profissionalData] = await Promise.all([
-                        servicoDocSnapshot.exists() ? servicoDocSnapshot.data() : null,
-                        empresaDocSnapshot.exists() ? empresaDocSnapshot.data() : null,
-                        getDoc(horarioDocRef).then(snapshot => snapshot.exists() ? snapshot.data() : null),
-                        getDoc(profissionalDocRef).then(snapshot => snapshot.exists() ? snapshot.data() : null),
-                    ]);
-    
-                    agendamentoInfo.push({
-                        id: docSnapshot.id,
-                        ...agendamentoData,
-                        servico: servicoData,
-                        empresa: empresaData,
-                        horario: horarioData,
-                        profissional: profissionalData,
-                    });
-                }
-    
-                setAgendamentoInfo(agendamentoInfo);
-                setIsLoading(false);
-    
-            } catch (error) {
-                console.error("Erro ao buscar informações: ", error);
-                setIsLoading(false);
-            }
-        }
-    
-        fetchClienteAgendamento();
-    }, [db]);
-    
+      const fetchClienteAgendamento = async () => {
+          try {
+              setIsLoading(true);
+
+              const auth = getAuth();
+              const user = auth.currentUser;
+              const uid = user ? user.uid : null;
+
+              const agendamentoDoc = query(collection(db, 'agendamento'), where('clienteId', '==', uid));
+              const querySnapshot = await getDocs(agendamentoDoc);
+              const agendamentoInfo = [];
+
+              for (const docSnapshot of querySnapshot.docs) {
+                  const agendamentoData = docSnapshot.data();
+
+                  const servicoId = agendamentoData.servicoId;
+                  const servicoDocRef = doc(db, 'servico', servicoId);
+                  const servicoDocSnapshot = await getDoc(servicoDocRef);
+
+                  const empresaId = agendamentoData.empresaId;
+                  const empresaDocRef = doc(db, 'empresa', empresaId);
+                  const empresaDocSnapshot = await getDoc(empresaDocRef);
+
+                  const horarioId = agendamentoData.dataAgendamento;
+                  const horarioDocRef = doc(db, 'horariosDisponiveis', horarioId);
+
+                  const profissionalId = agendamentoData.profissionalId;
+                  const profissionalDocRef = doc(db, 'profissional', profissionalId);
+
+                  const [servicoData, empresaData, horarioData, profissionalData] = await Promise.all([
+                      servicoDocSnapshot.exists() ? servicoDocSnapshot.data() : null,
+                      empresaDocSnapshot.exists() ? empresaDocSnapshot.data() : null,
+                      getDoc(horarioDocRef).then(snapshot => snapshot.exists() ? snapshot.data() : null),
+                      getDoc(profissionalDocRef).then(snapshot => snapshot.exists() ? snapshot.data() : null),
+                  ]);
+
+                  agendamentoInfo.push({
+                      id: docSnapshot.id,
+                      ...agendamentoData,
+                      servico: servicoData,
+                      empresa: empresaData,
+                      horario: horarioData,
+                      profissional: profissionalData,
+                      cartaoId: agendamentoData.cartao,
+                  });
+              }
+
+              setAgendamentoInfo(agendamentoInfo);
+              setIsLoading(false);
+
+              // Após obter os IDs dos cartões em cada agendamento, buscar as informações completas dos cartões
+              const cartoesInfoPromises = agendamentoInfo.map(async (agendamento) => {
+                  if (agendamento.cartaoId) {
+                      const cartaoDocRef = doc(clienteRef, uid, 'cartao', agendamento.cartaoId);
+                      const cartaoDocSnapshot = await getDoc(cartaoDocRef);
+                      return { id: agendamento.cartaoId, ...cartaoDocSnapshot.data() };
+                  }
+                  return null;
+              });
+
+              const cartoesInfo = await Promise.all(cartoesInfoPromises);
+
+              // Atualizar o estado com as informações completas do cartão em cada agendamento
+              setAgendamentoInfo((agendamentos) =>
+                  agendamentos.map((agendamento, index) => ({
+                      ...agendamento,
+                      cartaoInfo: cartoesInfo[index],
+                  }))
+              );
+          } catch (error) {
+              console.error('Erro ao buscar informações de agendamento:', error);
+              setIsLoading(false);
+          }
+      };
+
+      fetchClienteAgendamento();
+  }, [db]);
 
     useEffect(() => {
         async function fetchClientes() {
@@ -210,51 +229,53 @@ const ClientePagamentos= () => {
       
       return (
         <Container className="containerPagamentoCliente">
-          <h2 className="h2title">Seus Pagamentos, {clienteInfo.username}</h2>
-          {isLoading ? (
-            <p>Carregando...</p>
-          ) : (
-            <div className="pagamentoCliente">
-              {agendamentoInfo.map((agendamento, index) => {
-                const formattedDataAgendamento = new Date(agendamento.horario.horario.seconds * 1000);
-      
-                return (
-                  <Card key={index} className="mb-3 pmts-transaction-card">
-                    <Card.Body className="cardColor pmts-transaction-info apx-transaction-date-container">
-                      <Row>
-                        <Col md={12}>
-                          <h5 className="pmts-transaction-title">Detalhes do Pagamento</h5>
-                        </Col>
-                      </Row>
-                      <Row className="pmts-transaction-info">
-                        <Col md={6} className="colPagamento">
-                          <strong>Data Agendamento: </strong>
-                          {formattedDataAgendamento.toLocaleString()}
-                        </Col>
-                        <Col md={6} className="colPagamento">
-                          <strong>Serviço: </strong>
-                          {agendamento.servico.nome}
-                        </Col>
-                      </Row>
-      
-                      {cartoesCliente.map((cartao, index) => (
-                        <Row key={index} className="mb-3 pmts-transaction-info apx-transaction-date-container">
-                          <Col md={3} style={{ color: "black" }}>
-                            <strong style={{ color: "black" }}>Número do Cartão:</strong> {cartao.numero}
-                          </Col>
-                        </Row>
-                      ))}
-                    </Card.Body>
-                  </Card>
-                );
-              })}
-            </div>
-          )}
-          <button className="buttonAg">
-            <a href="/cliente/dados">Voltar</a>
-          </button>
+            <h2 className="h2title">Seus Pagamentos, {clienteInfo.username}</h2>
+            {isLoading ? (
+                <p>Carregando...</p>
+            ) : (
+                <div className="pagamentoCliente">
+                    {agendamentoInfo.map((agendamento, index) => {
+                        const formattedDataAgendamento = new Date(agendamento.horario.horario.seconds * 1000);
+    
+                        return (
+                            <Card key={index} className="mb-3 pmts-transaction-card">
+                                <Card.Body className="cardColor pmts-transaction-info apx-transaction-date-container">
+                                    <Row>
+                                        <Col md={12}>
+                                            <h5 className="pmts-transaction-title">Detalhes do Pagamento</h5>
+                                        </Col>
+                                    </Row>
+                                    <Row className="pmts-transaction-info">
+                                        <Col md={6} className="colPagamento">
+                                            <strong>Data Agendamento: </strong>
+                                            {formattedDataAgendamento.toLocaleString()}
+                                        </Col>
+                                        <Col md={6} className="colPagamento">
+                                            <strong>Serviço: </strong>
+                                            {agendamento.servico.nome}
+                                        </Col>
+                                    </Row>
+    
+                                    {/* Verificar se há informações do cartão antes de exibir */}
+                                    {agendamento.cartaoInfo && (
+                                        <Row key={index} className="mb-3 pmts-transaction-info apx-transaction-date-container">
+                                            <Col md={3} style={{ color: "black" }}>
+                                                <strong style={{ color: "black" }}>Número do Cartão:</strong> {agendamento.cartaoInfo.numero}
+                                            </Col>
+                                        </Row>
+                                    )}
+                                </Card.Body>
+                            </Card>
+                        );
+                    })}
+                </div>
+            )}
+            <button className="buttonAg">
+                <a href="/cliente/dados">Voltar</a>
+            </button>
         </Container>
-      );
+    );
+    
       
 }
 
