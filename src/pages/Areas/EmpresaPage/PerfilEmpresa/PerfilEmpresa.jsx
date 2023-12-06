@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button, Tab, Nav } from "react-bootstrap";
 import { getAuth } from "firebase/auth";
-import { getDoc, doc, getFirestore } from "firebase/firestore";
+import { getDoc, doc, getFirestore, getDocs } from "firebase/firestore";
 import { NavLink, useNavigate } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 
@@ -27,7 +27,6 @@ const EmpresaPerfil = () => {
   const history = useNavigate();
 
   const checkUserInEmpresaCollection = async (email) => {
-    const db = getFirestore();
     const userRef = collection(db, "empresa");
     const q = query(userRef, where("email", "==", email));
     const querySnapshot = await getDocs(q);

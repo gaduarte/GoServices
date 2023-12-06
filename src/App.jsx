@@ -24,7 +24,7 @@ import { ProfissionalAgendamentoDados } from "./pages/Areas/ProfissionalPage/Age
 import Resultados from "./pages/Search";
 import { FavoritosDados } from "./pages/HomePage/Favoritos";
 import { ClienteFavoritosDados } from "./pages/Areas/ClientePage/FavoritosCliente";
-import { ClienteDadosPerfil } from "./pages/Areas/ClientePage/Perfil.jsx";
+import { ClienteDadosPerfil } from "./pages/Areas/ClientePage/Perfil/index.jsx";
 import { EmpresaDadosPerfil } from "./pages/Areas/EmpresaPage/PerfilEmpresa/index.jsx";
 import { ProfissionalDadosPerfil } from "./pages/Areas/ProfissionalPage/Perfil/index.jsx";
 import { MaisAgendamentoDados } from "./pages/goservicesInfos/MaisAgendados/index.jsx";

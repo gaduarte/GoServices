@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button, Tab, Nav } from "react-bootstrap";
 import { getAuth } from "firebase/auth";
-import { getDoc, doc, getFirestore } from "firebase/firestore";
+import { getDoc, doc, getFirestore, getDocs } from "firebase/firestore";
 import { NavLink, useNavigate } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 
@@ -26,19 +26,50 @@ const ProfissionalPerfil = () => {
   const [id, setId] = useState(null);
   const history = useNavigate();
 
-  useEffect(() => {
+  
+  const checkUserInProfissionalCollection = async (email) => {
+    const userRef = collection(db, "profissional");
+    const q = query(userRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+};
+
+useEffect(()=>{
     const auth = getAuth();
 
-    auth.onAuthStateChanged(async function (user) {
-      if (user) {
-        const id = user.uid;
-        setId(id);
-      } else {
-        history("/login");
-      }
-      setIsLoading(false);
+    auth.onAuthStateChanged(async function (user){
+        if(user){
+            const id = user.uid;
+            setId(id);
+        }else{
+            history("/login");
+        }
+        setIsLoading(false);
     });
-  }, [history]);
+}, [history]);
+
+const checkUserRole = async () => {
+    try{
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        if(!user){
+            history("/login");
+        }else{
+            const isProfissional = await checkUserInProfissionalCollection(user.email);
+
+            if(!isProfissional){
+                history("/login");
+            }else{
+                sessionStorage.setItem("role", "profissional");
+                setIsLoading(false);
+            }
+        }
+    }catch (error) {
+        console.error("Erro ao verificar a função do usuário: ", error);
+        setIsLoading(false);
+      }
+}
 
   useEffect(()=>{
     async function fetchProfissional(){

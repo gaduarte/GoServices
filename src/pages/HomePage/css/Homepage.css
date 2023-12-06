@@ -154,8 +154,8 @@
   width: 0px;
   background-color: transparent;
   position: relative;
-  left: 63px;
-  top: 13px;
+  left: 98px;
+  top: 40px;
   font-size: 20px;
   color: red;
 }
@@ -166,10 +166,10 @@
 
 .agendarButton {
   margin: 0 auto;
-  width: 100px;
+  width: 100%;
   background-color: #c26e7e;
   border: none;
-  color: white;
+  color: #333;
   padding: 5px 10px;
   cursor: pointer;
 }
@@ -285,7 +285,7 @@
   color: #111;
 }
 
-    .containerFav {
+  .containerFav {
       background-color: #6e7ec2;
       padding: 10px;
       flex-basis: calc(11.1% - 20px);
@@ -298,6 +298,17 @@
       top: 50px;
     }
     
-    .buttonFav {
+  .buttonFav {
       width: 150px;
+    }
+
+  .rating-container {
+      display: flex;
+      align-items: center; /* Alinha os itens verticalmente */
+      margin-left: 10px;
+    }
+
+  .rating-count {
+      margin-left: 5px; 
+      color: #333;
     }

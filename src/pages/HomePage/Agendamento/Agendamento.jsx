@@ -199,7 +199,8 @@ const Agendamento = () => {
           return;
         }
   
-        const horariosQuerySnapshot = await getDocs(query(horarioRef, where("empresaId", "==", servicoData.empresaId)));
+        const horariosQuerySnapshot = await getDocs(query(horarioRef, where("empresaId", "==", servicoData.empresaId),
+        where("servico", "==", servicoId)));
         const horariosData = [];
   
         horariosQuerySnapshot.forEach((doc) => {

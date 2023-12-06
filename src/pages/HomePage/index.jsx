@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { addDoc, collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate, useParams } from "react-router-dom";
 import { appF } from "../../backend/Firebase/firebase";
 import './css/Homepage.css';
+import Rating from 'react-rating-stars-component';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAjWrDAR_DACdqhq2P7nfnYI4H6M0YkX50",
@@ -201,6 +202,45 @@ export function HomePage() {
     return text.slice(0, maxLength) + '...';
   };
 
+// Função para salvar a avaliação do usuário
+const handleSaveRating = async (servico, newRating) => {
+  try {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const uid = user ? user.uid : null;
+
+    if (user) {
+      const servicoDocRef = doc(db, 'servico', servico.id); // Corrigir para usar servico.id
+
+      // Obtém os dados do serviço
+      const servicoSnapshot = await getDoc(servicoDocRef);
+      const servicoData = servicoSnapshot.data();
+
+      if (servicoData) {
+        // Converte a avaliação média para número e obtém o total de avaliações
+        const avaliacaoMedia = parseFloat(newRating);
+        const totalAvaliacoes = parseInt(servicoData.totalAvaliacoes || 0, 10) + 1;
+
+        // Atualiza o documento do serviço
+        await updateDoc(servicoDocRef, {
+          avaliacaoMedia,
+          totalAvaliacoes,
+        });
+
+        setSuccessMessage('Avaliação salva com sucesso!');
+      } else {
+        setErrorMessage('Detalhes do serviço não encontrados.');
+      }
+    } else {
+      alert('Você precisa estar logado para realizar esta ação.');
+      history('/login');
+    }
+  } catch (error) {
+    console.error('Erro ao salvar a avaliação:', error);
+    setErrorMessage('Erro ao salvar a avaliação. Tente novamente mais tarde.');
+  }
+};
+
   const itemsPerRow = 7;
   return (
     <main className="main-home">
@@ -237,7 +277,7 @@ export function HomePage() {
                   servico.data.descricao
                 ) : (
                   <>
-                    {truncateText(servico.data.descricao, 30)} {/* Limita a descrição a 100 caracteres */}
+                    {truncateText(servico.data.descricao, 30)} 
                     <button onClick={() => setIsDescriptionExpanded(true)}>Mostrar Mais</button>
                   </>
                 )}
@@ -257,12 +297,23 @@ export function HomePage() {
               >
                 ❤️
               </button>
+              <div className="rating-container">
+                <Rating
+                  count={5}
+                  value={servico.data.avaliacaoMedia}
+                  onChange={(newValue) => handleSaveRating(servico, newValue)}
+                  size={24}
+                  activeColor="#ffd700"
+                />
+                <span className="rating-count">{servico.data.totalAvaliacoes}</span>
+              </div>
               <button
                 onClick={() => navigateToAgendamento(servico)}
                 className="agendarButton"
               >
                 Agendar
               </button>
+            
             </div>
           </div>
         ))}

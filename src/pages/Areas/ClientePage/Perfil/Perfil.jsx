@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button, Tab, Nav } from "react-bootstrap";
 import { getAuth } from "firebase/auth";
-import { getDoc, doc, getFirestore } from "firebase/firestore";
+import { getDoc, doc, getFirestore, collection, query, getDocs, where } from "firebase/firestore";
 import { NavLink, useNavigate } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 
@@ -27,7 +27,6 @@ const ClientePerfil = () => {
   const history = useNavigate();
 
   const checkUserInClienteCollection = async (email) => {
-    const db = getFirestore();
     const usersRef = collection(db, "cliente");
     const q = query(usersRef, where("email", "==", email));
     const querySnapshot = await getDocs(q);
@@ -85,7 +84,6 @@ useEffect(()=>{
         const uid = user ? user.uid : null;
 
         if (uid) {
-          const db = getFirestore();
           const clienteDocRef = doc(db, "cliente", uid);
 
           const docSnapshot = await getDoc(clienteDocRef);
