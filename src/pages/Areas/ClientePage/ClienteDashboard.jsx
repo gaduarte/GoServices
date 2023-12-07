@@ -177,8 +177,6 @@ const ClienteDashboard = () => {
           if(!response.ok){
             throw new Error("Erro na solicitação da API");
           }
-          
-    
           await auth.signOut();
 
           setSuccessMessage("Conta excluída com sucesso!");

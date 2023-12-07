@@ -432,7 +432,6 @@ app.post('/addServico', async (req, res) => {
 app.post('/addHorario', async(req,res)=>{
     try{
         const generatedId = generateUniqueId();
-
         const horarioData = {
             diasSelecionados: req.body.horario,
             empresaID: req.body.empresaId,
@@ -440,7 +439,6 @@ app.post('/addHorario', async(req,res)=>{
             status: req.body.status,
             id: generatedId
         };
-
         const formattedDate = horarioData.diasSelecionados.toLocaleString('pt-BR', {
             day: 'numeric',
             month: 'long',
@@ -450,11 +448,8 @@ app.post('/addHorario', async(req,res)=>{
             second: 'numeric',
             timeZone: 'America/Sao_Paulo',
           });
-          
           console.log('Data formatada:', formattedDate);              
-        
         console.log('Dados de horário de empresa:', horarioData);
-
         const webhookURL = 'http://localhost:3000/webhook';
         const webhookData = {
             eventType: 'NovoHorarioCadastrado',
@@ -463,7 +458,6 @@ app.post('/addHorario', async(req,res)=>{
                 data: { ...horarioData, diasSelecionados: formattedDate }
             }
         };
-    
         try {
             const response = await fetch(webhookURL, {
                 method: 'POST',
@@ -472,16 +466,13 @@ app.post('/addHorario', async(req,res)=>{
                 },
                 body: JSON.stringify(webhookData),
             });
-        
             if (!response.ok) {
                 throw new Error('Erro na solicitação do webhook');
             }
-        
             console.log('Dados enviados para o webhook com sucesso.');
         } catch (error) {
             console.error('Erro ao enviar dados para o webhook:', error);
         }
-
       console.log('Simulação: Cadastro de serviço realizado com sucesso.');
   
       res.status(200).json({ message: 'Serviço cadastrado com sucesso!' });

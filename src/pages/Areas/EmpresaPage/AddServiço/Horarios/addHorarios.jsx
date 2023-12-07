@@ -196,6 +196,7 @@ export const AdicionarHorarioDisponivel = () => {
       console.log('Resposta da API:', responseData);
   
       setSuccessMessage('Horário cadastrado com sucesso!');
+      alert('Horário cadastrado com sucesso!');
       setErrorMessage('');
     } catch (error) {
       console.error('Erro ao adicionar horário:', error);
@@ -205,6 +206,8 @@ export const AdicionarHorarioDisponivel = () => {
   
   return (
     <div className="centeredFormHorarioEmp">
+      {successMessage && <div className="successMessage">{successMessage}</div>}
+      {errorMessage && <div className="errorMessage">{errorMessage}</div>}
       <label className="h3H">Data e Hora:</label>
       <DatePicker
         selected={selectedDate}
